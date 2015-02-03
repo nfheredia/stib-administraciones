@@ -36,3 +36,4 @@ node_modules/
 *.*~
 stib-administraciones/settings_local.py
 stib-administraciones/static
+stib-administraciones/media

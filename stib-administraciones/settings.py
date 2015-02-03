@@ -140,6 +140,7 @@ DJANGO_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',
 
     # Useful template tags:
     # 'django.contrib.humanize',
@@ -149,17 +150,19 @@ DJANGO_APPS = (
 )
 THIRD_PARTY_APPS = (
     'crispy_forms',  # Form layouts
-    #'avatar',  # for user avatars
-    #'allauth',  # registration
-    #'allauth.account',  # registration
-    #'allauth.socialaccount',  # registration
     'south',
+    'easy_thumbnails',
+    'allauth',  # registration
+    'allauth.account',  # registration
+    'allauth.socialaccount',  # registration
 )
 
 # Apps specific for this project go here.
 LOCAL_APPS = (
     'stib-administraciones.users',  # custom users app
-    'stib-administraciones.perfiles',
+    'stib-administraciones.perfiles', # perfiles de usuarios
+    'stib-administraciones.edificios', # perfiles de edificios
+    'stib-administraciones.llaves', # llaves de edificios
 )
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
@@ -202,6 +205,15 @@ AUTH_PROFILE_MODULE = 'perfiles.Perfiles'
 LOGIN_REDIRECT_URL = 'users:redirect'
 LOGIN_URL = 'account_login'
 # END Custom user app defaults
+
+# Thumbnail images
+THUMBNAIL_ALIASES = {
+    '': {
+        '70x70': dict(size=(70, 70), quality=75, crop="center"),
+        'small': dict(size=(50, 50), quality=75, crop="center"),
+    }
+}
+# end Thumbnail images
 
 # --------------------------
 #  IMPORT LOCAL SETTINGS
