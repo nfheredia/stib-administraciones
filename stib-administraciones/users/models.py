@@ -11,3 +11,7 @@ class User(AbstractUser):
 
     def __unicode__(self):
         return self.username
+
+    class Meta:
+        verbose_name = 'Usuarios'
+        verbose_name_plural = 'Usuarios'
