@@ -8,7 +8,7 @@ body {
     font-size: 12px;
     font-family: "Lucida Grande","DejaVu Sans","Bitstream Vera Sans",Verdana,Arial,sans-serif;
     color: #333;
-    background: #fff;
+    background: #eee;
 }
 
 /* LINKS */
@@ -501,7 +501,7 @@ textarea, select, .vTextField {
     font-size: 11px;
     text-align: left;
     font-weight: bold;
-    background: #7CA0C7 url(../img/default-bg.gif) top left repeat-x;
+    background: #417690;
     color: white;
 }
 
@@ -798,7 +798,7 @@ table#change-history tbody th {
 
 #branding h1 {
     padding: 0 10px;
-    font-size: 18px;
+    font-size: 16px;
     margin: 8px 0;
     font-weight: normal;
     color: #f4f379;
