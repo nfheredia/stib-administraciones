@@ -166,6 +166,7 @@ LOCAL_APPS = (
     'stib-administraciones.personales', # personales que trabajan en un edificio
     'stib-administraciones.horarios', # horarios de los edificios
     'stib-administraciones.contactos', # contactos de los edificios
+    'stib-administraciones.fotos', # fotos de los edificios
 )
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
