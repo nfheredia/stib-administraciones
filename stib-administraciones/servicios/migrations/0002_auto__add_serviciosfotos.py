@@ -1,0 +1,54 @@
+# -*- coding: utf-8 -*-
+from south.utils import datetime_utils as datetime
+from south.db import db
+from south.v2 import SchemaMigration
+from django.db import models
+
+
+class Migration(SchemaMigration):
+
+    def forwards(self, orm):
+        # Adding model 'ServiciosFotos'
+        db.create_table(u'servicios_serviciosfotos', (
+            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('modificado', self.gf('django.db.models.fields.DateTimeField')(auto_now=True, blank=True)),
+            ('creado', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
+            ('producto', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['servicios.Servicios'])),
+            ('path', self.gf('django.db.models.fields.files.ImageField')(max_length=100)),
+            ('nombre', self.gf('django.db.models.fields.CharField')(unique=True, max_length=150)),
+            ('comentario', self.gf('django.db.models.fields.TextField')(blank=True)),
+        ))
+        db.send_create_signal(u'servicios', ['ServiciosFotos'])
+
+
+    def backwards(self, orm):
+        # Deleting model 'ServiciosFotos'
+        db.delete_table(u'servicios_serviciosfotos')
+
+
+    models = {
+        u'servicios.servicios': {
+            'Meta': {'object_name': 'Servicios'},
+            'condicion_iva': ('django.db.models.fields.IntegerField', [], {}),
+            'creado': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
+            'descripcion': ('django.db.models.fields.TextField', [], {'blank': 'True'}),
+            'forma_pago': ('django.db.models.fields.CharField', [], {'max_length': '150'}),
+            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'modificado': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'}),
+            'nombre': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '150'}),
+            'precio': ('django.db.models.fields.FloatField', [], {}),
+            'validez_oferta': ('django.db.models.fields.IntegerField', [], {})
+        },
+        u'servicios.serviciosfotos': {
+            'Meta': {'object_name': 'ServiciosFotos'},
+            'comentario': ('django.db.models.fields.TextField', [], {'blank': 'True'}),
+            'creado': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
+            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'modificado': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'}),
+            'nombre': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '150'}),
+            'path': ('django.db.models.fields.files.ImageField', [], {'max_length': '100'}),
+            'producto': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['servicios.Servicios']"})
+        }
+    }
+
+    complete_apps = ['servicios']
