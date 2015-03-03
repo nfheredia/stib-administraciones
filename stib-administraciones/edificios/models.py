@@ -23,7 +23,7 @@ class Edificios(TimeStampedModel):
     cantidad_unidades = models.IntegerField(blank=True, null=True, max_length=2,  verbose_name=u"Cantidad de unidades")
     comentario = models.TextField(blank=True, null=True, verbose_name=u"Comentarios")
 
-    def __str__(self):
+    def __unicode__(self):
         return self.nombre + ' - ' + self.direccion
 
     class Meta:

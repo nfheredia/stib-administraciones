@@ -16,7 +16,7 @@ class Personales(TimeStampedModel):
                               unique=True)
     comentario = models.TextField(blank=True, verbose_name='Comentario')
 
-    def __str__(self):
+    def __unicode__(self):
         """ Muestro el nombre """
         return self.nombre
 

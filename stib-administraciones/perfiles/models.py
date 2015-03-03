@@ -20,7 +20,7 @@ class Perfiles(TimeStampedModel):
     direccion_oficina = models.CharField(blank=False, max_length=150, verbose_name=u"Dirección de la oficina")
     direccion_alternativa = models.CharField(blank=True, max_length=150, null=True, verbose_name=u"Dirección alternativa")
 
-    def __str__(self):
+    def __unicode__(self):
         """ Muestro el nombre, sirve para el sitio de admin """
         return self.nombre
 

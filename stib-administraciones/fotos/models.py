@@ -16,7 +16,7 @@ class CategoriasFotos(TimeStampedModel):
     nombre = models.CharField(blank=False, max_length=150, null=False, verbose_name=u"Nombre")
     comentario = models.TextField(blank=True, null=True, verbose_name=u"Comentarios")
 
-    def __str__(self):
+    def __unicode__(self):
         return self.nombre
 
     class Meta:
@@ -34,7 +34,7 @@ class Fotos(TimeStampedModel):
     comentario = models.TextField(blank=True, null=True, verbose_name=u"Comentarios")
     path = ThumbnailerImageField(null=False, blank=False, upload_to="edificios_fotos", verbose_name=u"Foto")
 
-    def __str__(self):
+    def __unicode__(self):
         return self.nombre + " (" + self.edificio.nombre + " - " + self.edificio.direccion + ")"
 
     class Meta:

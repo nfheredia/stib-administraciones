@@ -13,7 +13,7 @@ class TipoLlaves(TimeStampedModel):
     nombre = models.CharField(blank=False, max_length=150, null=False, verbose_name=u"Nombre")
     comentario = models.TextField(blank=True, null=True, verbose_name=u"Comentarios")
 
-    def __str__(self):
+    def __unicode__(self):
         return self.nombre
 
     class Meta:
@@ -28,7 +28,7 @@ class Llaves(TimeStampedModel):
     tipo_llave = models.ForeignKey(TipoLlaves, verbose_name=u"Tipo de llave")
     edificio = models.ForeignKey(Edificios, verbose_name=u"Edificio")
 
-    def __str__(self):
+    def __unicode__(self):
         return self.edificio.nombre + " - " + self.edificio.direccion
 
     class Meta:

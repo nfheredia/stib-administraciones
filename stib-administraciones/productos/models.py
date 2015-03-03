@@ -37,7 +37,7 @@ class Productos(TimeStampedModel):
 
         precio = models.FloatField(blank=False, null=False, verbose_name="Precio")
 
-        def __str__(self):
+        def __unicode__(self):
             """ Muestro el nombre del producto"""
             return self.nombre
 
@@ -59,7 +59,7 @@ class ProductosFotos(TimeStampedModel):
 
     comentario = models.TextField(blank=True, verbose_name='Comentario')
 
-    def __str__(self):
+    def __unicode__(self):
         return self.nombre + " (" + self.producto.nombre + ")"
 
     class Meta:
