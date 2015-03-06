@@ -35,7 +35,7 @@ TIME_ZONE = 'America/Buenos_Aires'
 # http://www.i18nguy.com/unicode/language-identifiers.html
 LANGUAGE_CODE = 'es-es'
 
-SITE_ID = 1
+SITE_ID = 5
 
 # If you set this to False, Django will make some optimizations so as not
 # to load the internationalization machinery.
@@ -157,6 +157,7 @@ THIRD_PARTY_APPS = (
     'allauth',  # registration
     'allauth.account',  # registration
     'allauth.socialaccount',  # registration
+    'imperavi',
 )
 
 # Apps specific for this project go here.
@@ -172,6 +173,7 @@ LOCAL_APPS = (
     'stib-administraciones.productos', # productos
     'stib-administraciones.servicios', # servicios
     'stib-administraciones.relaciones', # relaciones
+    #'stib-administraciones.flatpagesx', # flatpagesx
 )
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
