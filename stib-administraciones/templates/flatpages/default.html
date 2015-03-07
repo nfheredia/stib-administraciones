@@ -1,16 +1,12 @@
 {% extends "base.html" %}
 
-
 {% block content %}
+    <div class="row">
+        <div class="col-lg-9">
+            <h1 class="page-header">{{ flatpage.title }}</h1>
 
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-9">
-                <h1 class="page-header">{{ flatpage.title }}</h1>
+            {{ flatpage.content|safe }}
 
-                {{ flatpage.content|safe }}
-
-            </div>
         </div>
     </div>
 {% endblock %}

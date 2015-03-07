@@ -25,11 +25,8 @@ class UserDetailView(LoginRequiredMixin, DetailView):
 
 
 class UserRedirectView(LoginRequiredMixin, RedirectView):
-    permanent = False
-
-    def get_redirect_url(self):
-        return reverse("users:detail",
-                       kwargs={"username": self.request.user.username})
+    # -- Ir a Inicio una vez logueado
+    pattern_name = 'inicio'
 
 
 class UserUpdateView(LoginRequiredMixin, UpdateView):
