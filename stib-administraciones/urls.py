@@ -11,12 +11,13 @@ admin.autodiscover()
 urlpatterns = patterns('',
     # -- sitio adminitracion
     url(r'^admin/', include(admin.site.urls)),
-
+    # -- usuarios
     url(r'^users/', include("stib-administraciones.users.urls", namespace="users")),
+    # -- accounts apps
     url(r'^accounts/', include('allauth.urls')),
-
     # -- perfiles
     url(r'^perfiles/', include('stib-administraciones.perfiles.urls', namespace='perfiles')),
+    # -- imperavi editor
     url(r'^imperavi/', include('imperavi.urls')),
 
 ) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
@@ -28,5 +29,5 @@ urlpatterns += patterns('django.contrib.flatpages.views',
     # -- todas las flatpages
     url(r'^(?P<url>.*/)$', 'flatpage'),
     # -- pagina / , root de la pagina
-    url(r'^', 'flatpage', {'url': '/inicio/'}, name='inicio'),
+    url(r'^$', 'flatpage', {'url': '/inicio/'}, name='inicio'),
 )
