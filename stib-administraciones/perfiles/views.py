@@ -21,4 +21,4 @@ class PerfilesUpdateView(LoginRequiredMixin, UpdateView):
 
     def get_success_url(self):
         messages.success(self.request, u'Tu perfil fué editado correctamente.')
-        return '/perfiles/update/'
+        return self.success_url

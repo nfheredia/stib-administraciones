@@ -174,6 +174,7 @@ LOCAL_APPS = (
     'stib-administraciones.servicios', # servicios
     'stib-administraciones.relaciones', # relaciones
     'stib-administraciones.flatpagesx', # flatpagesx
+    'stib-administraciones.feedbacks', # feedbacks
 )
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps

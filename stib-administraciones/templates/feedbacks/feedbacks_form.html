@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}Feedback{% endblock %}
+
+{% block content %}
+
+<div class="row">
+    <div class="col-lg-9">
+        <h1 class="page-header">Dejános tu Feedback</h1>
+    </div>
+    <div class="col-lg-9">
+        <h3>Buenísimo que estás aca!! Significa que tenés algo que contarnos.</h3>
+                <br>
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-5">
+        <form class="form-horizontal" method="post" action="/feedbacks/create/">
+            {% csrf_token %}
+            {{ form|crispy }}
+            <div class="control-group">
+              <div class="controls">
+                <button type="submit" class="btn btn-primary">Enviar</button>
+              </div>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

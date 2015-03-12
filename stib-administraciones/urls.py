@@ -19,6 +19,8 @@ urlpatterns = patterns('',
     url(r'^perfiles/', include('stib-administraciones.perfiles.urls', namespace='perfiles')),
     # -- imperavi editor
     url(r'^imperavi/', include('imperavi.urls')),
+    # -- feedbacks
+    url(r'^feedbacks/', include('stib-administraciones.feedbacks.urls')),
 
 ) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
