@@ -9,4 +9,4 @@ class PerfilesForm(forms.ModelForm):
     """
     class Meta:
         model = Perfiles
-        exclude = ['user']
+        exclude = ['user', 'alerta_bienvenida']
