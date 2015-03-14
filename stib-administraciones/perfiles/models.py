@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 from django.db import models
 
-from ..settings import AUTH_USER_MODEL
-
 from ..core.models import TimeStampedModel
+
+from ..users.models import User
 
 
 class Perfiles(TimeStampedModel):
@@ -11,7 +11,7 @@ class Perfiles(TimeStampedModel):
     Perfiles de los usuarios.
     Para agregar informacion extra al modelo por defecto.
     """
-    user = models.ForeignKey(AUTH_USER_MODEL, verbose_name=u"Usuario", unique=True)
+    user = models.OneToOneField(User, related_name="perfil")
     nombre = models.CharField(blank=False, max_length=150, verbose_name=u"Nombre")
     telefono_fijo = models.CharField(blank=True, max_length=15, null=True, verbose_name=u"Teléfono Fijo")
     telefono_emergencia = models.CharField(blank=True, max_length=15, null=True, verbose_name=u"Teléfono de emergencia")
@@ -27,8 +27,11 @@ class Perfiles(TimeStampedModel):
         return self.nombre
 
     @classmethod
-    def mostrar_mensaje_bienvenida(cls, user_id):
-        return cls.objects.filter(user=user_id).get()
+    def valor_mensaje_bienvenida(cls, user_id):
+        """
+        Devuelve el valor de "alerta_bienvenida" correspondiente al usuario logueado
+        """
+        return cls.objects.values('alerta_bienvenida').filter(user=user_id).get()
 
     class Meta:
         verbose_name = 'Perfiles'

@@ -3,7 +3,7 @@ from django.db import models
 
 from easy_thumbnails.fields import ThumbnailerImageField
 
-from ..settings import AUTH_USER_MODEL
+from ..users.models import User
 
 from ..core.models import TimeStampedModel
 
@@ -13,8 +13,8 @@ class Edificios(TimeStampedModel):
     Edificios, los mismos pertenecen a las diferentes
     administraciones/usuarios
     """
-    user = models.ForeignKey(AUTH_USER_MODEL, verbose_name=u"Usuario",
-                             help_text="Administración a la cual pertenece el edificio")
+    user = models.OneToOneField(User, verbose_name=u"Usuario",
+                                help_text="Administración a la cual pertenece el edificio")
     nombre = models.CharField(blank=False, max_length=150, verbose_name=u"Nombre del edificio")
     codigo = models.CharField(blank=False, max_length=150, verbose_name=u"Código")
     direccion = models.CharField(blank=False, max_length=150, verbose_name=u"Dirección")

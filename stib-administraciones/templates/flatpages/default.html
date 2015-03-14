@@ -1,11 +1,7 @@
 {% extends "base.html" %}
-{% load perfiles_tags %}
 
 {% block content %}
     <div class="row">
-        <div class="col-lg-12">
-            {% mostrar_mensaje_bienvenida request.user.id %}
-        </div>
         <div class="col-lg-9">
             <h1 class="page-header">{{ flatpage.title }}</h1>
             {{ flatpage.content|safe }}

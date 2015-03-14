@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
 from django.db import models
 
-from ..settings import AUTH_USER_MODEL
+from ..users.models import User
 
 from ..core.models import TimeStampedModel
+
 
 class TipoFeedbacks(TimeStampedModel):
     """
@@ -24,7 +25,7 @@ class Feedbacks(TimeStampedModel):
     """
     Feedbacks que dejan las administraciones
     """
-    user = models.ForeignKey(AUTH_USER_MODEL, verbose_name=u"Usuario")
+    user = models.ForeignKey(User, verbose_name=u"Usuario")
     tipo_feedback = models.ForeignKey(TipoFeedbacks, blank=False, null=False,
                                       verbose_name=u"Categoría")
     asunto = models.CharField(blank=False, null=False, max_length=300, verbose_name=u"Asunto")

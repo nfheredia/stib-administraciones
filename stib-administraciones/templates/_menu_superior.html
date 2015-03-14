@@ -46,12 +46,12 @@
                             {% endif %}
                             <li class="divider"></li>
                             <li>
-                                <a id="account_logout" href="{% url "account_logout" %}"><i class="fa fa-power-off"></i> Salir </a>
+                                <a id="account_logout" href="{% url 'account_logout' %}"><i class="fa fa-power-off"></i> Salir </a>
                             </li>
                         </ul>
                     </li>
                 {% else %}
-                    <li><a href="{% url "account_login" %}"><i class="fa fa-user"></i> Ingresá</a></li>
+                    <li><a href="{% url 'account_login' %}"><i class="fa fa-user"></i> Ingresá</a></li>
                 {% endif %}
             </ul>
         </div><!-- /.navbar-collapse -->

@@ -1,4 +1,6 @@
 {% load staticfiles %}
+{% load perfiles_tags %}
+
 <!DOCTYPE html>
 <html lang="en" ng-app>
     <head>
@@ -38,6 +40,12 @@
                         <!-- Para mostrar mensajes -->
                         {% include "_mensajes.html" %}
                         <!-- / Para mostrar mensajes -->
+
+                        <!-- Para mostrar mensaje que complete su perfil -->
+                        {% if request.user.is_authenticated and request.user.is_staff == False and request.user.perfil.alerta_bienvenida == 1 and request.path != '/perfiles/update/' %}
+                            {% include "_mensaje_completar_perfil.html" %}
+                        {% endif %}
+                        <!-- / Para mostrar mensaje que complete su perfil -->
 
                         {% block content %}
                             <p>Use this document as a way to quick start any new project.</p>
