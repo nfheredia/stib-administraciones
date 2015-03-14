@@ -26,13 +26,6 @@ class Perfiles(TimeStampedModel):
         """ Muestro el nombre, sirve para el sitio de admin """
         return self.nombre
 
-    @classmethod
-    def valor_mensaje_bienvenida(cls, user_id):
-        """
-        Devuelve el valor de "alerta_bienvenida" correspondiente al usuario logueado
-        """
-        return cls.objects.values('alerta_bienvenida').filter(user=user_id).get()
-
     class Meta:
         verbose_name = 'Perfiles'
         verbose_name_plural = 'Perfiles'
