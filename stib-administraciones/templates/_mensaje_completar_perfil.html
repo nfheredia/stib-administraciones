@@ -7,9 +7,9 @@
             </div>
             <div class="col-lg-7"></div>
             <div class="col-lg-5">
-                <a href="/perfiles/update" class="btn btn-primary">Modificar</a>
-                <a class="btn btn-success">Gracias, en otro momento</a>
-
+                <br>
+                <a href="{% url 'perfiles:perfiles_update' %}" class="btn btn-success">Modificar</a>
+                <a href="{% url 'perfiles:no_mostrar_msg_bienvenida' %}" class="btn">Gracias, en otro momento</a>
             </div>
         </div>
     </div>
