@@ -21,6 +21,8 @@ urlpatterns = patterns('',
     url(r'^imperavi/', include('imperavi.urls')),
     # -- feedbacks
     url(r'^feedbacks/', include('stib-administraciones.feedbacks.urls')),
+    # -- novedades
+    url(r'^novedades/', include('stib-administraciones.novedades.urls')),
 
 ) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

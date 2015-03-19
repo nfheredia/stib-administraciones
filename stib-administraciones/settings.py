@@ -158,6 +158,7 @@ THIRD_PARTY_APPS = (
     'allauth.account',  # registration
     'allauth.socialaccount',  # registration
     'imperavi',
+    'taggit',
 )
 
 # Apps specific for this project go here.
@@ -175,6 +176,7 @@ LOCAL_APPS = (
     'stib-administraciones.relaciones', # relaciones
     'stib-administraciones.flatpagesx', # flatpagesx
     'stib-administraciones.feedbacks', # feedbacks
+    'stib-administraciones.novedades', # novedades
 )
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
