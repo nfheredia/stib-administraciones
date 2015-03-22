@@ -1,15 +1,15 @@
 {% extends "base.html" %}
-
+{% load pagination_tags %}
 {% block title %} Novedades {% endblock %}
 
 {% block content %}
-
+{% autopaginate object_list 2 %}
     {% if object_list %}
         {% for novedad in object_list %}
             <div class="row">
                 <div class="col-lg-9">
                     <h1 class="page-header">
-                        <a>{{ novedad.titulo }}</a>
+                        <a href="{% url 'novedades_detail' novedad.id %}">{{ novedad.titulo }}</a>
                     </h1>
                 </div>
             </div>
@@ -19,7 +19,7 @@
                     <b>Fecha:</b> {{ novedad.modificado|date:"SHORT_DATE_FORMAT" }} |
                     <b>Etiquetas:</b>
                     {% for t in novedad.tags.all %}
-                        {{  t.name }}
+                        <a class="label label-default">{{  t.name }}</a>
                     {% endfor %}
                     <br><br>
                 </div>
@@ -27,9 +27,12 @@
             <div class="row">
                 <div class="col-lg-9">
                     {% autoescape off %}{{ novedad.contenido|truncatewords:50 }} {% endautoescape %}
+                    <br>
+                    <a>Leer mas...</a>
                 </div>
             </div>
         {% endfor %}
-    {% endif %}
 
+    {% endif %}
+{% paginate %}
 {% endblock %}

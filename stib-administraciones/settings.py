@@ -94,6 +94,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.contrib.flatpages.middleware.FlatpageFallbackMiddleware',
+    'pagination.middleware.PaginationMiddleware',
 )
 # END MIDDLEWARE CONFIGURATION
 
@@ -159,6 +160,7 @@ THIRD_PARTY_APPS = (
     'allauth.socialaccount',  # registration
     'imperavi',
     'taggit',
+    'pagination',
 )
 
 # Apps specific for this project go here.
