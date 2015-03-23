@@ -16,3 +16,6 @@ class Novedades(TimeStampedModel):
 
     def __unicode__(self):
         return self.titulo
+
+    class Meta:
+        ordering = ['creado']
