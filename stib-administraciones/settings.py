@@ -161,6 +161,7 @@ THIRD_PARTY_APPS = (
     'imperavi',
     'taggit',
     'pagination',
+    'disqus',
 )
 
 # Apps specific for this project go here.
@@ -229,6 +230,12 @@ THUMBNAIL_ALIASES = {
     }
 }
 # end Thumbnail images
+
+# Disqus
+DISQUS_API_KEY = 'uqHEQ4RlBF6Vb6Lq4pUXXV5zusjm4wc5pZwbIyV324cbJ5ZZbAnUZZadG8ShKFt3'
+DISQUS_WEBSITE_SHORTNAME = 'Stib Administraciones'
+# / Disqus
+
 
 # --------------------------
 #  IMPORT LOCAL SETTINGS

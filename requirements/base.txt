@@ -41,3 +41,4 @@ easy-thumbnails==1.4
 django-imperavi==0.2.3
 django-taggit==0.12.3
 django-pagination==1.0.7
+django-disqus==0.5

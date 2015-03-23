@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% load disqus_tags %}
+
+{% block title %} {{ object.titulo }} {% endblock %}
+
+{% block content %}
+    <div class="row">
+                <div class="col-lg-9">
+                    <h1 class="page-header">
+                        <a href="#">{{ object.titulo }}</a>
+                    </h1>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-9">
+                    <b>Autor:</b> {{ object.user.username }} |
+                    <b>Fecha:</b> {{ object.modificado|date:"SHORT_DATE_FORMAT" }} |
+                    <b>Etiquetas:</b>
+                    {% for t in object.tags.all %}
+                        <a class="label label-default">{{  t.name }}</a>
+                    {% endfor %}
+                    <br><br>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-9">
+                    {% autoescape off %}{{ object.contenido }} {% endautoescape %}
+                </div>
+            </div>
+    </div>
+
+    <div class="row">
+      {% disqus_show_comments %}
+      </div>
+{% endblock %}
