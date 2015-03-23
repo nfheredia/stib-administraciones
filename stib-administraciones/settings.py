@@ -233,7 +233,7 @@ THUMBNAIL_ALIASES = {
 
 # Disqus
 DISQUS_API_KEY = 'uqHEQ4RlBF6Vb6Lq4pUXXV5zusjm4wc5pZwbIyV324cbJ5ZZbAnUZZadG8ShKFt3'
-DISQUS_WEBSITE_SHORTNAME = 'Stib Administraciones'
+DISQUS_WEBSITE_SHORTNAME = 'StibAdministraciones'
 # / Disqus
 
 
