@@ -18,7 +18,9 @@
                     <b>Fecha:</b> {{ object.modificado|date:"SHORT_DATE_FORMAT" }} |
                     <b>Etiquetas:</b>
                     {% for t in object.tags.all %}
-                        <a class="label label-default">{{  t.name }}</a>
+                        <a href="/novedades/tag/{{ t.name }}" class="label label-default">
+                            {{  t.name }}
+                        </a>
                     {% endfor %}
                     <br><br>
                 </div>
