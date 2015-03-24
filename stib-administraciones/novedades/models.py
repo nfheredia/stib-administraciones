@@ -18,4 +18,6 @@ class Novedades(TimeStampedModel):
         return self.titulo
 
     class Meta:
+        verbose_name = 'Novedades'
+        verbose_name_plural = 'Novedades'
         ordering = ['creado']

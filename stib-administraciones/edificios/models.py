@@ -13,7 +13,7 @@ class Edificios(TimeStampedModel):
     Edificios, los mismos pertenecen a las diferentes
     administraciones/usuarios
     """
-    user = models.OneToOneField(User, verbose_name=u"Usuario",
+    user = models.ForeignKey(User, verbose_name=u"Usuario",
                                 help_text="Administración a la cual pertenece el edificio")
     nombre = models.CharField(blank=False, max_length=150, verbose_name=u"Nombre del edificio")
     codigo = models.CharField(blank=False, max_length=150, verbose_name=u"Código")
