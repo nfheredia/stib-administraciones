@@ -1,1 +1,5 @@
-/* Project specific Javascript goes here. */
+$(function() {
+
+    $('#side-menu').metisMenu();
+
+});
