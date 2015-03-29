@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block title %}Eliminar Edificio{% endblock title %}
+
+{% block content %}
+
+    <h1 class="page-header">Eliminar Edificio</h1>
+    <form action="" method="post">
+        {% csrf_token %}
+        <p><b>ATENCIÓN:</b> Está seguro de eliminar el edificio "{{ object.nombre }}"?</p>
+        <button type="submit" class='btn btn-danger'><i class="fa fa-trash-o"></i> Eliminar</button>
+        <a href="{% url 'edificios:list' %}">Volver</a>
+    </form>
+
+
+{% endblock %}

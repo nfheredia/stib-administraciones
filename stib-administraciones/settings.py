@@ -113,6 +113,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'django.contrib.messages.context_processors.messages',
     'django.core.context_processors.request',
     # Your stuff: custom template context processers go here
+    'stib-administraciones.edificios.context_processors.edificios_usuarios',
 )
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#template-dirs

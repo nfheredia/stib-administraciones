@@ -8,6 +8,11 @@ from ..users.models import User
 from ..core.models import TimeStampedModel
 
 
+class EdificiosUsuariosManager(models.Manager):
+    def por_usuarios(self, user_id):
+        return super(EdificiosUsuariosManager, self).get_queryset().filter(user=user_id)
+
+
 class Edificios(TimeStampedModel):
     """
     Edificios, los mismos pertenecen a las diferentes
@@ -22,6 +27,13 @@ class Edificios(TimeStampedModel):
     cantidad_pisos = models.IntegerField(blank=True, null=True, max_length=2, verbose_name=u"Cantidad de pisos")
     cantidad_unidades = models.IntegerField(blank=True, null=True, max_length=2,  verbose_name=u"Cantidad de unidades")
     comentario = models.TextField(blank=True, null=True, verbose_name=u"Comentarios")
+
+    # managers
+    objects = models.Manager()
+    edificios_usuarios_object = EdificiosUsuariosManager()
+
+    def get_absolute_url(self):
+        return '/edificios'
 
     def __unicode__(self):
         return self.nombre + ' - ' + self.direccion

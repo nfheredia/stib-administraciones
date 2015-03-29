@@ -190,3 +190,11 @@ border-color: #e7e7e7;
 .navbar-default  .navbar-right>li>a {
     color: #428bca;
 }
+
+table.dataTable  {
+    width: 100%;
+    margin: 0 auto;
+    clear: both;
+    border-collapse: collapse;
+    border-spacing: 0;
+}

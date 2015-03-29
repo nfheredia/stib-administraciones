@@ -14,17 +14,27 @@
                 <!-- /input-group -->
             </li>
 
-            <!-- Lista de edificios -->
-            <li class="cat-1">
-                <a href="#"><i class="fa fa-building fa-fw"></i> Mis Clientes<span class="fa arrow"></span></a>
-                <ul class="nav nav-second-level">
-                    <li class="cat-2"> <a> 111 </a> </li>
-                    <li class="cat-2"> <a> 222 </a> </li>
-                </ul>
-            </li><!-- / Lista de edificios -->
+            {% if request.user.is_staff %}
+                <li>
+                    <a href="{% url 'edificios:list' %}"><i class="fa fa-building fa-fw"></i> Edificios </a>
+                </li>
+            {% else %}
+                <!-- Lista de edificios del usuario logueado -->
+                {% if edificios_usuarios %}
+                    <li class="edificio">
+                        <a href="#"><i class="fa fa-building fa-fw"></i> Mis Clientes<span class="fa arrow"></span></a>
+                        <ul class="nav nav-second-level">
+                            {% for edificio in edificios_usuarios %}
+                                <li class="edificio">
+                                    <a href="{% url 'edificios:administraciones' edificio.id %}"> {{edificio.direccion}} </a>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </li>
+                {% endif %}<!-- / Lista de edificios del usuario logueado -->
+            {% endif %}
 
         </ul>
-
 
         <!-- /#side-menu -->
     </div>

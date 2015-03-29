@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}Edificios{% endblock title %}
+
+{% block content %}
+
+    <div class="row">
+        <div class="col-lg-9">
+            <a href="{% url 'edificios:list' %}"><i class="fa fa-reply"> Volver</i></a>
+            <h1 class="page-header">
+                {% if form.instance.id %}
+                    Editar
+                {% else %}
+                    Nuevo
+                {% endif %}
+                Edificio
+            </h1>
+            <form class="form-horizontal" method="post">
+                {% csrf_token %}
+                {{ form|crispy }}
+                <div class="control-group">
+                  <div class="controls">
+                    <button type="submit" class="btn btn-primary"><i class="fa fa-check"></i> Confirmar</button>
+                  </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+{% endblock %}
