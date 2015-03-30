@@ -163,6 +163,7 @@ THIRD_PARTY_APPS = (
     'taggit',
     'pagination',
     'disqus',
+    'sorl.thumbnail',
 )
 
 # Apps specific for this project go here.
@@ -228,6 +229,7 @@ THUMBNAIL_ALIASES = {
     '': {
         '70x70': dict(size=(70, 70), quality=75, crop="center"),
         'small': dict(size=(50, 50), quality=75, crop="center"),
+        'avatar': {'size': (50, 50), 'crop': True},
     }
 }
 # end Thumbnail images
@@ -236,7 +238,6 @@ THUMBNAIL_ALIASES = {
 DISQUS_API_KEY = 'uqHEQ4RlBF6Vb6Lq4pUXXV5zusjm4wc5pZwbIyV324cbJ5ZZbAnUZZadG8ShKFt3'
 DISQUS_WEBSITE_SHORTNAME = 'StibAdministraciones'
 # / Disqus
-
 
 # --------------------------
 #  IMPORT LOCAL SETTINGS
