@@ -1,4 +1,3 @@
-# Django settings for riauditoria.
 import os
 
 DEBUG = False
@@ -163,7 +162,6 @@ THIRD_PARTY_APPS = (
     'taggit',
     'pagination',
     'disqus',
-    'sorl.thumbnail',
 )
 
 # Apps specific for this project go here.
@@ -225,11 +223,11 @@ LOGIN_URL = 'account_login'
 # END Custom user app defaults
 
 # Thumbnail images
+THUMBNAIL_DEBUG = True
 THUMBNAIL_ALIASES = {
     '': {
         '70x70': dict(size=(70, 70), quality=75, crop="center"),
         'small': dict(size=(50, 50), quality=75, crop="center"),
-        'avatar': {'size': (50, 50), 'crop': True},
     }
 }
 # end Thumbnail images

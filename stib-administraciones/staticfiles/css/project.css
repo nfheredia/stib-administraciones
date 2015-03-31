@@ -198,3 +198,7 @@ table.dataTable  {
     border-collapse: collapse;
     border-spacing: 0;
 }
+
+.text-white{
+    color: white
+}

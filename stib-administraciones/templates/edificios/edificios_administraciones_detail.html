@@ -12,20 +12,28 @@
     </div>
     <div class="row">
         <div class="col-lg-6">
-            {% if object.foto_fachada %}
-                <img class="img-circle pull-right_"
-                 src="{% thumbnail object.foto_fachada 200 %}" alt="No imagen">
-            {% else %}
-                <img class="img-circle pull-right_"
-                 src="{% static 'images/edificio-sin-foto.png' %}">
-                <br>
-                <a>Editá los datos del edificio para añadir una foto de fachada</a>
-            {% endif %}
-
+            <div class="well ">
+                {% if object.foto_fachada %}
+                    <img class="img-circle_ pull-right_"
+                     src="{% thumbnail object.foto_fachada 300x300 crop %}" alt="No imagen">
+                {% else %}
+                    <img class="img-circle pull-right_"
+                     src="{% static 'images/edificio-sin-foto.png' %}">
+                    <br>
+                    <a>Editá los datos del edificio para añadir una foto de fachada</a>
+                {% endif %}
+            </div>
         </div>
         <div class="col-lg-6">
             <div class="panel panel-primary">
-              <div class="panel-heading">Detalles</div>
+              <div class="panel-heading">
+                  Detalles
+                  <div class="pull-right">
+                      <a title="Editar" href="{% url 'edificios:administraciones_detalles_update' object.id %}">
+                          <i class="fa fa-pencil text-white"></i>
+                      </a>
+                  </div>
+              </div>
               <div class="panel-body">
                   <div class="well well-lg">
                       <label><strong>Dirección: </strong></label>
@@ -38,13 +46,32 @@
                       {% if object.cantidad_pisos %}{{ object.cantidad_pisos }}{% else %}-{% endif %}
                       <br>
                       <label><strong>Cantidad de unidades: </strong></label>
-                      {% if object.cantidad_unidades %}{{ object.cantidad_unidades}{% else %}-{% endif %}
-                      <br>
-                      <label><strong>Comentarios: </strong></label>
-                      {% if object.comentario %}{{ object.comentario }}{% else %}-{% endif %}
-                      <br>
+                      {% if object.cantidad_unidades %}{{ object.cantidad_unidades}}{% else %}-{% endif %}
                   </div>
               </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-12">
+
+            <div class="well">
+                {% if object.comentario %}
+                    <div class="pull-right">
+                        <a href="{% url 'edificios:administraciones_comentario_update' object.id %}">
+                            <i class="fa fa-pencil text-muted"></i>
+                        </a>
+                    </div>
+                <br>
+                {% endif %}
+                <label><strong>Comentarios: </strong></label>
+                 {% if object.comentario %}
+                    {{ object.comentario }}
+                 {% else %}
+                    <a href="{% url 'edificios:administraciones_comentario_update' object.id %}">
+                        Aún no tienes comentarios, agregar uno.
+                    </a>
+                 {% endif %}
             </div>
         </div>
     </div>

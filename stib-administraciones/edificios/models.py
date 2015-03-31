@@ -9,8 +9,13 @@ from ..core.models import TimeStampedModel
 
 
 class EdificiosUsuariosManager(models.Manager):
+
     def por_usuarios(self, user_id):
         return super(EdificiosUsuariosManager, self).get_queryset().filter(user=user_id)
+
+    def por_edificio(self, user_id, edificio_id):
+        return self.por_usuarios(user_id).filter(id=edificio_id)
+
 
 
 class Edificios(TimeStampedModel):

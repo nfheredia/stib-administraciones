@@ -6,7 +6,9 @@ from .views import (
     EdificiosCreateView,
     EdificiosUpdateView,
     EdificiosDeleteView,
-    EdificiosAdministracionesView
+    EdificiosAdministracionesView,
+    EdificiosAdministracionesComentarioUpdateView,
+    EdificiosAdministracionesDetallesUpdateView,
 )
 
 urlpatterns = patterns('',
@@ -34,6 +36,16 @@ urlpatterns = patterns('',
         r'^administracion/(?P<pk>\d+)$',
         EdificiosAdministracionesView.as_view(),
         name='administraciones'
+    ),
+    url(
+        r'^administracion/comentario/update/(?P<pk>\d+)$',
+        EdificiosAdministracionesComentarioUpdateView.as_view(),
+        name='administraciones_comentario_update'
+    ),
+    url(
+        r'^administracion/detalles/update/(?P<pk>\d+)$',
+        EdificiosAdministracionesDetallesUpdateView.as_view(),
+        name='administraciones_detalles_update'
     ),
 
 )
