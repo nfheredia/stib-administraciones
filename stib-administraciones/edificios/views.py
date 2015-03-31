@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from django.views.generic import (
     ListView,
     CreateView,
@@ -110,7 +111,7 @@ class EdificiosAdministracionesView(LoginRequiredMixin, EdificiosAdministracione
 
 class EdificiosAdministracionesDetallesUpdateView(LoginRequiredMixin, EdificiosAdministracionesUpdateMixin, UpdateView):
     """
-    Editar los campos nomre, codigo, cantidad_pisos y cantidad_unidades
+    Editar los campos nombre, codigo, cantidad_pisos y cantidad_unidades
     Solo para las administraciones loguedas y que el edificio le pertenezca
     """
     fields = ['nombre', 'codigo', 'cantidad_pisos', 'cantidad_unidades']
@@ -124,3 +125,8 @@ class EdificiosAdministracionesComentarioUpdateView(LoginRequiredMixin, Edificio
     """
     fields = ['comentario']
     success_msg = 'Se ha modificado el comentario del edificios.'
+
+
+class EdificiosAdministracionesFachadaUpdateView(LoginRequiredMixin, EdificiosAdministracionesUpdateMixin, UpdateView):
+    fields = ['foto_fachada']
+    success_msg = 'La foto de fachada se editó correctamente.'

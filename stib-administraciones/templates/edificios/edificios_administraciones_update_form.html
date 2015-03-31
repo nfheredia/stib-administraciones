@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}Edificios{% endblock title %}
+
+{% block content %}
+
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="page-header">
+                Editar  "{{form.instance.direccion}}"
+            </h1>
+            <form class="form-horizontal" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                {{ form|crispy }}
+                <div class="control-group">
+                  <div class="controls">
+                    <button type="submit" class="btn btn-primary"><i class="fa fa-check"></i> Confirmar</button>
+                  </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+{% endblock %}

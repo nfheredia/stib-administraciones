@@ -14,28 +14,34 @@
         <div class="col-lg-6">
             <div class="well ">
                 {% if object.foto_fachada %}
-                    <img class="img-circle_ pull-right_"
-                     src="{% thumbnail object.foto_fachada 300x300 crop %}" alt="No imagen">
-                {% else %}
-                    <img class="img-circle pull-right_"
-                     src="{% static 'images/edificio-sin-foto.png' %}">
+                    <div class="pull-right">
+                        <a href="{% url 'edificios:administraciones_fachada_update' object.id %}">
+                            <i class="fa fa-pencil text-muted"></i>
+                        </a>
+                    </div>
                     <br>
-                    <a>Editá los datos del edificio para añadir una foto de fachada</a>
+                    <img src="{% thumbnail object.foto_fachada 300x300 crop %}" alt="No imagen">
+                {% else %}
+                    <img src="{% static 'images/edificio-sin-foto.png' %}">
+                    <br>
+                    <a href="{% url 'edificios:administraciones_fachada_update' object.id %}">
+                        Agregá una foto de fachada
+                    </a>
                 {% endif %}
             </div>
         </div>
         <div class="col-lg-6">
             <div class="panel panel-primary">
-              <div class="panel-heading">
+                <div class="panel-heading">
                   Detalles
                   <div class="pull-right">
                       <a title="Editar" href="{% url 'edificios:administraciones_detalles_update' object.id %}">
                           <i class="fa fa-pencil text-white"></i>
                       </a>
                   </div>
-              </div>
-              <div class="panel-body">
-                  <div class="well well-lg">
+                </div>
+                <div class="panel-body">
+                    <div class="well well-lg">
                       <label><strong>Dirección: </strong></label>
                       {{ object.direccion }}
                       <br>
@@ -47,25 +53,32 @@
                       <br>
                       <label><strong>Cantidad de unidades: </strong></label>
                       {% if object.cantidad_unidades %}{{ object.cantidad_unidades}}{% else %}-{% endif %}
-                  </div>
-              </div>
+                    </div>
+                </div>
             </div>
+
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                  Localización
+                </div>
+                <div class="panel-body">
+                    <iframe src="https://www.google.com/maps/embed?pb=Ayacucho+1557%2C+Rosario%2C+Santa+Fe!5e0!3m2!1ses!2sar!4v1427770730560" width="400" height="200" frameborder="0" style="border:0"></iframe>
+                </div>
+            </div>
+
         </div>
     </div>
     <div class="row">
         <div class="col-lg-12">
-
             <div class="well">
+                <label><strong>Comentarios: </strong></label>
                 {% if object.comentario %}
                     <div class="pull-right">
                         <a href="{% url 'edificios:administraciones_comentario_update' object.id %}">
                             <i class="fa fa-pencil text-muted"></i>
                         </a>
                     </div>
-                <br>
-                {% endif %}
-                <label><strong>Comentarios: </strong></label>
-                 {% if object.comentario %}
+                    <br>
                     {{ object.comentario }}
                  {% else %}
                     <a href="{% url 'edificios:administraciones_comentario_update' object.id %}">

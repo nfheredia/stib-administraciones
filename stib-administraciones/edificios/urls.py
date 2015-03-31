@@ -9,6 +9,7 @@ from .views import (
     EdificiosAdministracionesView,
     EdificiosAdministracionesComentarioUpdateView,
     EdificiosAdministracionesDetallesUpdateView,
+    EdificiosAdministracionesFachadaUpdateView,
 )
 
 urlpatterns = patterns('',
@@ -46,6 +47,11 @@ urlpatterns = patterns('',
         r'^administracion/detalles/update/(?P<pk>\d+)$',
         EdificiosAdministracionesDetallesUpdateView.as_view(),
         name='administraciones_detalles_update'
+    ),
+    url(
+        r'^administracion/fachada/update/(?P<pk>\d+)$',
+        EdificiosAdministracionesFachadaUpdateView.as_view(),
+        name='administraciones_fachada_update'
     ),
 
 )
