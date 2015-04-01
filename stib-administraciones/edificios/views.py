@@ -106,9 +106,7 @@ class EdificiosAdministracionesView(LoginRequiredMixin, EdificiosAdministracione
     template_name = 'edificios/edificios_administraciones_detail.html'
 
     def get_queryset(self):
-        qr = self.get_qr()
-        print qr[0]
-        return qr
+        return self.get_qr()
 
 
 class EdificiosAdministracionesDetallesUpdateView(LoginRequiredMixin, EdificiosAdministracionesUpdateMixin, UpdateView):
