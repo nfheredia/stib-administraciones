@@ -5,7 +5,17 @@ from braces.views import LoginRequiredMixin
 from .models import Novedades
 
 
-class NovedadesListView(LoginRequiredMixin, ListView):
+class NovedadesListMixin(object):
+    def get_context_data(self, **kwargs):
+        """
+        Devolvemos todas las tags para todas las vistas del tipo ListView
+        """
+        context = super(NovedadesListMixin, self, **kwargs).get_context_data(**kwargs)
+        context['tags'] = self.model.tags.all()
+        return context
+
+
+class NovedadesListView(LoginRequiredMixin, NovedadesListMixin, ListView):
     """
     Lista todas las novedades
     """
@@ -29,7 +39,7 @@ class NovedadesDetailView(LoginRequiredMixin, DetailView):
     model = Novedades
 
 
-class NovedadesTagsListiView(LoginRequiredMixin, ListView):
+class NovedadesTagsListiView(LoginRequiredMixin, NovedadesListMixin, ListView):
     """
     Filtro de novedades por los 'tags'
     """

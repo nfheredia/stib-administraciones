@@ -218,3 +218,7 @@ table.dataTable  {
     background: #ccc;
     color: #fff;
 }
+
+.label-primary {
+    margin: 5px
+}

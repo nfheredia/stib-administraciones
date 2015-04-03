@@ -1,0 +1,12 @@
+<div class="panel panel-default" style="margin-top: 10px">
+    <div class="panel-heading"><strong>Tags</strong></div>
+    <div class="panel-body">
+        <div class="well well-lg">
+            {% for t in tags %}
+                <a href="/novedades/tag/{{t.name}}" class="label label-primary">
+                    {{ t.name }}
+                </a>
+            {% endfor %}
+        </div>
+    </div>
+</div>
