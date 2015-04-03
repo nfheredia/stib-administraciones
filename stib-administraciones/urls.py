@@ -22,7 +22,7 @@ urlpatterns = patterns('',
     # -- feedbacks
     url(r'^feedbacks/', include('stib-administraciones.feedbacks.urls')),
     # -- novedades
-    url(r'^novedades/', include('stib-administraciones.novedades.urls')),
+    url(r'^novedades/', include('stib-administraciones.novedades.urls', namespace='novedades')),
     # -- edificios
     url(r'^edificios/', include('stib-administraciones.edificios.urls', namespace='edificios')),
 

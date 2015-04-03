@@ -11,6 +11,16 @@ class NovedadesListView(LoginRequiredMixin, ListView):
     """
     model = Novedades
 
+    def get_queryset(self):
+        queryset = super(NovedadesListView, self).get_queryset()
+
+        # -- ingreso por el formulario de busqueda??
+        q = self.request.GET.get('q')
+        if q:
+            return queryset.filter(contenido__icontains=q).all()
+
+        return queryset
+
 
 class NovedadesDetailView(LoginRequiredMixin, DetailView):
     """
@@ -32,5 +42,7 @@ class NovedadesTagsListiView(LoginRequiredMixin, ListView):
             tags__slug__in=[tag]
         ).distinct()
         return tag_filter
+
+
 
 

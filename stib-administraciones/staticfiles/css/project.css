@@ -202,3 +202,19 @@ table.dataTable  {
 .text-white{
     color: white
 }
+
+#search-form-novedades input {
+    color: #999;
+    font-weight: bold;
+    background: #eee;
+    border-color: #eee;
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    -o-box-shadow: none;
+    box-shadow: none;
+}
+
+#search-form-novedades button {
+    background: #ccc;
+    color: #fff;
+}
