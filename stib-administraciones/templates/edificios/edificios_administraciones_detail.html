@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 {% load staticfiles %}
 {% load thumbnail %}
+{% load fotos_tags %}
 
 {% block title %} {{object.nombre}} {% endblock %}
 
@@ -30,6 +31,31 @@
                         Agregá una foto de fachada
                     </a>
                 {% endif %}
+            </div>
+            <div class="panel panel-primary">
+                {% obtener_fotos_por_edificio object.id as fotos %}
+                <div class="panel-heading">
+                  <i class="fa fa-picture-o text-white"></i> Fotos
+                  {% if fotos.count > 0 %}
+                      <div class="pull-right">
+                          <a title="Editar" href="{% url 'edificios:administraciones_detalles_update' object.id %}">
+                              <i class="fa fa-pencil text-white"></i>
+                          </a>
+                      </div>
+                  {% endif %}
+                </div>
+                <div class="panel-body">
+                    {% if fotos.count == 0 %}
+                        <a href="#">Agregue sus primeras fotos</a>
+                    {% else %}
+                        {% for f in fotos|slice:":7" %}
+                            <img src="{% thumbnail f.path 50x50 crop %}">
+                        {% endfor %}
+                    {% endif %}
+                    {% if fotos.count > 7 %}
+                        <a>Todas</a>
+                    {% endif %}
+                </div>
             </div>
         </div>
         <div class="col-lg-6">
