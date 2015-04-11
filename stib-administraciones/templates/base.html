@@ -21,6 +21,9 @@
             <!-- include data-table css -->
             <link  rel="stylesheet" href="{% static 'libs/datatablejs/css/jquery.dataTables.min.css' %}">
             <link  rel="stylesheet" href="{% static 'libs/datatablejs/css/DT_bootstrap.css' %}">
+            <!-- FancyBox -->
+            <link  rel="stylesheet" href="{% static 'libs/fancybox/source/jquery.fancybox.css' %}">
+            <link  rel="stylesheet" href="{% static 'libs/fancybox/source/helpers/jquery.fancybox-buttons.css' %}">
             <!-- Project specific CSS -->
             <link href="{% static 'css/project.css' %}" rel="stylesheet">
         {% endblock %}
@@ -72,7 +75,10 @@
             <!-- Your stuff: Third-party javascript libraries go here -->
             <!-- include Datatable -->
             <script type="text/javascript" src="{% static 'libs/datatablejs/js/jquery.dataTables.js' %}"></script>
-            <script type="text/javascript" src="{% static 'libs/datatablejs/js/DT_bootstrap.js' %}"></script></script>
+            <script type="text/javascript" src="{% static 'libs/datatablejs/js/DT_bootstrap.js' %}"></script>
+            <!-- FancyBox -->
+            <script type="text/javascript" src="{% static 'libs/fancybox/source/jquery.fancybox.pack.js' %}"></script>
+            <script type="text/javascript" src="{% static 'libs/fancybox/source/helpers/jquery.fancybox-buttons.js' %}"></script>
             <!-- place project specific Javascript in this file -->
             <script src="{% static 'js/project.js' %}"></script>
             <!-- Menu desplegable bootstrap -->

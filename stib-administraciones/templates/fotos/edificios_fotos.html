@@ -1,0 +1,37 @@
+{% load fotos_tags %}
+{% load thumbnail %}
+
+<div class="panel panel-primary">
+    {% obtener_fotos_por_edificio object.id as fotos %}
+    <div class="panel-heading">
+        <i class="fa fa-picture-o text-white"></i> Fotos
+        {% if fotos.count > 0 %}
+          <div class="pull-right">
+              <a title="Editar" href="{% url 'edificios:administraciones_detalles_update' object.id %}">
+                  <i class="fa fa-pencil text-white"></i>
+              </a>
+          </div>
+        {% endif %}
+    </div>
+    <div class="panel-body">
+        {% if fotos.count == 0 %}
+            <a href="#">Agregue sus primeras fotos</a>
+        {% else %}
+            <!-- muestro las primeras siete -->
+            {% for f in fotos|slice:":7" %}
+                <a class="fancybox" rel="gallery1" href="{% thumbnail f.path 500x500 crop %}" title="{{ f.categoria }} | {{ f.nombre }}">
+                    <img src="{% thumbnail f.path 50x50 crop %}">
+                </a>
+            {% endfor %}
+        {% endif %}
+        <!-- si son mas de siete, se muestra el link para ver todas -->
+        {% if fotos.count > 7 %}
+            <a id="todas-las-fotos">Todas</a>
+            {% for f in fotos|slice:"7:" %}
+                <a class="fancybox no-display" rel="gallery1" href="{% thumbnail f.path 500x500 crop %}" title="{{ f.categoria }} | {{ f.nombre }}">
+                    <img src="{% thumbnail f.path 50x50 crop %}">
+                </a>
+            {% endfor %}
+        {% endif %}
+    </div>
+</div>
