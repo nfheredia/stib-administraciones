@@ -114,7 +114,7 @@ class EdificiosAdministracionesDetallesUpdateView(LoginRequiredMixin, EdificiosA
     Editar los campos nombre, codigo, cantidad_pisos y cantidad_unidades
     Solo para las administraciones loguedas y que el edificio le pertenezca
     """
-    fields = ['nombre', 'codigo', 'cantidad_pisos', 'cantidad_unidades']
+    fields = ['nombre', 'cantidad_pisos', 'cantidad_unidades']
     success_msg = 'Los datos del edificio se han editado correctamente.'
 
 
