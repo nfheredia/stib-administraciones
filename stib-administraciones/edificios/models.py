@@ -17,7 +17,6 @@ class EdificiosUsuariosManager(models.Manager):
         return self.por_usuarios(user_id).filter(id=edificio_id)
 
 
-
 class Edificios(TimeStampedModel):
     """
     Edificios, los mismos pertenecen a las diferentes

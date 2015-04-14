@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block title %}Eliminar Foto{% endblock title %}
+
+{% block content %}
+
+    <h1 class="page-header">Eliminar Foto</h1>
+    <form action="" method="post">
+        {% csrf_token %}
+        <p><b>ATENCIÓN:</b> Está seguro de eliminar la foto?</p>
+        <button type="submit" class='btn btn-danger'><i class="fa fa-trash-o"></i> Eliminar</button>
+        <a href="{% url 'fotos:administracion_list' edificio.id %}">Volver</a>
+    </form>
+
+
+{% endblock %}

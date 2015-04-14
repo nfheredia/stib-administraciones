@@ -7,7 +7,7 @@
         <i class="fa fa-picture-o text-white"></i> Fotos
         {% if fotos.count > 0 %}
           <div class="pull-right">
-              <a title="Editar" href="{% url 'edificios:administraciones_detalles_update' object.id %}">
+              <a title="Editar" href="{% url 'fotos:administracion_list' object.id %}">
                   <i class="fa fa-pencil text-white"></i>
               </a>
           </div>
