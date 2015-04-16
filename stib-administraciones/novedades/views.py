@@ -39,7 +39,7 @@ class NovedadesDetailView(LoginRequiredMixin, DetailView):
     model = Novedades
 
 
-class NovedadesTagsListiView(LoginRequiredMixin, NovedadesListMixin, ListView):
+class NovedadesTagsListView(LoginRequiredMixin, NovedadesListMixin, ListView):
     """
     Filtro de novedades por los 'tags'
     """

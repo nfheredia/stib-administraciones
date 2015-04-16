@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% load productos_tags %}
+{% load thumbnail %}
+{% load static %}
+
+{% block title %} {{ object.nombre }} {% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-lg-12">
+            <br>
+            <a href="{% url 'productos:list' %}"><i class="fa fa-reply"> Volver</i></a>
+            <h1 class="page-header">
+                {{ object.nombre }}
+            </h1>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-3">
+            {% fotos_productos object.id as fotos %}
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <i class="fa fa-picture-o text-white"></i> Fotos
+                </div>
+                <div class="panel-body">
+                    <div class="well">
+                        {% if object.image %}
+                            <a class="fancybox" rel="gallery1" href="{% thumbnail object.image  100x100  %}">
+                                <img src="{% thumbnail object.image  100x100  %}">
+                            </a>
+                        {% else %}
+                            <img src="{% static 'images/sin-imagen.jpg' %}">
+                        {% endif %}
+                        <br>
+                        {% if fotos %}
+                            {% for foto in fotos %}
+                                <a class="fancybox" rel="gallery1" href="{% thumbnail foto.path 500x500 %}" title="{{foto.nombre}}">
+                                    <img src="{% thumbnail foto.path 100x100 %}"><br>
+                                </a>
+                            {% endfor %}
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-9">
+            <div class="well">
+                <b>Etiquetas:</b>
+                {% for t in object.tags.all %}
+                    <a href="/productos/tag/{{t.name}}" class="label label-default">
+                        {{  t.name }}
+                    </a>
+                {% endfor %}
+            </div>
+            {% autoescape off %}{{ object.descripcion }} {% endautoescape %}
+        </div>
+    </div>
+{% endblock %}

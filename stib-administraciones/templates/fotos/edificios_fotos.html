@@ -15,7 +15,7 @@
     </div>
     <div class="panel-body">
         {% if fotos.count == 0 %}
-            <a href="{% url 'fotos:administracion_create' object.id %}">Agregue su primera fotos</a>
+            <a href="{% url 'fotos:administracion_create' object.id %}">Agregue su primera foto</a>
         {% else %}
             <!-- muestro las primeras siete -->
             {% for f in fotos|slice:":7" %}

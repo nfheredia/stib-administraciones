@@ -25,8 +25,10 @@ urlpatterns = patterns('',
     url(r'^novedades/', include('stib-administraciones.novedades.urls', namespace='novedades')),
     # -- edificios
     url(r'^edificios/', include('stib-administraciones.edificios.urls', namespace='edificios')),
-     # -- fotos
+    # -- fotos
     url(r'^fotos/', include('stib-administraciones.fotos.urls', namespace='fotos')),
+    # -- productos
+    url(r'^productos/', include('stib-administraciones.productos.urls', namespace='productos')),
 
 ) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

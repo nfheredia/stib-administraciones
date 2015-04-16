@@ -1,5 +1,6 @@
 from django import template
 from ..models import Fotos
+
 register = template.Library()
 
 @register.assignment_tag

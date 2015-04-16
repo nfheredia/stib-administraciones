@@ -20,18 +20,23 @@
                 </li>
             {% else %}
                 <!-- Lista de edificios del usuario logueado -->
-                {% if edificios_usuarios %}
-                    <li class="edificio">
-                        <a href="#"><i class="fa fa-building fa-fw"></i> Mis Clientes<span class="fa arrow"></span></a>
-                        <ul class="nav nav-second-level">
-                            {% for edificio in edificios_usuarios %}
-                                <li class="edificio">
-                                    <a href="{% url 'edificios:administraciones' edificio.id %}"> {{edificio.direccion}} </a>
-                                </li>
-                            {% endfor %}
-                        </ul>
+                {% if request.user.is_authenticated %}
+                    {% if edificios_usuarios %}
+                        <li class="edificio">
+                            <a href="#"><i class="fa fa-building fa-fw"></i> Mis Clientes<span class="fa arrow"></span></a>
+                            <ul class="nav nav-second-level">
+                                {% for edificio in edificios_usuarios %}
+                                    <li class="edificio">
+                                        <a href="{% url 'edificios:administraciones' edificio.id %}"> {{edificio.direccion}} </a>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </li>
+                    {% endif %}<!-- / Lista de edificios del usuario logueado -->
+                    <li>
+                        <a href="{% url 'productos:list' %}"><i class="fa fa-archive"></i> Productos</a>
                     </li>
-                {% endif %}<!-- / Lista de edificios del usuario logueado -->
+                {% endif %}
             {% endif %}
 
         </ul>
