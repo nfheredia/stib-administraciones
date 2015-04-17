@@ -25,11 +25,17 @@
                 <ul class="nav navbar-nav">
                     <li><a href="{% url 'novedades:list' %}">Novedades <span class="sr-only">(current)</span></a></li>
                 </ul>
+                {% if request.user.is_staff == False %}
+                    <ul class="nav navbar-nav">
+                        <li>
+                            <a id="feedback" href="{% url 'feedback_create' %}"> Feedback </a>
+                        </li>
+                    </ul>
+                {% endif %}
             {% endif %}
             <ul class="nav navbar-nav">
                 <li><a href="/contacto/">Contacto <span class="sr-only">(current)</span></a></li>
             </ul>
-
             <ul class="nav navbar-nav navbar-right">
                 {% if request.user.is_authenticated %}
                     <li class="dropdown">
@@ -44,11 +50,6 @@
                             <li>
                                 <a id="cambiar_contrasena" href="/accounts/password/change/"><i class="fa fa-key"></i> Cambiar contraseña </a>
                             </li>
-                            {% if  request.user.is_staff == False  %}
-                                <li>
-                                    <a id="feedback" href="{% url 'feedback_create' %}"><i class="fa fa-comment"></i> Feedback </a>
-                                </li>
-                            {% endif %}
                             <li class="divider"></li>
                             <li>
                                 <a id="account_logout" href="{% url 'account_logout' %}"><i class="fa fa-power-off"></i> Salir </a>
