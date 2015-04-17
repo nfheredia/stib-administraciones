@@ -18,12 +18,18 @@
             <ul class="nav navbar-nav">
                 <li><a href="/inicio">Inicio <span class="sr-only">(current)</span></a></li>
             </ul>
-            <ul class="nav navbar-nav">
-                <li><a href="/faq/">Preguntas Frecuentes <span class="sr-only">(current)</span></a></li>
-            </ul>
             {% if request.user.is_authenticated %}
                 <ul class="nav navbar-nav">
+                    <li><a href="/institucional/">Institucional <span class="sr-only">(current)</span></a></li>
+                </ul>
+                <ul class="nav navbar-nav">
+                    <li><a href="/seguridad/">Seguridad <span class="sr-only">(current)</span></a></li>
+                </ul>
+                <ul class="nav navbar-nav">
                     <li><a href="{% url 'novedades:list' %}">Novedades <span class="sr-only">(current)</span></a></li>
+                </ul>
+                <ul class="nav navbar-nav">
+                    <li><a href="/faq/">Preguntas Frecuentes <span class="sr-only">(current)</span></a></li>
                 </ul>
                 {% if request.user.is_staff == False %}
                     <ul class="nav navbar-nav">
@@ -32,10 +38,10 @@
                         </li>
                     </ul>
                 {% endif %}
+                <ul class="nav navbar-nav">
+                    <li><a href="/contacto/">Contacto <span class="sr-only">(current)</span></a></li>
+                </ul>
             {% endif %}
-            <ul class="nav navbar-nav">
-                <li><a href="/contacto/">Contacto <span class="sr-only">(current)</span></a></li>
-            </ul>
             <ul class="nav navbar-nav navbar-right">
                 {% if request.user.is_authenticated %}
                     <li class="dropdown">
