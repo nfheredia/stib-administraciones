@@ -1,9 +1,11 @@
 <div class="panel panel-default" style="margin-top: 10px">
-    <div class="panel-heading"><strong>Tags</strong></div>
+    <div class="panel-heading">
+        <i class="fa fa-tag"></i> <strong>Tags</strong>
+    </div>
     <div class="panel-body">
         <div class="well well-lg">
             {% for t in tags %}
-                <a href="/productos/tag/{{t.name}}" class="label label-primary">
+                <a href="/{{modulo}}/tag/{{t.name}}" class="label label-primary">
                     {{ t.name }}
                 </a>
             {% endfor %}

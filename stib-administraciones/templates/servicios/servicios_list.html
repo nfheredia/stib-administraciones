@@ -3,7 +3,7 @@
 {% load staticfiles %}
 {% load thumbnail %}
 
-{% block title %} Productos {% endblock %}
+{% block title %} Servicios {% endblock %}
 
 {% block content %}
 
@@ -11,7 +11,7 @@
 
     <div class="row">
         <div class="col-lg-12">
-            <h1 class="page-header"><i class="fa fa-archive"></i> Productos</h1>
+            <h1 class="page-header"><i class="fa fa-cog"></i> Servicios</h1>
         </div>
     </div>
 
@@ -20,31 +20,31 @@
          <div class="col-lg-4 pull-right" style="margin-top: 40px">
             <div class="row">
                 <div class="col-lg-12">
-                    {% include '_search_form.html' with modulo='productos' %}
+                    {% include '_search_form.html' with modulo='servicios' %}
                 </div>
             </div>
             <div class="row">
                 <div class="col-lg-12">
-                    {% include '_tags_filter.html' with modulo='productos' %}
+                    {% include '_tags_filter.html' with modulo='servicios' %}
                 </div>
             </div>
         </div><!-- / Columna de buscardor y Nube tags -->
-        <!-- Columna con los productos -->
+        <!-- Columna con los servicios -->
         <div class="col-lg-8">
             {% if object_list %}
-                {% for producto in object_list %}
+                {% for servicio in object_list %}
                     <div class="row">
                         <div class="col-lg-12">
                             <h1 class="page-header">
-                                <a href="{% url 'productos:detail' producto.id %}">{{ producto.nombre }}</a>
+                                <a href="{% url 'servicios:detail' servicio.id %}">{{ servicio.nombre }}</a>
                             </h1>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-lg-12">
                             <b>Etiquetas:</b>
-                            {% for t in producto.tags.all %}
-                                <a href="/productos/tag/{{ t.name }}" class="label label-default">
+                            {% for t in servicio.tags.all %}
+                                <a href="/servicios/tag/{{ t.name }}" class="label label-default">
                                     {{  t.name }}
                                 </a>
                             {% endfor %}
@@ -53,16 +53,16 @@
                     </div>
                     <div class="row">
                         <div class="col-lg-3">
-                            {% if producto.image %}
-                                <img src="{% thumbnail producto.image  150x150  %}">
+                            {% if servicio.image %}
+                                <img src="{% thumbnail servicio.image  150x150  %}">
                             {% else %}
                                 <img src="{% static 'images/sin-imagen.jpg' %}">
                             {% endif %}
                         </div>
                         <div class="col-lg-9">
-                            {% autoescape off %}{{ producto.descripcion|truncatewords:30 }} {% endautoescape %}
+                            {% autoescape off %}{{ servicio.descripcion|truncatewords:30 }} {% endautoescape %}
                             <br>
-                            <a href="{% url 'productos:detail' producto.id %}">
+                            <a href="{% url 'servicios:detail' servicio.id %}">
                                 Ampliar información...
                             </a>
                         </div>
@@ -73,12 +73,12 @@
                 <div class="row">
                     <div class="col-lg-12">
                         <div style="margin-top: 40px">
-                            <b>No hay productos.</b>
+                            <b>No hay servicio.</b>
                         </div>
                     </div>
                 </div>
             {% endif %}
-        </div><!-- / Columna con los productos -->
+        </div><!-- / Columna con los servicios -->
 
      </div>
 
