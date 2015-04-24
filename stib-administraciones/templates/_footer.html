@@ -1,0 +1,62 @@
+<footer class="footer footer-border">
+  <div class="footer_top">
+    <div class="container">
+      <div class="row">
+        <!-- Ubicanos -->
+        <div class="col-sm-4 col-md-4 compadr">
+          <h1>Ubicanos</h1>
+          <ul>
+            <li>Stib Ingeniería</li>
+            <li>San Martin 2264/2268/2272</li>
+            <li>Rosario, Santa Fe, Argentina</li>
+          </ul>
+        </div><!-- / ubicanos -->
+        <!-- Seguinos -->
+        <div class="col-sm-4 col-md-4 newletter">
+          <h1>Seguinos</h1>
+          <div class="clearfix"></div>
+          <ul class="social">
+            <a href="https://www.facebook.com/stib.ingenieria" target="_blank">
+                <i class="fa fa-facebook-official fa-5x"></i>
+            </a>
+            <a href="https://twitter.com/stibingenieria" target="_blank">
+                <i class="fa fa-twitter-square fa-5x"></i>
+            </a>
+          </ul>
+        </div><!-- / seguinos -->
+        <!-- Contactanos -->
+        <div class="col-sm-4 col-md-4 adress">
+          <h1>Contactanos</h1>
+          <i class="fa fa-phone"></i> 0341 4828812
+            <br>
+          <i class="fa fa-envelope-o"></i> info@stib.com.ar</a>
+        </div><!-- Contactanos -->
+      </div>
+    </div>
+    <div class="clearfix"></div>
+  </div>
+  <div class="footer_bott">
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-3 col-md-3">
+          <p>Copyright &copy; 2015 Stib Ingeniería</p>
+        </div>
+        <div class="col-sm-9 col-md-9">
+          <ul class="footer_toppages">
+            <li><a href="/inicio">Inicio</a></li>
+            {% if request.user.is_authenticated %}
+                <li><a href="/institucional/">Institucional</a></li>
+                <li><a href="/seguridad/">Seguridad</a></li>
+                <li><a href="{% url 'novedades:list' %}">Novedades</a></li>
+                <li><a href="/faq/">Preguntas Frecuentes</a></li>
+                {% if request.user.is_staff == False %}
+                    <li><a id="feedback" href="{% url 'feedback_create' %}"> Feedback </a></li>
+                {% endif %}
+                <li><a href="/contacto/">Contacto</a></li>
+            {% endif %}
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>

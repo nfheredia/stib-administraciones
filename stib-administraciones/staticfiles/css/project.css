@@ -226,3 +226,20 @@ table.dataTable  {
 .no-display {
     display: none;
 }
+
+.footer-border {
+    border-top: 1px solid #e7e7e7
+}
+
+.footer_bott {
+    background: #DFDCDC;
+    padding: 9px 0;
+}
+
+ul.footer_toppages {
+    list-style: none;
+    padding: 0;
+    float: right;
+}
+ul.footer_toppages li{ display:inline-block;}
+ul.footer_toppages li a{ float:left; font-size:12px; text-transform:none; color:#9da4ad; padding:5px 10px;}
