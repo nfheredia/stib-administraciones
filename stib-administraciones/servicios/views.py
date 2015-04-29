@@ -1,8 +1,12 @@
 # -*- coding: utf-8 -*-
 from django.views.generic import ListView, DetailView
+from django.contrib import messages
+from django.http import HttpResponseRedirect
+from django.core.mail import EmailMessage
 from braces.views import LoginRequiredMixin
 
 from .models import Servicios
+from ..settings_local import STIB_FROM_EMAIL
 
 
 class ServiciosMixin(object):
@@ -40,3 +44,27 @@ class ServiciosTagsListView(LoginRequiredMixin, ServiciosMixin, ListView):
         return Servicios.objects.\
             filter(tags__slug__in=[self.kwargs['tag']]).\
             distinct()
+
+
+def pedido_cotizacion(request, pk):
+    """
+    - Envio de email para el pedido de una cotizacion
+    - Hay que tener en cta que la administracion debe
+    tener completo su perfil..
+    """
+    if request.user.perfil.alerta_bienvenida == 1:
+        msg = "Para poder solictar una cotización, antes debe\
+            <a href='/perfiles/update'>completar sus datos de perfil</a>."
+        messages.error(request, msg)
+        return HttpResponseRedirect('/servicios/'+pk)
+
+    servicios = Servicios.objects.get(id=pk)
+    mail = EmailMessage(subject='Pedido de cotizacion del serivicio "'+servicios.nombre+'"',
+                        from_email=request.user.perfil.email_1,
+                        to=STIB_FROM_EMAIL)
+    mail.body = '"'+request.user.perfil.nombre + '" solicita cotizacion del servicio "'+servicios.nombre+'"'
+    mail.send()
+    messages.success(request, "Hemos recibido tu pedido de cotización, \
+                        a la brevedad nos pondremos en contacto.")
+    return HttpResponseRedirect('/servicios/'+pk)
+

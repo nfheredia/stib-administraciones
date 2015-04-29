@@ -162,6 +162,7 @@ THIRD_PARTY_APPS = (
     'taggit',
     'pagination',
     'disqus',
+    'djrill',
 )
 
 # Apps specific for this project go here.

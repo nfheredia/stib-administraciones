@@ -3,7 +3,7 @@
         <br>
         <div class="alert alert-dismissable alert-{{ message.tags }}">
             <button aria-hidden="true" data-dismiss="alert" class="close"type="button">×</button>
-            {{ message }}
+            {% autoescape off %} {{ message }} {% endautoescape %}
         </div>
     {% endfor %}
 {% endif %}
