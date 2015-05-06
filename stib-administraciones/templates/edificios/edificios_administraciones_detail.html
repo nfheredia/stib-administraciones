@@ -94,4 +94,28 @@
             </div>
         </div>
     </div>
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="page-header">Otros clientes</h1>
+        </div>
+        {% for otro_edificio in otros_edificios %}
+            <div class="col-lg-3">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                      <i class="fa fa-building fa-fw text-white"></i> {{otro_edificio.nombre}}
+                    </div>
+                    <div class="panel-body text-center">
+                        {% if otro_edificio.foto_fachada %}
+                            <img class="img-responsive center-block" src="{% thumbnail otro_edificio.foto_fachada 100x100 crop %}" alt="No imagen">
+                        {% else %}
+                            <img class="img-responsive center-block" src="{% static 'images/edificio-sin-foto100x100.png' %}">
+                        {% endif %}
+                        <strong>{{otro_edificio.direccion}}</strong>
+                        <br><br>
+                        <a class="btn btn-success" href="{% url 'edificios:administraciones' otro_edificio.id %}">Visitar</a>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
 {% endblock %}

@@ -108,6 +108,11 @@ class EdificiosAdministracionesView(LoginRequiredMixin, EdificiosAdministracione
     def get_queryset(self):
         return self.get_qr()
 
+    def get_context_data(self, **kwargs):
+        ctx = super(EdificiosAdministracionesView, self).get_context_data(**kwargs)
+        ctx['otros_edificios'] = Edificios.objects.exclude(pk=self.kwargs['pk'])[:4]
+        return ctx
+
 
 class EdificiosAdministracionesDetallesUpdateView(LoginRequiredMixin, EdificiosAdministracionesUpdateMixin, UpdateView):
     """
