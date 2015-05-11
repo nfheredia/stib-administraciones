@@ -2,6 +2,7 @@
 {% load servicios_tags %}
 {% load thumbnail %}
 {% load static %}
+{% load crispy_forms_tags %}
 
 {% block title %} {{ object.nombre }} {% endblock %}
 
@@ -58,6 +59,26 @@
             <a class="btn btn-success" href="{% url 'servicios:pedido_cotizacion' object.id %}">
                 <i class="fa fa-envelope"></i> Solicitar una cotización
             </a>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-12">
+            <br>
+            <div class="panel panel-primary">
+              <div class="panel-heading">
+                <h3 class="panel-title">
+                    <i class="fa fa-envelope-o"></i> Envianos tu consulta
+                </h3>
+              </div>
+              <div class="panel-body">
+                  <p>Utilize el siguiente formulario para comunicarte con nosotros acerca de este servicio.</p>
+                <form method="post" action="{% url 'servicios:enviar_consulta' object.id %}">
+                    {% csrf_token %}
+                    {{ form_consulta|crispy }}
+                    <input type="submit" class="btn btn-success">
+                </form>
+              </div>
+            </div>
         </div>
     </div>
 {% endblock %}

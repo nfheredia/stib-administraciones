@@ -7,6 +7,7 @@ from braces.views import LoginRequiredMixin
 
 from ..settings_local import STIB_FROM_EMAIL
 from .models import Productos
+from .forms import FormConsulta
 
 
 class ProductosMixin(object):
@@ -34,6 +35,11 @@ class ProductosListView(LoginRequiredMixin, ProductosMixin, ListView):
 class ProductosDetailView(LoginRequiredMixin, DetailView):
     """ Detalle de un productos """
     model = Productos
+
+    def get_context_data(self, **kwargs):
+        ctx = super(ProductosDetailView, self).get_context_data(**kwargs)
+        ctx['form_consulta'] = FormConsulta
+        return ctx
 
 
 class ProductosTagsListView(LoginRequiredMixin, ProductosMixin, ListView):
@@ -66,4 +72,32 @@ def pedir_cotizacion(request, pk):
     mail.send()
     messages.success(request, "Hemos recibido tu pedido de cotización, \
                         a la brevedad nos pondremos en contacto.")
+    return HttpResponseRedirect('/productos/'+pk)
+
+
+def enviar_consulta(request, pk):
+    """
+    Proceso de formulario para realizar consulta de un producto
+    y envío de email.
+    """
+    if request.method == 'POST':
+        # -- tiene completo el prefil??
+        if request.user.perfil.alerta_bienvenida == 1:
+            msg = "Para poder realizar una consulta, antes debe\
+                <a href='/perfiles/update'>completar sus datos de perfil</a>."
+            messages.error(request, msg)
+            return HttpResponseRedirect('/productos/'+pk)
+
+        formulario = FormConsulta(request.POST)
+        if formulario.is_valid():
+            producto = Productos.objects.get(id=pk)
+            mail = EmailMessage(subject='Consulta del producto "'+producto.nombre+'"',
+                                from_email=request.user.perfil.email_1,
+                                to=STIB_FROM_EMAIL)
+            mail.body = formulario.cleaned_data['consulta']
+            mail.send()
+            messages.success(request, "Hemos recibido tu consulta, \
+                        a la brevedad nos pondremos en contacto.")
+        else:
+            messages.error(request, 'Complete el formulario.')
     return HttpResponseRedirect('/productos/'+pk)

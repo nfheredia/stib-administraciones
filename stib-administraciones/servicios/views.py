@@ -7,6 +7,7 @@ from braces.views import LoginRequiredMixin
 
 from .models import Servicios
 from ..settings_local import STIB_FROM_EMAIL
+from .forms import FormConsulta
 
 
 class ServiciosMixin(object):
@@ -34,6 +35,11 @@ class ServiciosListView(LoginRequiredMixin, ServiciosMixin, ListView):
 class ServiciosDetailView(LoginRequiredMixin, DetailView):
     """ Detalle de un servicio """
     model = Servicios
+
+    def get_context_data(self, **kwargs):
+        ctx = super(ServiciosDetailView, self).get_context_data(**kwargs)
+        ctx['form_consulta'] = FormConsulta
+        return ctx
 
 
 class ServiciosTagsListView(LoginRequiredMixin, ServiciosMixin, ListView):
@@ -66,5 +72,33 @@ def pedido_cotizacion(request, pk):
     mail.send()
     messages.success(request, "Hemos recibido tu pedido de cotización, \
                         a la brevedad nos pondremos en contacto.")
+    return HttpResponseRedirect('/servicios/'+pk)
+
+
+def enviar_consulta(request, pk):
+    """
+    Proceso de formulario para realizar consulta de un servicio
+    y envío de email.
+    """
+    if request.method == 'POST':
+        # -- tiene completo el prefil??
+        if request.user.perfil.alerta_bienvenida == 1:
+            msg = "Para poder realizar una consulta, antes debe\
+                <a href='/perfiles/update'>completar sus datos de perfil</a>."
+            messages.error(request, msg)
+            return HttpResponseRedirect('/servicios/'+pk)
+
+        formulario = FormConsulta(request.POST)
+        if formulario.is_valid():
+            servicio = Servicios.objects.get(id=pk)
+            mail = EmailMessage(subject='Consulta del servicio "'+servicio.nombre+'"',
+                                from_email=request.user.perfil.email_1,
+                                to=STIB_FROM_EMAIL)
+            mail.body = formulario.cleaned_data['consulta']
+            mail.send()
+            messages.success(request, "Hemos recibido tu consulta, \
+                        a la brevedad nos pondremos en contacto.")
+        else:
+            messages.error(request, 'Complete el formulario.')
     return HttpResponseRedirect('/servicios/'+pk)
 

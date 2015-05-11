@@ -1,6 +1,6 @@
 from django.conf.urls import patterns, url
 
-from .views import ServiciosListView, ServiciosDetailView, ServiciosTagsListView, pedido_cotizacion
+from .views import ServiciosListView, ServiciosDetailView, ServiciosTagsListView, pedido_cotizacion, enviar_consulta
 
 urlpatterns = patterns('stib-administraciones.productos.views',
     url(
@@ -15,6 +15,7 @@ urlpatterns = patterns('stib-administraciones.productos.views',
     ),
     url(r'^tag/(?P<tag>[\w-]+)/$', ServiciosTagsListView.as_view(), name='tags'),
     url(r'^pedido/cotizacion/(?P<pk>\d+)$', pedido_cotizacion, name='pedido_cotizacion'),
+    url(r'^enviar/consulta/(?P<pk>\d+)$', enviar_consulta, name='enviar_consulta'),
 )
 
 
