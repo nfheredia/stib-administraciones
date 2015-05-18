@@ -87,7 +87,7 @@
         </div>
         {% for otro_producto in otros_productos %}
             <div class="col-lg-4">
-                <div class="panel panel-primary">
+                <div class="panel panel-primary" style="height: 400px">
                     <div class="panel-heading">
                       <i class="fa fa-archive"></i> {{otro_producto.nombre}}
                     </div>
@@ -99,7 +99,7 @@
                         {% endif %}
                         <br>
                         <div class="well">
-                            {% autoescape off %}{{ object.descripcion|truncatewords:20 }} {% endautoescape %}
+                            {% autoescape off %}{{ otro_producto.descripcion|truncatewords:20 }} {% endautoescape %}
                         </div>
                         <a class="btn btn-success" href="{% url 'productos:detail' otro_producto.id %}">Visitar</a>
                     </div>

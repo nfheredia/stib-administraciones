@@ -39,6 +39,7 @@ class ServiciosDetailView(LoginRequiredMixin, DetailView):
     def get_context_data(self, **kwargs):
         ctx = super(ServiciosDetailView, self).get_context_data(**kwargs)
         ctx['form_consulta'] = FormConsulta
+        ctx['otros_servicios'] = Servicios.objects.exclude(pk=self.kwargs['pk'])[:4]
         return ctx
 
 
