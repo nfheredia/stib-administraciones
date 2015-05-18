@@ -86,7 +86,7 @@
             <h1 class="page-header">Otros productos</h1>
         </div>
         {% for otro_producto in otros_productos %}
-            <div class="col-lg-3">
+            <div class="col-lg-4">
                 <div class="panel panel-primary">
                     <div class="panel-heading">
                       <i class="fa fa-archive"></i> {{otro_producto.nombre}}
@@ -97,7 +97,10 @@
                         {% else %}
                             <img class="img-responsive center-block" src="{% static 'images/sin-imagen.jpg' %}">
                         {% endif %}
-                        <br><br>
+                        <br>
+                        <div class="well">
+                            {% autoescape off %}{{ object.descripcion|truncatewords:20 }} {% endautoescape %}
+                        </div>
                         <a class="btn btn-success" href="{% url 'productos:detail' otro_producto.id %}">Visitar</a>
                     </div>
                 </div>
