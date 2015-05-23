@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block title %}Eliminar Horario{% endblock title %}
+
+{% block content %}
+
+    <h1 class="page-header">Eliminar Horario</h1>
+    <form action="" method="post">
+        {% csrf_token %}
+        <p><b>ATENCIÓN:</b> Está seguro de eliminar el horario?</p>
+        <button type="submit" class='btn btn-danger'><i class="fa fa-trash-o"></i> Eliminar</button>
+        <a href="{% url 'horarios:edificio_horario_list' edificio.id %}">Volver</a>
+    </form>
+
+{% endblock %}

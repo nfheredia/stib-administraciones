@@ -18,7 +18,7 @@
                 {% endif %}
                 contacto del edificio "{{edificio.nombre}}"
             </h1>
-            <form class="form-horizontal" method="post" enctype="multipart/form-data">
+            <form class="form-horizontal" method="post">
                 {% csrf_token %}
                 {{ form|crispy }}
                 <div class="control-group">

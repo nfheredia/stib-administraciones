@@ -7,8 +7,12 @@
 {% block content %}
     <div class="row">
         <div class="col-lg-12">
-            <h1 class="page-header">{{ object.nombre }}</h1>
-            <a id="open_recursos_modal">Recursos</a>
+            <h1 class="page-header">
+                {{ object.nombre }}
+                <div class="pull-right">
+                    <a id="open_recursos_modal"><i class="fa fa-cog"></i></a>
+                </div>
+            </h1>
         </div>
     </div>
     <div class="row">
@@ -120,8 +124,6 @@
         {% endfor %}
     </div>
 
-
-
 <!-- modal 'recursos' -->
 <div class="modal fade" id="recursos_modal">
     <div class="modal-dialog">
@@ -134,15 +136,29 @@
             </div>
             <div class="modal-body">
                 <div class="row">
-                    <div class="col-sm-6">
-                        <div class="pull-right">
+                    <div class="col-sm-3">
+                        <a href="{% url 'contactos:edificio_contactos_list' object.id %}">
                             <i class="fa fa-user-plus fa-5x"></i><br>
-                            <a href="{% url 'contactos:edificio_contactos_list' object.id %}">Contactos</a>
-                        </div>
+                            Contactos
+                        </a>
                     </div>
-                    <div class="col-sm-6">
-                        <i class="fa fa-user-plus fa-5x"></i><br>
-                        <a href="{% url 'contactos:edificio_contactos_list' object.id %}">Contactos</a>
+                    <div class="col-sm-3">
+                        <a href="{% url 'fotos:administracion_list' object.id %}">
+                            <i class="fa fa-picture-o fa-5x"></i><br>
+                            Fotos
+                        </a>
+                    </div>
+                    <div class="col-sm-3">
+                        <a href="{% url 'horarios:edificio_horario_list' object.id %}">
+                            <i class="fa fa-clock-o fa-5x"></i><br>
+                            Horarios
+                        </a>
+                    </div>
+                    <div class="col-sm-3">
+                        <a href="{% url 'horarios:edificio_horario_list' object.id %}">
+                            <i class="fa fa-key fa-5x"></i><br>
+                            Llaves
+                        </a>
                     </div>
                 </div>
             </div>
