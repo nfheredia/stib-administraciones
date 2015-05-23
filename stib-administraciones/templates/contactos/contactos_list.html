@@ -1,9 +1,50 @@
 {% extends 'base.html' %}
+{% load pagination_tags %}
 
 {% block title %}Contactos del edificio{% endblock title %}
 
 {% block content %}
+    {% autopaginate object_list 20 %}
+    <br>
+    <a href="{% url 'edificios:administraciones' edificio.id %}"><i class="fa fa-reply"> Volver</i></a>
 
     <h1 class="page-header">Contactos del edificio "{{edificio.nombre}}"</h1>
+
+    <a href="{% url 'contactos:edificio_contactos_create' edificio.id %}" class="btn btn-primary">
+        <i class="fa fa-plus"></i> Agregar Contacto
+    </a>
+
+    <table cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered" id="dt_grid">
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Piso</th>
+                <th>Dpto.</th>
+                <th>Teléfono</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% if object_list %}
+                {% for contacto in object_list %}
+                    <tr>
+                        <td>{{ contacto.nombre }}</td>
+                        <td>{{ contacto.piso }}</td>
+                        <td>{{ contacto.departamento }}</td>
+                        <td>{{ contacto.telefono }}</td>
+                        <td>
+                            <a href="{% url 'contactos:edificio_contactos_update' edificio.id contacto.id %}">
+                                <i class="fa fa-pencil"></i>
+                            </a>
+                            <a href="{% url 'contactos:edificio_contactos_delete' edificio.id contacto.id %}">
+                                <i class="fa fa-trash-o"></i>
+                            </a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            {% endif %}
+        </tbody>
+    </table>
+    {% paginate %}
 
 {% endblock %}

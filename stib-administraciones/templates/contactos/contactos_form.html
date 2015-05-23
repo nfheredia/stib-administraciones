@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}Contactos del edificio{% endblock title %}
+
+{% block content %}
+
+    <div class="row">
+        <div class="col-lg-9">
+            <br>
+            <a href="{% url 'contactos:edificio_contactos_list' edificio.id %}"><i class="fa fa-reply"> Volver</i></a>
+
+            <h1 class="page-header">
+                {% if form.instance.id %}
+                    Editar
+                {% else %}
+                    Nuevo
+                {% endif %}
+                contacto del edificio "{{edificio.nombre}}"
+            </h1>
+            <form class="form-horizontal" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                {{ form|crispy }}
+                <div class="control-group">
+                  <div class="controls">
+                    <button type="submit" class="btn btn-primary"><i class="fa fa-check"></i> Confirmar</button>
+                  </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+{% endblock %}

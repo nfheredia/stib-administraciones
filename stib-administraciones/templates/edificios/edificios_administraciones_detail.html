@@ -8,6 +8,7 @@
     <div class="row">
         <div class="col-lg-12">
             <h1 class="page-header">{{ object.nombre }}</h1>
+            <a id="open_recursos_modal">Recursos</a>
         </div>
     </div>
     <div class="row">
@@ -118,4 +119,38 @@
             </div>
         {% endfor %}
     </div>
+
+
+
+<!-- modal 'recursos' -->
+<div class="modal fade" id="recursos_modal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title">
+                Recursos
+            </h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="pull-right">
+                            <i class="fa fa-user-plus fa-5x"></i><br>
+                            <a href="{% url 'contactos:edificio_contactos_list' object.id %}">Contactos</a>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <i class="fa fa-user-plus fa-5x"></i><br>
+                        <a href="{% url 'contactos:edificio_contactos_list' object.id %}">Contactos</a>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- / modal 'recursos' -->
+
 {% endblock %}

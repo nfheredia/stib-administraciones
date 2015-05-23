@@ -12,7 +12,7 @@ class PermisosAEdificiosMixin(object):
     """
     def dispatch(self, request, *args, **kwargs):
         usuario = request.user.id
-        edificio = self.kwargs['pk']
+        edificio = self.kwargs['edificio']
 
         check = Edificios.edificios_usuarios_object\
             .por_edificio(usuario, edificio)
