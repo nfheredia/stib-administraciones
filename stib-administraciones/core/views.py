@@ -21,3 +21,25 @@ class PermisosAEdificiosMixin(object):
             raise PermissionDenied
 
         return super(PermisosAEdificiosMixin, self).dispatch(request, *args, **kwargs)
+
+
+def permisos_a_edificios(view_func):
+    """
+    Funcion que comprueba si el edificio que
+    se quiere ver corresponde a la administracion
+    logueada.
+    Similar a la clase 'PermisosAEdificiosMixin', pero
+    esta se utiliza para vistas basadas en funciones
+    """
+    def _wrapped_view_func(request, *args, **kwargs):
+        usuario = request.user.id
+        edificio = kwargs['edificio']
+
+        check = Edificios.edificios_usuarios_object\
+            .por_edificio(usuario, edificio)
+
+        if check.count() != 1:
+            raise PermissionDenied
+        else:
+            return view_func(request, *args, **kwargs)
+    return _wrapped_view_func

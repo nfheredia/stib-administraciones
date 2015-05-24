@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}Llaves del edificio{% endblock title %}
+
+{% block content %}
+
+    <div class="row">
+        <div class="col-lg-9">
+            <br>
+            <a href="{% url 'edificios:administraciones' edificio.id %}">
+                <i class="fa fa-reply"> Volver</i>
+            </a>
+            <h1 class="page-header">
+                Llaves del edificio "{{edificio.nombre}}"
+            </h1>
+
+            <div class="alert alert-dismissable alert-info">
+	            <i class="fa fa-exclamation-triangle"></i>
+                Seleccione las llaves con las que cuenta el edificio.
+            </div>
+
+            <form class="form-horizontal" method="post">
+                {% csrf_token %}
+                {{ form.tipo_llaves }}
+                <div class="control-group">
+                  <div class="controls">
+                    <button type="submit" class="btn btn-primary"><i class="fa fa-check"></i> Confirmar</button>
+                  </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+{% endblock %}

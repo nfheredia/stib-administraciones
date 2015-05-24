@@ -243,3 +243,7 @@ ul.footer_toppages {
 }
 ul.footer_toppages li{ display:inline-block;}
 ul.footer_toppages li a{ float:left; font-size:12px; text-transform:none; color:#9da4ad; padding:5px 10px;}
+
+ul {
+    list-style-type: none
+}
