@@ -17,8 +17,7 @@ def set_llaves(request, edificio):
     llaves_edificios = Llaves.objects.filter(edificio=edificio).all()
 
     ctx = {
-        'form': TipoLlavesForm(prefix='llaves',
-                               initial={str(llave.tipo_llave_id):1 for llave in llaves_edificios}),
+        'form': TipoLlavesForm(prefix='llaves', initial={str(llave.tipo_llave_id):1 for llave in llaves_edificios}),
         'edificio': Edificios.objects.get(pk=edificio)
     }
 
