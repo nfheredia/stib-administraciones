@@ -33,7 +33,11 @@
                         {% if object_list %}
                             {% for foto in object_list %}
                                 <tr>
-                                    <td><img src="{% thumbnail foto.path 50x50 crop %}"></td>
+                                    <td>
+                                        <a class="fancybox" href="{% thumbnail foto.path 500x500 crop %}" title="{{ foto.categoria }} | {{ foto.nombre }}">
+                                            <img src="{% thumbnail foto.path 50x50 crop %}">
+                                        </a>
+                                    </td>
                                     <td>{{ foto.categoria }}</td>
                                     <td>{{ foto.nombre }}</td>
                                     <td>
