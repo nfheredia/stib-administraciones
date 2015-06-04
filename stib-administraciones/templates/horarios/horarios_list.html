@@ -6,7 +6,7 @@
 {% block content %}
     {% autopaginate object_list 20 %}
     <br>
-    <a href="{% url 'edificios:administraciones' edificio.id %}"><i class="fa fa-reply"> Volver</i></a>
+    <a class="btn btn-success" href="{% url 'edificios:administraciones' edificio.id %}"><i class="fa fa-reply"> Volver</i></a>
 
     <h1 class="page-header">Horarios del edificio "{{edificio.nombre}}"</h1>
 

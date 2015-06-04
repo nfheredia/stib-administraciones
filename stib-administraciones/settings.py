@@ -113,6 +113,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'django.core.context_processors.request',
     # Your stuff: custom template context processers go here
     'stib-administraciones.edificios.context_processors.edificios_usuarios',
+    'stib-administraciones.edificios.context_processors.url_to_open_lateral_menu',
 )
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#template-dirs

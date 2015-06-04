@@ -1,10 +1,14 @@
+# -*- coding: utf-8 -*-
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.core.mail import EmailMessage
+from django.http import HttpResponseRedirect
 from .forms import TipoLlavesForm
 from .models import Llaves
 from ..edificios.models import Edificios
 from ..core.views import permisos_a_edificios
+from ..settings_local import STIB_FROM_EMAIL
 
 
 @login_required(redirect_field_name='accounts/login/')
@@ -20,7 +24,6 @@ def set_llaves(request, edificio):
     initial_data = {}
     if llaves_edificios:
         for llave in llaves_edificios:
-            print llave.tipo_llave_id
             initial_data[str(llave.tipo_llave_id)]=1
 
     ctx = {
@@ -40,7 +43,31 @@ def set_llaves(request, edificio):
             llaves.edificio_id = edificio
             llaves.save()
 
-        messages.success(request, 'Se han asignado las llaves correctamente.')
-        return redirect('edificios:administraciones', edificio)
+        # -- han ingresado un comentario??
+        if request.POST.get('llave_comentario'):
+            return enviar_comentario(request, edificio)
+        else:
+            messages.success(request, 'Se han asignado las llaves correctamente.')
+            return redirect('edificios:administraciones', edificio)
 
     return render(request, 'llaves/llaves_form.html', ctx)
+
+
+def enviar_comentario(request, edificio):
+    """
+    Envío por email de comentario sobre llaves.
+    """
+    if request.user.perfil.alerta_bienvenida:
+        msg = "Para poder dejar un comentario sobre las llaves. primero debes \
+            <a href='/perfiles/update'>completar sus datos de perfil</a>."
+        messages.error(request, msg)
+        return redirect('edificios:administraciones', edificio)
+
+    email = EmailMessage(from_email=request.user.perfil.email_1,
+                         subject='Comentario de llaves',
+                         to=STIB_FROM_EMAIL)
+    email.body = '"'+request.user.perfil.nombre + '" ha comentado: ' + \
+                                                   request.POST.get('llave_comentario')
+    email.send()
+    messages.success(request, 'Se recibió correctamente su comentario y configuración de llaves.')
+    return redirect('edificios:administraciones', edificio)
