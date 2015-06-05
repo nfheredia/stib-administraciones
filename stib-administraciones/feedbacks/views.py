@@ -4,7 +4,7 @@ from django.views.generic import CreateView
 from django.contrib import messages
 from django.core.mail import EmailMessage
 from braces.views import LoginRequiredMixin
-from ..settings_local import STIB_FROM_EMAIL
+from ..settings_local import STIB_TO_EMAIL
 from .models import Feedbacks
 
 
@@ -25,7 +25,7 @@ class FeedbacksCreate(LoginRequiredMixin, CreateView):
 
         mail = EmailMessage(subject='Nuevo Feedback - '+form.instance.tipo_feedback.nombre,
                             from_email=self.request.user.perfil.email_1,
-                            to=STIB_FROM_EMAIL)
+                            to=STIB_TO_EMAIL)
         mail.body = form.instance.mensaje
         mail.send()
 

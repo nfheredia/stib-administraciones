@@ -8,7 +8,7 @@ from .forms import TipoLlavesForm
 from .models import Llaves
 from ..edificios.models import Edificios
 from ..core.views import permisos_a_edificios
-from ..settings_local import STIB_FROM_EMAIL
+from ..settings_local import STIB_TO_EMAIL
 
 
 @login_required(redirect_field_name='accounts/login/')
@@ -63,11 +63,15 @@ def enviar_comentario(request, edificio):
         messages.error(request, msg)
         return redirect('edificios:administraciones', edificio)
 
+    cliente = Edificios.objects.get(pk=edificio)
     email = EmailMessage(from_email=request.user.perfil.email_1,
                          subject='Comentario de llaves',
-                         to=STIB_FROM_EMAIL)
-    email.body = '"'+request.user.perfil.nombre + '" ha comentado: ' + \
-                                                   request.POST.get('llave_comentario')
+                         to=STIB_TO_EMAIL)
+    email.content_subtype = 'html'
+    email.body = 'La administracion "'+request.user.perfil.nombre+'" sobre el' \
+                 ' cliente "'+cliente.direccion+'" realiza la siguiente consulta: <br>' \
+                 + request.POST.get('llave_comentario')
     email.send()
+
     messages.success(request, 'Se recibió correctamente su comentario y configuración de llaves.')
     return redirect('edificios:administraciones', edificio)

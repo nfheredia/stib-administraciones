@@ -6,7 +6,7 @@ from django.core.mail import EmailMessage
 from braces.views import LoginRequiredMixin
 
 from .models import Servicios
-from ..settings_local import STIB_FROM_EMAIL
+from ..settings_local import STIB_TO_EMAIL
 from .forms import FormConsulta
 
 
@@ -68,7 +68,7 @@ def pedido_cotizacion(request, pk):
     servicios = Servicios.objects.get(id=pk)
     mail = EmailMessage(subject='Pedido de cotizacion del serivicio "'+servicios.nombre+'"',
                         from_email=request.user.perfil.email_1,
-                        to=STIB_FROM_EMAIL)
+                        to=STIB_TO_EMAIL)
     mail.body = '"'+request.user.perfil.nombre + '" solicita cotizacion del servicio "'+servicios.nombre+'"'
     mail.send()
     messages.success(request, "Hemos recibido tu pedido de cotización, \
@@ -94,7 +94,7 @@ def enviar_consulta(request, pk):
             servicio = Servicios.objects.get(id=pk)
             mail = EmailMessage(subject='Consulta del servicio "'+servicio.nombre+'"',
                                 from_email=request.user.perfil.email_1,
-                                to=STIB_FROM_EMAIL)
+                                to=STIB_TO_EMAIL)
             mail.body = formulario.cleaned_data['consulta']
             mail.send()
             messages.success(request, "Hemos recibido tu consulta, \

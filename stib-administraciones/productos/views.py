@@ -5,7 +5,7 @@ from django.http import HttpResponseRedirect
 from django.contrib import messages
 from braces.views import LoginRequiredMixin
 
-from ..settings_local import STIB_FROM_EMAIL
+from ..settings_local import STIB_TO_EMAIL
 from .models import Productos
 from .forms import FormConsulta
 
@@ -68,7 +68,7 @@ def pedir_cotizacion(request, pk):
     producto = Productos.objects.get(id=pk)
     mail = EmailMessage(subject='Pedido de cotizacion del producto "'+producto.nombre+'"',
                         from_email=request.user.perfil.email_1,
-                        to=STIB_FROM_EMAIL)
+                        to=STIB_TO_EMAIL)
     mail.body = '"'+request.user.perfil.nombre + '" solicita cotizacion del producto "'+producto.nombre+'"'
     mail.send()
     messages.success(request, "Hemos recibido tu pedido de cotización, \
@@ -94,7 +94,7 @@ def enviar_consulta(request, pk):
             producto = Productos.objects.get(id=pk)
             mail = EmailMessage(subject='Consulta del producto "'+producto.nombre+'"',
                                 from_email=request.user.perfil.email_1,
-                                to=STIB_FROM_EMAIL)
+                                to=STIB_TO_EMAIL)
             mail.body = formulario.cleaned_data['consulta']
             mail.send()
             messages.success(request, "Hemos recibido tu consulta, \
