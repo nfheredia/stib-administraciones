@@ -46,6 +46,12 @@ def permisos_a_edificios(view_func):
 
 
 def enviar_mails_para_sincronizar(self):
+    """
+    Funcionalidad que determina que eventos( Alta, baja o edicion) que
+    está ejecutando y sobre que entidad (contactos, Llaves, Horarios).
+    Va a enviar un correo que el personal encargado esté enterado de
+    tal evento.
+    """
     # -- nombre de la administracion
     administracion = self.request.user.perfil.nombre
     if administracion == "":
@@ -57,10 +63,26 @@ def enviar_mails_para_sincronizar(self):
         .get(pk=self.kwargs['edificio'])
     # -- / nombre del edificio
 
-    email_body = """
-    Administracion: %s <br>
-    Edificio: %s (%s) <br>
-    Entidad: %s <br>
-    """
-    print administracion
+    # -- obtengo el nombre del modelo como string
+    entidad = self.model.__name__
+
+    # -- de todas las clases que se heredan en la clase base
+    # -- obtengo el nombre la ultima, de esta forma se obtiene
+    # -- que tipo de evento se trata (Creacion, edicion o Delete)
+    class_evento = self.__class__.__bases__[len( self.__class__.__bases__ )-1].__name__
+    if class_evento == 'CreateView':
+        evento = 'ALTA'
+    elif class_evento == 'UpdateView':
+        evento = 'EDICION'
+    else:
+        evento = 'BORRADO'
+
+    email_body = "<b>Administracion:</b> %s " \
+                 "<br><b>Edificio:</b> %s (%s) " \
+                 "<br><b>Entidad:</b> %s <br>" \
+                 "<br><b>Evento:</b> %s <br>" \
+                 % (administracion, edificio['nombre'], edificio['direccion'],
+                    entidad, evento)
+
+    print email_body
 
