@@ -43,3 +43,24 @@ def permisos_a_edificios(view_func):
         else:
             return view_func(request, *args, **kwargs)
     return _wrapped_view_func
+
+
+def enviar_mails_para_sincronizar(self):
+    # -- nombre de la administracion
+    administracion = self.request.user.perfil.nombre
+    if administracion == "":
+        administracion = '<Nombre Desconocido>'
+    # -- / nombre de la administracion
+
+    # -- nombre del edificio
+    edificio = Edificios.objects.values('nombre', 'direccion')\
+        .get(pk=self.kwargs['edificio'])
+    # -- / nombre del edificio
+
+    email_body = """
+    Administracion: %s <br>
+    Edificio: %s (%s) <br>
+    Entidad: %s <br>
+    """
+    print administracion
+
