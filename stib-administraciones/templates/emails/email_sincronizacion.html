@@ -1,0 +1,40 @@
+<b>Administracion:</b> {{administracion}}
+<br>
+<b>Edificio:</b> {{edificio}}
+<br>
+<b>Entidad:</b> {{entidad}}
+<br>
+<b>Evento:</b> {{evento}}
+<br>
+<br>
+<b><u>Detalle:</u></b>
+<br>
+{% if entidad == 'Contactos' %}
+    <b>Nombre del contacto:</b> {{detalle.contacto}}
+    <br>
+    <b>Piso:</b>{{detalle.piso}}
+    <br>
+    <b>Dpto:</b>{{detalle.departamento}}
+{% elif entidad == 'Llaves' %}
+    <b>Lave:</b> {{detalle.llave}}
+{% elif entidad == 'Horarios' %}
+    <b>Personal:</b> {{detalle.personal}}
+    <br>
+    <b>Hora desde:</b> {{detalle.hora_desde}}
+    <br>
+    <b>Hora hasta:</b> {{detalle.hora_hasta}}
+    <br>
+    <b>Lunes:</b> {{detalle.lunes}}
+    <br>
+    <b>Martes:</b> {{detalle.martes}}
+    <br>
+    <b>Miercoles:</b> {{detalle.miercoles}}
+    <br>
+    <b>Jueves:</b> {{detalle.jueves}}
+    <br>
+    <b>Viernes:</b> {{detalle.viernes}}
+    <br>
+    <b>Sábado:</b> {{detalle.sabado}}
+    <br>
+    <b>Domingo:</b> {{detalle.domingo}}
+{% endif  %}

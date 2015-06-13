@@ -25,6 +25,23 @@ class Horarios(TimeStampedModel):
     hora_desde = models.TimeField(blank=False, null=False)
     hora_hasta = models.TimeField(blank=False, null=False)
 
+    _status = 'edited'
+
+    def save(self, force_insert=False, force_update=False, using=None,
+             update_fields=None):
+        if self.pk is None:
+            self._status = 'new'
+        super(Horarios, self).save(force_insert=False, force_update=False, using=None,
+                                   update_fields=None)
+
+    def delete(self, using=None):
+        self._status = 'deleted'
+        super(Horarios, self).delete(using=None)
+
+    @property
+    def get_status(self):
+        return self._status
+
     def __unicode__(self):
         return self.edificio.nombre
 

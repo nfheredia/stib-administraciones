@@ -1,1 +1,1 @@
-__author__ = 'bruno'
+import signals
