@@ -72,7 +72,8 @@ def _set_detalle(entidad, instance):
         detalle = {
             'contacto': instance.nombre,
             'piso': instance.piso,
-            'departamento': instance.departamento
+            'departamento': instance.departamento,
+            'telefono': instance.telefono
         }
     elif entidad == 'Llaves':
         detalle = {
