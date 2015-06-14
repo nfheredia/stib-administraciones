@@ -44,9 +44,8 @@ def enviar_email_sincronizacion(sender, instance, **kwargs):
         evento = 'Borrado'
 
     # -- Detalle
-    detalle = _get_detalle(entidad, instance)
+    detalle = _set_detalle(entidad, instance)
 
-    # -- Envio por email
     ctx = {
         'administracion': administracion,
         'edificio': edificio,
@@ -54,17 +53,17 @@ def enviar_email_sincronizacion(sender, instance, **kwargs):
         'evento': evento,
         'detalle': detalle
     }
-
+    # -- Envio por email
     body = render_to_string('emails/email_sincronizacion.html', ctx)
     msg = EmailMessage(from_email='no-reply@stibadministraciones.com',
                        subject='[STIB ADMINISTRACIONES] - Registro de actividad',
                        to=STIB_TO_EMAIL,
                        body=body)
-    msg.content_subtype='html'
+    msg.content_subtype = 'html'
     msg.send()
 
 
-def _get_detalle(entidad, instance):
+def _set_detalle(entidad, instance):
     """
     Armamos el detalle que se enviara por email
     """

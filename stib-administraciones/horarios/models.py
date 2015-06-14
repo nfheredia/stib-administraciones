@@ -1,13 +1,13 @@
 # -*- coding: utf-8 -*-
 from django.db import models
 
-from ..core.models import TimeStampedModel
+from ..core.models import TimeStampedModel, ModelStatus
 
 from ..edificios.models import Edificios
 from ..personales.models import Personales
 
 
-class Horarios(TimeStampedModel):
+class Horarios(TimeStampedModel, ModelStatus):
     """
     Modelo para registrar el horario de entrada
     a los diferentes edificios y vincularlos con
@@ -24,23 +24,6 @@ class Horarios(TimeStampedModel):
     domingo = models.BooleanField(default=False, verbose_name='Domingo')
     hora_desde = models.TimeField(blank=False, null=False)
     hora_hasta = models.TimeField(blank=False, null=False)
-
-    _status = 'edited'
-
-    def save(self, force_insert=False, force_update=False, using=None,
-             update_fields=None):
-        if self.pk is None:
-            self._status = 'new'
-        super(Horarios, self).save(force_insert=False, force_update=False, using=None,
-                                   update_fields=None)
-
-    def delete(self, using=None):
-        self._status = 'deleted'
-        super(Horarios, self).delete(using=None)
-
-    @property
-    def get_status(self):
-        return self._status
 
     def __unicode__(self):
         return self.edificio.nombre

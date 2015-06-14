@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.db import models
 
-from ..core.models import TimeStampedModel
+from ..core.models import TimeStampedModel, ModelStatus
 
 from ..edificios.models import Edificios
 
@@ -21,29 +21,12 @@ class TipoLlaves(TimeStampedModel):
         verbose_name_plural = "Tipo de Llaves"
 
 
-class Llaves(TimeStampedModel):
+class Llaves(TimeStampedModel, ModelStatus):
     """
     Llaves de los edificios
     """
     tipo_llave = models.ForeignKey(TipoLlaves, verbose_name=u"Tipo de llave")
     edificio = models.ForeignKey(Edificios, verbose_name=u"Edificio")
-
-    _status = 'edited'
-
-    def save(self, force_insert=False, force_update=False, using=None,
-             update_fields=None):
-        if self.pk is None:
-            self._status = 'new'
-        super(Llaves, self).save(force_insert=False, force_update=False, using=None,
-                                 update_fields=None)
-
-    def delete(self, using=None):
-        self._status = 'deleted'
-        super(Llaves, self).delete(using=None)
-
-    @property
-    def get_status(self):
-        return self._status
 
     def __unicode__(self):
         return self.edificio.nombre + " - " + self.edificio.direccion

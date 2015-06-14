@@ -4,7 +4,7 @@ from django.contrib import messages
 from django.core.urlresolvers import reverse
 from braces.views import LoginRequiredMixin
 
-from ..core.views import PermisosAEdificiosMixin, enviar_mails_para_sincronizar
+from ..core.views import PermisosAEdificiosMixin
 from .models import Contactos
 from ..edificios.models import Edificios
 
@@ -25,7 +25,6 @@ class ContactosEdificiosMixin(object):
         return ctx
 
     def get_success_url(self):
-        #enviar_mails_para_sincronizar(self)
         messages.success(self.request, self.success_msg)
         return reverse('contactos:edificio_contactos_list',
                        kwargs={'edificio': self.kwargs['edificio']})

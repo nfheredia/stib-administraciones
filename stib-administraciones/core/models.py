@@ -13,6 +13,28 @@ class TimeStampedModel(models.Model):
         abstract = True
 
 
+class ModelStatus(models.Model):
+    _status = 'edited'
+
+    def save(self, force_insert=False, force_update=False, using=None,
+             update_fields=None):
+        if self.pk is None:
+            self._status = 'new'
+        super(ModelStatus, self).save(force_insert=False, force_update=False, using=None,
+                                      update_fields=None)
+
+    def delete(self, using=None):
+        self._status = 'deleted'
+        super(ModelStatus, self).delete(using=None)
+
+    @property
+    def get_status(self):
+        return self._status
+
+    class Meta:
+        abstract = True
+
+
 class ProductosSerivicios(TimeStampedModel):
     """
     Clase abstracta para productos y servicios

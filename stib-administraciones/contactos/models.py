@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
 from django.db import models
 
-from ..core.models import TimeStampedModel
+from ..core.models import TimeStampedModel, ModelStatus
 
 from ..edificios.models import Edificios
 
 
-class Contactos(TimeStampedModel):
+class Contactos(TimeStampedModel, ModelStatus):
     """
     Contáctos de un edificio
     """
@@ -23,25 +23,8 @@ class Contactos(TimeStampedModel):
     telefono = models.CharField(max_length=50, blank=True)
     comentario = models.TextField(blank=True)
 
-    _status = 'edited'
-
     def __unicode__(self):
         return self.nombre
-
-    def save(self, force_insert=False, force_update=False, using=None,
-             update_fields=None):
-        if self.pk is None:
-            self._status = 'new'
-        super(Contactos, self).save(force_insert=False, force_update=False, using=None,
-                                    update_fields=None)
-
-    def delete(self, using=None):
-        self._status = 'deleted'
-        super(Contactos, self).delete(using=None)
-
-    @property
-    def get_status(self):
-        return self._status
 
     class Meta:
         verbose_name = 'Contáctos'

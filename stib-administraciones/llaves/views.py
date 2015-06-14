@@ -3,7 +3,7 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.mail import EmailMessage
-from django.http import HttpResponseRedirect
+from django.template.loader import render_to_string
 from .forms import TipoLlavesForm
 from .models import Llaves
 from ..edificios.models import Edificios
@@ -64,13 +64,24 @@ def enviar_comentario(request, edificio):
         return redirect('edificios:administraciones', edificio)
 
     cliente = Edificios.objects.get(pk=edificio)
+
+    # -- Nombre de la administracion
+    administracion = request.user.perfil.nombre
+    if administracion == "":
+        administracion = '<Nombre Desconocido>'
+
+    ctx = {
+        'administracion': administracion,
+        'edificio_nombre': cliente.nombre,
+        'edificio_direccion': cliente.direccion,
+        'consulta': request.POST.get('llave_comentario')
+    }
+    body = render_to_string('emails/comentario_llaves.html', ctx)
     email = EmailMessage(from_email=request.user.perfil.email_1,
                          subject='Comentario de llaves',
-                         to=STIB_TO_EMAIL)
+                         to=STIB_TO_EMAIL,
+                         body=body)
     email.content_subtype = 'html'
-    email.body = 'La administracion "'+request.user.perfil.nombre+'" sobre el' \
-                 ' cliente "'+cliente.direccion+'" realiza la siguiente consulta: <br>' \
-                 + request.POST.get('llave_comentario')
     email.send()
 
     messages.success(request, 'Se recibió correctamente su comentario y configuración de llaves.')
