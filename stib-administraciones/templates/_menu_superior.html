@@ -1,45 +1,66 @@
+{% load thumbnail  %}
+
 <!-- top menu -->
 <nav class="navbar navbar-default">
     <div class="container-fluid">
         <!-- Brand and toggle get grouped for better mobile display -->
         <div class="navbar-header">
-        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-          <span class="sr-only">Toggle navigation</span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-        </button>
-        <a class="navbar-brand" href="#">Stib Administraciones</a>
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#">
+                <img src="/static/images/logo_stib.png" width="100" height="50">
+            </a>
         </div>
         <!-- end Brand -->
 
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav">
-                <li><a href="/inicio">Inicio <span class="sr-only">(current)</span></a></li>
+                <li class="{% if '/inicio/' in request.get_full_path or '//' in request.get_full_path %}active{% endif %}">
+                    <a href="/inicio">Inicio <span class="sr-only">(current)</span></a>
+                </li>
             </ul>
             {% if request.user.is_authenticated %}
                 <ul class="nav navbar-nav">
-                    <li><a href="/institucional/">Institucional <span class="sr-only">(current)</span></a></li>
+                    <li class="{%if '/institucional/' in request.get_full_path %}active{% endif %}">
+                        <a href="/institucional/">Institucional <span class="sr-only">(current)</span></a>
+                    </li>
                 </ul>
                 <ul class="nav navbar-nav">
-                    <li><a href="/seguridad/">Seguridad <span class="sr-only">(current)</span></a></li>
+                    <li class="{%if '/seguridad/' in request.get_full_path %}active{% endif %}">
+                        <a href="/seguridad/">Seguridad <span class="sr-only">(current)</span></a>
+                    </li>
                 </ul>
                 <ul class="nav navbar-nav">
-                    <li><a href="{% url 'novedades:list' %}">Novedades <span class="sr-only">(current)</span></a></li>
+                    <li class="{%if '/como-trabajamos/' in request.get_full_path %}active{% endif %}">
+                        <a href="/como-trabajamos/">Como Trabajamos <span class="sr-only">(current)</span></a>
+                    </li>
                 </ul>
                 <ul class="nav navbar-nav">
-                    <li><a href="/faq/">Preguntas Frecuentes <span class="sr-only">(current)</span></a></li>
+                    <li class="{%if '/novedades/' in request.get_full_path %}active{% endif %}">
+                        <a href="{% url 'novedades:list' %}">Novedades <span class="sr-only">(current)</span></a>
+                    </li>
+                </ul>
+                <ul class="nav navbar-nav">
+                    <li class="{%if '/faq/' in request.get_full_path %}active{% endif %}">
+                        <a href="/faq/">Preguntas Frecuentes <span class="sr-only">(current)</span></a>
+                    </li>
                 </ul>
                 {% if request.user.is_staff == False %}
                     <ul class="nav navbar-nav">
-                        <li>
+                        <li class="{%if '/feedbacks/create/' in request.get_full_path %}active{% endif %}">
                             <a id="feedback" href="{% url 'feedback_create' %}"> Feedback </a>
                         </li>
                     </ul>
                 {% endif %}
                 <ul class="nav navbar-nav">
-                    <li><a href="/contacto/">Contacto <span class="sr-only">(current)</span></a></li>
+                    <li class="{%if '/contacto/' in request.get_full_path %}active{% endif %}">
+                        <a href="/contacto/">Contacto <span class="sr-only">(current)</span></a>
+                    </li>
                 </ul>
             {% endif %}
             <ul class="nav navbar-nav navbar-right">

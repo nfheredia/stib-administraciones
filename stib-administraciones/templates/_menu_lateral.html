@@ -22,11 +22,11 @@
                 <!-- Lista de edificios del usuario logueado -->
                 {% if request.user.is_authenticated %}
                     {% if edificios_usuarios %}
-                        <li class="edificio">
+                        <li class="edificio active">
                             <a href="#"><i class="fa fa-building fa-fw"></i> Mis Clientes<span class="fa arrow"></span></a>
                             <ul class="{% if '/edificios/' in request.get_full_path or '/contactos/' in request.get_full_path or '/llaves/' in request.get_full_path or '/fotos/' in request.get_full_path or '/horarios/' in request.get_full_path %}nav nav-second-level collapse in{% else %}nav nav-second-level{% endif %}">
                                 {% for edificio in edificios_usuarios %}
-                                    <li class="edificio">
+                                    <li class="edificio ">
                                         <a href="{% url 'edificios:administraciones' edificio.id %}"> {{edificio.direccion}} </a>
                                     </li>
                                 {% endfor %}
