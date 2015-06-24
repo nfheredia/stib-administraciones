@@ -37,6 +37,8 @@ urlpatterns = patterns('',
     url(r'^horarios/', include('stib-administraciones.horarios.urls', namespace='horarios')),
     # -- llaves
     url(r'^llaves/', include('stib-administraciones.llaves.urls', namespace='llaves')),
+    # -- comunicacion
+    url(r'^comunicacion/', include('stib-administraciones.relaciones.urls', namespace='comunicacion')),
 
 ) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

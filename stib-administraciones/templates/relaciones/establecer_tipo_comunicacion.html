@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+
+{% block title %}Editar Perfil{% endblock %}
+
+{% block content %}
+
+<div class="row">
+    <div class="col-lg-9">
+        <h1 class="page-header">Envío de Notificaciones</h1>
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-5">
+        <form class="form-horizontal" method="post">
+            {% csrf_token %}
+            {{ form|crispy }}
+            <div class="control-group">
+              <div class="controls">
+                <button type="submit" class="btn btn-primary">Aceptar</button>
+              </div>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
