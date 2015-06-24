@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
 from .forms import FormDefinirTipoComunicacion
-from django.views.generic import FormView
+from django.views.generic import FormView, CreateView
 from braces.views import LoginRequiredMixin, StaffuserRequiredMixin
+
+from .models import RelacionesUsuariosProductos
 
 
 class EstableverTipoComunicacion(LoginRequiredMixin, StaffuserRequiredMixin, FormView):
@@ -21,3 +23,13 @@ class EstableverTipoComunicacion(LoginRequiredMixin, StaffuserRequiredMixin, For
         destinatario = form.cleaned_data["destinatario"]
         self.success_url = entidad + "-" + destinatario
         return super(EstableverTipoComunicacion, self).form_valid(form)
+
+
+class NotificarUsuariosProductos(LoginRequiredMixin, StaffuserRequiredMixin, CreateView):
+	"""
+	Notificar a usuarios sobre determinados
+	productos
+	"""
+	template_name = 'relaciones/notificar_usuarios_productos.html'
+	model = RelacionesUsuariosProductos
+	    
