@@ -12,10 +12,14 @@ class Relaciones(TimeStampedModel):
     Modelo abstracto, reusable
     """
     titulo = models.CharField(blank=False, max_length=150, null=False,
-                              verbose_name='Título',  unique=True)
+                              verbose_name='Título')
     descripcion = models.TextField(blank=True, verbose_name='Descripción')
     leido = models.BooleanField(verbose_name="Leido", default=False)
-    enviado = models.BooleanField(verbose_name="Enviado", default=False)
+    enviado = models.BooleanField(verbose_name="Enviar por email?",
+                                  default=False,
+                                  help_text='ATENCIÓN: Se enviará el mail si la '
+                                            'administración tiene configurado su dirección'
+                                            'de correo')
 
     class Meta:
         abstract = True

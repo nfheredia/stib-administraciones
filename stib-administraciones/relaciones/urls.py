@@ -1,6 +1,8 @@
 from django.conf.urls import patterns, url
 
-from .views import EstableverTipoComunicacion, NotificarUsuariosProductos
+from .views import (EstableverTipoComunicacion,
+                    NotificarUsuariosProductos,
+                    search_productos_autocomplete)
 
 urlpatterns = patterns('stib-administraciones.productos.views',
     url(
@@ -8,10 +10,15 @@ urlpatterns = patterns('stib-administraciones.productos.views',
         view=EstableverTipoComunicacion.as_view(),
         name='definir'
     ),
-	url(
+    url(
         regex=r'^productos-administraciones$',
         view=NotificarUsuariosProductos.as_view(),
         name='productos-administraciones'
+    ),
+    url(
+        regex=r'^search_productos_autocomplete/$',
+        view=search_productos_autocomplete,
+        name='search_productos_autocomplete'
     ),
 )
 

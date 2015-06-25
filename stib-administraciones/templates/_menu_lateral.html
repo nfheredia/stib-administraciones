@@ -17,7 +17,9 @@
             {% if request.user.is_staff %}
                 <li>
                     <a href="{% url 'edificios:list' %}"><i class="fa fa-building fa-fw"></i> Edificios </a>
-		    <a href="{% url 'notificaciones:definir' %}"><i class="fa fa-bullhorn fa-fw"></i> Notificaciones </a>
+                </li>
+                <li>
+		            <a href="{% url 'notificaciones:definir' %}"><i class="fa fa-bullhorn fa-fw"></i> Notificaciones </a>
                 </li>
             {% else %}
                 <!-- Lista de edificios del usuario logueado -->

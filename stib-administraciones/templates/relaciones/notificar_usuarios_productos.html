@@ -1,13 +1,13 @@
 {% extends "base.html" %}
-{% load crispy_forms_tags %}
+{% load crispy_forms_tags staticfiles %}
 
-{% block title %}Notificaciones Usuarios Productos{% endblock %}
+{% block title %}Notificaciones Administraciones Productos{% endblock %}
 
 {% block content %}
 
 <div class="row">
     <div class="col-lg-9">
-        <h1 class="page-header">Notificaciones Usuarios Productos</h1>
+        <h1 class="page-header">Notificaciones Administraciones Productos</h1>
     </div>
 </div>
 <div class="row">
@@ -17,10 +17,14 @@
             {{ form|crispy }}
             <div class="control-group">
               <div class="controls">
-                <button type="submit" class="btn btn-primary">Aceptar</button>
+                <button type="submit" class="btn btn-primary">Enviar</button>
               </div>
             </div>
         </form>
     </div>
 </div>
 {% endblock %}
+{% block javascript %}
+    {{ block.super }}
+    <script src="{% static 'js/notificaciones-autocomplete.js' %}"></script>
+{% endblock javascript %}
