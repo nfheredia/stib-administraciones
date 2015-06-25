@@ -2,6 +2,7 @@ from django.conf.urls import patterns, url
 
 from .views import (EstableverTipoComunicacion,
                     NotificarUsuariosProductos,
+					NotificarUsuariosServicios,
                     search_productos_autocomplete)
 
 urlpatterns = patterns('stib-administraciones.productos.views',
@@ -19,6 +20,12 @@ urlpatterns = patterns('stib-administraciones.productos.views',
         regex=r'^search_productos_autocomplete/$',
         view=search_productos_autocomplete,
         name='search_productos_autocomplete'
+    ),
+	,
+    url(
+        regex=r'^serivicios-administraciones$',
+        view=NotificarUsuariosServicios.as_view(),
+        name='serivicios-administraciones'
     ),
 )
 

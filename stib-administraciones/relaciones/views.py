@@ -32,7 +32,7 @@ class EstableverTipoComunicacion(LoginRequiredMixin, StaffuserRequiredMixin, For
 
 class NotificarUsuariosProductos(LoginRequiredMixin, StaffuserRequiredMixin, CreateView):
     """
-    Notificar a usuarios sobre determinados
+    Notificar a usuarios(administraciones) sobre determinados
     productos
     """
     template_name = 'relaciones/notificar_usuarios_productos.html'
