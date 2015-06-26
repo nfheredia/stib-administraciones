@@ -4,7 +4,9 @@ from .views import (EstableverTipoComunicacion,
                     NotificarProductosUsuarios,
                     NotificarServiciosUsuarios,
                     get_autocomplete_result,
-                    NotificarProductosEdificios)
+                    NotificarProductosEdificios,
+					get_autocomplete_edificios_result,
+					NotificarServiciosEdificios)
 
 urlpatterns = patterns('stib-administraciones.productos.views',
     url(
@@ -32,6 +34,16 @@ urlpatterns = patterns('stib-administraciones.productos.views',
         view=NotificarProductosEdificios.as_view(),
         name='productos-edificios'
     ),
+	url(
+        regex=r'^servicios-edificios$',
+        view=NotificarServiciosEdificios.as_view(),
+        name='servicios-edificios'
+    ),
+	url(
+        regex=r'^search-autocomplete-edificios$',
+        view=get_autocomplete_edificios_result,
+        name='search-autocomplete-edificios'
+    )
 )
 
 

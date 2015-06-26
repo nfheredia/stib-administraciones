@@ -26,4 +26,17 @@ $(document).ready(function(){
         }
     });
 
+	/* **************************************************
+        Autocomplete de edificios
+        - utilizamos jquery autocomplete
+    *************************************************** */
+    $( "#id_edificio_nombre" ).autocomplete({
+        source: "/notificaciones/search-autocomplete-edificios",
+        selectFirst:true,
+        minLength:3,
+        select: function(event,ui) {
+            $("#id_edificio").val(ui.item.id)
+        }
+    });
+
 });

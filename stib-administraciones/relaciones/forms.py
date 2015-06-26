@@ -2,7 +2,7 @@
 from django import forms
 from django.db import models
 from django.contrib.auth import get_user_model
-from .models import RelacionesUsuariosProductos, RelacionesUsuariosServicios
+from .models import RelacionesUsuariosProductos, RelacionesUsuariosServicios, RelacionesEdificiosProductos, RelacionesEdificiosServicios
 
 
 class FormDefinirTipoComunicacion(forms.Form):
@@ -41,7 +41,44 @@ class FormNotificacionesUsuarios(forms.ModelForm):
         self.fields['tipo_relacion'].label = 'Motivos de tu notificacion'
 
 
-class FormNotificacionUsuariosProductos(FormNotificacionesUsuarios):
+class FormularioAutosuggestEdificios(forms.ModelForm):
+	""" Form para el autosuggest de edificios """
+
+	edificio_nombre = forms.CharField(max_length=150, required=True)
+
+	def __init__(self, *args, **kwargs):
+		super(FormularioAutosuggestEdificios, self).__init__(*args, **kwargs)
+		self.fields['edificio_nombre'].label = 'Edificio'
+		self.fields['edificio_nombre'].help_text = 'Escriba el nombre o direccion del edificio'
+		self.fields['edificio'].widget = forms.HiddenInput()
+		self.fields['tipo_relacion'].label = 'Motivos de tu notificacion'
+
+
+class FormularioAutosuggestProductos(forms.ModelForm):
+	""" Form para el autosuggest de productos """
+
+	producto_nombre = forms.CharField(max_length=150, required=True)
+
+	def __init__(self, *args, **kwargs):
+		super(FormularioAutosuggestProductos, self).__init__(*args, **kwargs)
+		self.fields['producto_nombre'].label = 'Nombre del producto'
+		self.fields['producto_nombre'].help_text = 'Escriba el nombre del producto'
+		self.fields['producto'].widget = forms.HiddenInput()
+
+
+class FormularioAutosuggestServicios(forms.ModelForm):
+	""" Form para el autosuggest de servicios """
+
+	servicio_nombre = forms.CharField(max_length=150, required=True)
+
+	def __init__(self, *args, **kwargs):
+		super(FormularioAutosuggestServicios, self).__init__(*args, **kwargs)
+		self.fields['servicio_nombre'].label = 'Nombre del servicio'
+		self.fields['servicio_nombre'].help_text = 'Escriba el nombre del servicio'
+		self.fields['servicio'].widget = forms.HiddenInput()
+
+
+class FormNotificacionUsuariosProductos(FormNotificacionesUsuarios, FormularioAutosuggestProductos):
     """
     Formulario que presentara los campos necesarios para
     enviar una notificacion a una administracion sobre un producto.
@@ -50,21 +87,13 @@ class FormNotificacionUsuariosProductos(FormNotificacionesUsuarios):
     - Se filtran los usuarios para mostrar solo los que NO
     son usuarios de 'staff'
     """
-    producto_nombre = forms.CharField(max_length=150, required=True)
-
     class Meta:
         model = RelacionesUsuariosProductos
         fields = ('titulo', 'descripcion', 'usuario', 'producto_nombre',
                   'producto', 'tipo_relacion', 'enviado', )
 
-    def __init__(self, *args, **kwargs):
-        super(FormNotificacionUsuariosProductos, self).__init__(*args, **kwargs)
-        self.fields['producto_nombre'].label = 'Nombre del producto'
-        self.fields['producto_nombre'].help_text = 'Escriba el nombre del producto'
-        self.fields['producto'].widget = forms.HiddenInput()
 
-
-class FormNotificacionUsuariosServicios(FormNotificacionesUsuarios):
+class FormNotificacionUsuariosServicios(FormNotificacionesUsuarios, FormularioAutosuggestServicios):
     """
     Formulario que presentara los campos necesarios para
     enviar una notificacion a una administracion sobre un servicio.
@@ -73,17 +102,31 @@ class FormNotificacionUsuariosServicios(FormNotificacionesUsuarios):
     - Se filtran los usuarios para mostrar solo los que NO
     son usuarios de 'staff'
     """
-    servicio_nombre = forms.CharField(max_length=150, required=True)
-
     class Meta:
         model = RelacionesUsuariosServicios
         fields = ('titulo', 'descripcion', 'usuario', 'servicio_nombre',
                   'servicio', 'tipo_relacion', 'enviado', )
 
-    def __init__(self, *args, **kwargs):
-        super(FormNotificacionUsuariosServicios, self).__init__(*args, **kwargs)
-        self.fields['servicio_nombre'].label = 'Nombre del servicio'
-        self.fields['servicio_nombre'].help_text = 'Escriba el nombre del servicio'
-        self.fields['servicio'].widget = forms.HiddenInput()
+
+class FormNotificacionEdificiosProductos(FormularioAutosuggestEdificios, FormularioAutosuggestProductos):
+	"""
+	Formulario que permitira enviar notificaciones de productos
+	para un determinado edificio.
+	Tiene auto-suggest en los campos de productos y edificios.
+	"""
+	class Meta:
+		model = RelacionesEdificiosProductos
+		fields = ('titulo', 'descripcion', 'edificio', 'edificio_nombre', 'producto_nombre','producto', 'tipo_relacion', 'enviado', )
+
+
+class FormNotificacionEdificiosServicios(FormularioAutosuggestEdificios, FormularioAutosuggestServicios):
+	"""
+	Formulario que permitira enviar notificaciones de servicios
+	para un determinado edificio.
+	Tiene auto-suggest en los campos de servicios y edificios.
+	"""
+	class Meta:
+		model = RelacionesEdificiosServicios
+		fields = ('titulo', 'descripcion', 'edificio', 'edificio_nombre', 'servicio_nombre','servicio', 'tipo_relacion', 'enviado', )
 
 

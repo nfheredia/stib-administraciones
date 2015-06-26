@@ -4,16 +4,21 @@ from django.http import HttpResponse
 from django.contrib import messages
 from django.core.urlresolvers import reverse
 from django.views.generic import FormView, CreateView
+from django.db.models import Q
 from braces.views import LoginRequiredMixin, StaffuserRequiredMixin
 
 from .forms import (FormDefinirTipoComunicacion,
                     FormNotificacionUsuariosProductos,
-                    FormNotificacionUsuariosServicios)
+                    FormNotificacionUsuariosServicios,
+					FormNotificacionEdificiosProductos,
+					FormNotificacionEdificiosServicios)
 from .models import (RelacionesUsuariosProductos,
                      RelacionesUsuariosServicios,
-                     RelacionesEdificiosProductos)
+                     RelacionesEdificiosProductos,
+					 RelacionesEdificiosServicios)
 from ..productos.models import Productos
 from ..servicios.models import Servicios
+from ..edificios.models import Edificios
 
 
 class EstableverTipoComunicacion(LoginRequiredMixin, StaffuserRequiredMixin, FormView):
@@ -75,10 +80,22 @@ class NotificarServiciosUsuarios(NotificarCreateViewMixin):
 class NotificarProductosEdificios(NotificarCreateViewMixin):
     """ Notificar a edificio sobre determinados productos. """
     model = RelacionesEdificiosProductos
+    form_class = FormNotificacionEdificiosProductos
 
     def get_context_data(self, **kwargs):
         ctx = super(NotificarProductosEdificios, self).get_context_data(**kwargs)
         ctx['page_title'] = 'Notificaciones de Productos para Edificios'
+        return ctx
+
+
+class NotificarServiciosEdificios(NotificarCreateViewMixin):
+    """ Notificar a edificio sobre determinados servicios. """
+    model = RelacionesEdificiosServicios
+    form_class = FormNotificacionEdificiosServicios
+
+    def get_context_data(self, **kwargs):
+        ctx = super(NotificarServiciosEdificios, self).get_context_data(**kwargs)
+        ctx['page_title'] = 'Notificaciones de Servicios para Edificios'
         return ctx
 
 
@@ -94,7 +111,7 @@ def get_autocomplete_result(request):
     # -- convierto string a isntancia de clase --
     class_instance = globals()[obj]
     # -- consulta sql para obtener el resultado --
-    results = class_instance.objects.filter(nombre__icontains=q).all()
+    results = class_instance.objects.filter(nombre__icontains=q)
     results_list = []
 
     for result in results:
@@ -104,3 +121,27 @@ def get_autocomplete_result(request):
         results_list.append(dic_result)
 
     return HttpResponse(json.dumps(results_list), mimetype="application/json")
+
+
+def get_autocomplete_edificios_result(request):
+	"""
+    Busqueda de edificios, se utiliza en una llamada
+    ajax en el formulario para auto-sugerir el resultado.
+    """
+	# -- término a buscar --
+	q = request.GET['term']
+	# -- busqueda por nombre o direccion de edificio
+	edificios = Edificios.objects.filter(Q(nombre__icontains=q) | Q(direccion__icontains=q))
+
+	results_list = []
+
+	for edificio in edificios:
+		dic_result = {}
+		dic_result['id'] = edificio.id
+		dic_result['label'] = edificio.nombre +" - "+edificio.direccion
+		results_list.append(dic_result)
+
+	return HttpResponse(json.dumps(results_list), mimetype="application/json")
+	
+	
+
