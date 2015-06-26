@@ -6,9 +6,14 @@ from django.core.urlresolvers import reverse
 from django.views.generic import FormView, CreateView
 from braces.views import LoginRequiredMixin, StaffuserRequiredMixin
 
-from .forms import FormDefinirTipoComunicacion, FormNotificacionUsuariosProductos
-from .models import RelacionesUsuariosProductos
+from .forms import (FormDefinirTipoComunicacion,
+                    FormNotificacionUsuariosProductos,
+                    FormNotificacionUsuariosServicios)
+from .models import (RelacionesUsuariosProductos,
+                     RelacionesUsuariosServicios,
+                     RelacionesEdificiosProductos)
 from ..productos.models import Productos
+from ..servicios.models import Servicios
 
 
 class EstableverTipoComunicacion(LoginRequiredMixin, StaffuserRequiredMixin, FormView):
@@ -30,34 +35,72 @@ class EstableverTipoComunicacion(LoginRequiredMixin, StaffuserRequiredMixin, For
         return super(EstableverTipoComunicacion, self).form_valid(form)
 
 
-class NotificarUsuariosProductos(LoginRequiredMixin, StaffuserRequiredMixin, CreateView):
-    """
-    Notificar a usuarios(administraciones) sobre determinados
-    productos
-    """
-    template_name = 'relaciones/notificar_usuarios_productos.html'
-    model = RelacionesUsuariosProductos
-    form_class = FormNotificacionUsuariosProductos
+class NotificarCreateViewMixin(LoginRequiredMixin, StaffuserRequiredMixin, CreateView):
+
+    template_name = 'relaciones/notificar_form.html'
 
     def get_success_url(self):
         messages.success(self.request, 'La notificación se envió con éxito.')
         return reverse('notificaciones:definir')
 
 
-def search_productos_autocomplete(request):
+class NotificarProductosUsuarios(NotificarCreateViewMixin):
     """
-    Busqueda de productos, se utiliza en una llamada
-    ajax en el formulario para auto-sugerir el
-    nombre de un producto
+    Notificar a usuarios(administraciones) sobre determinados
+    productos
     """
+    model = RelacionesUsuariosProductos
+    form_class = FormNotificacionUsuariosProductos
+
+    def get_context_data(self, **kwargs):
+        ctx = super(NotificarProductosUsuarios, self).get_context_data(**kwargs)
+        ctx['page_title'] = 'Notificaciones de Productos para Administraciones '
+        return ctx
+
+
+class NotificarServiciosUsuarios(NotificarCreateViewMixin):
+    """
+    Notificar a usuarios(administraciones) sobre determinados
+    servicios.
+    """
+    model = RelacionesUsuariosServicios
+    form_class = FormNotificacionUsuariosServicios
+
+    def get_context_data(self, **kwargs):
+        ctx = super(NotificarServiciosUsuarios, self).get_context_data(**kwargs)
+        ctx['page_title'] = 'Notificaciones de Servicios para Administraciones '
+        return ctx
+
+
+class NotificarProductosEdificios(NotificarCreateViewMixin):
+    """ Notificar a edificio sobre determinados productos. """
+    model = RelacionesEdificiosProductos
+
+    def get_context_data(self, **kwargs):
+        ctx = super(NotificarProductosEdificios, self).get_context_data(**kwargs)
+        ctx['page_title'] = 'Notificaciones de Productos para Edificios'
+        return ctx
+
+
+def get_autocomplete_result(request):
+    """
+    Busqueda de productos y servicios, se utiliza en una llamada
+    ajax en el formulario para auto-sugerir el resultado.
+    """
+    # -- término a buscar --
     q = request.GET['term']
-    productos = Productos.objects.filter(nombre__icontains=q).all()
-    productos_list = []
+    # -- parametro que indica en que modelo bsucar --
+    obj = request.GET['obj']
+    # -- convierto string a isntancia de clase --
+    class_instance = globals()[obj]
+    # -- consulta sql para obtener el resultado --
+    results = class_instance.objects.filter(nombre__icontains=q).all()
+    results_list = []
 
-    for producto in productos:
+    for result in results:
         dic_result = {}
-        dic_result['id'] = producto.id
-        dic_result['label'] = producto.nombre
-        productos_list.append(dic_result)
+        dic_result['id'] = result.id
+        dic_result['label'] = result.nombre
+        results_list.append(dic_result)
 
-    return HttpResponse(json.dumps(productos_list), mimetype="application/json")
+    return HttpResponse(json.dumps(results_list), mimetype="application/json")
