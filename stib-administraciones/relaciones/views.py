@@ -10,12 +10,12 @@ from braces.views import LoginRequiredMixin, StaffuserRequiredMixin
 from .forms import (FormDefinirTipoComunicacion,
                     FormNotificacionUsuariosProductos,
                     FormNotificacionUsuariosServicios,
-					FormNotificacionEdificiosProductos,
-					FormNotificacionEdificiosServicios)
+                    FormNotificacionEdificiosProductos,
+                    FormNotificacionEdificiosServicios)
 from .models import (RelacionesUsuariosProductos,
                      RelacionesUsuariosServicios,
                      RelacionesEdificiosProductos,
-					 RelacionesEdificiosServicios)
+                     RelacionesEdificiosServicios)
 from ..productos.models import Productos
 from ..servicios.models import Servicios
 from ..edificios.models import Edificios
@@ -124,24 +124,24 @@ def get_autocomplete_result(request):
 
 
 def get_autocomplete_edificios_result(request):
-	"""
+    """
     Busqueda de edificios, se utiliza en una llamada
     ajax en el formulario para auto-sugerir el resultado.
     """
-	# -- término a buscar --
-	q = request.GET['term']
-	# -- busqueda por nombre o direccion de edificio
-	edificios = Edificios.objects.filter(Q(nombre__icontains=q) | Q(direccion__icontains=q))
+    # -- término a buscar --
+    q = request.GET['term']
+    # -- busqueda por nombre o direccion de edificio
+    edificios = Edificios.objects.filter(Q(nombre__icontains=q) | Q(direccion__icontains=q))
 
-	results_list = []
+    results_list = []
 
-	for edificio in edificios:
-		dic_result = {}
-		dic_result['id'] = edificio.id
-		dic_result['label'] = edificio.nombre +" - "+edificio.direccion
-		results_list.append(dic_result)
+    for edificio in edificios:
+        dic_result = {}
+        dic_result['id'] = edificio.id
+        dic_result['label'] = edificio.nombre +" - "+edificio.direccion
+        results_list.append(dic_result)
 
-	return HttpResponse(json.dumps(results_list), mimetype="application/json")
-	
-	
+    return HttpResponse(json.dumps(results_list), mimetype="application/json")
+
+
 

@@ -164,6 +164,7 @@ THIRD_PARTY_APPS = (
     'pagination',
     'disqus',
     'djrill',
+    'tinymce',
 )
 
 # Apps specific for this project go here.

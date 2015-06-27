@@ -5,46 +5,45 @@ from .views import (EstableverTipoComunicacion,
                     NotificarServiciosUsuarios,
                     get_autocomplete_result,
                     NotificarProductosEdificios,
-					get_autocomplete_edificios_result,
-					NotificarServiciosEdificios)
+                    get_autocomplete_edificios_result,
+                    NotificarServiciosEdificios)
 
 urlpatterns = patterns('stib-administraciones.productos.views',
     url(
-        regex=r'^$',
-        view=EstableverTipoComunicacion.as_view(),
-        name='definir'
+       regex=r'^$',
+       view=EstableverTipoComunicacion.as_view(),
+       name='definir'
     ),
     url(
-        regex=r'^productos-administraciones$',
-        view=NotificarProductosUsuarios.as_view(),
-        name='productos-administraciones'
+       regex=r'^productos-administraciones$',
+       view=NotificarProductosUsuarios.as_view(),
+       name='productos-administraciones'
     ),
     url(
-        regex=r'^search-autocomplete/$',
-        view=get_autocomplete_result,
-        name='search_autocomplete'
+       regex=r'^search-autocomplete/$',
+       view=get_autocomplete_result,
+       name='search_autocomplete'
     ),
     url(
-        regex=r'^servicios-administraciones$',
-        view=NotificarServiciosUsuarios.as_view(),
-        name='servicios-administraciones'
+       regex=r'^servicios-administraciones$',
+       view=NotificarServiciosUsuarios.as_view(),
+       name='servicios-administraciones'
     ),
     url(
-        regex=r'^productos-edificios$',
-        view=NotificarProductosEdificios.as_view(),
-        name='productos-edificios'
+       regex=r'^productos-edificios$',
+       view=NotificarProductosEdificios.as_view(),
+       name='productos-edificios'
     ),
-	url(
-        regex=r'^servicios-edificios$',
-        view=NotificarServiciosEdificios.as_view(),
-        name='servicios-edificios'
+    url(
+       regex=r'^servicios-edificios$',
+       view=NotificarServiciosEdificios.as_view(),
+       name='servicios-edificios'
     ),
-	url(
-        regex=r'^search-autocomplete-edificios$',
-        view=get_autocomplete_edificios_result,
-        name='search-autocomplete-edificios'
+    url(
+       regex=r'^search-autocomplete-edificios$',
+       view=get_autocomplete_edificios_result,
+       name='search-autocomplete-edificios'
     )
 )
-
 
 
