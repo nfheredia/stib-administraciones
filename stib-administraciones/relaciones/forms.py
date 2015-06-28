@@ -2,8 +2,6 @@
 from django import forms
 from django.db import models
 from django.contrib.auth import get_user_model
-
-from tinymce.widgets import TinyMCE
 from .models import RelacionesUsuariosProductos, RelacionesUsuariosServicios, RelacionesEdificiosProductos, \
     RelacionesEdificiosServicios
 
@@ -52,9 +50,9 @@ class FormularioAutosuggestEdificios(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(FormularioAutosuggestEdificios, self).__init__(*args, **kwargs)
         self.fields['edificio_nombre'].label = 'Edificio'
-        self.fields['edificio_nombre'].help_text = 'Escriba el nombre o direccion del edificio'
+        self.fields['edificio_nombre'].help_text = 'Escriba el nombre o dirección del edificio'
         self.fields['edificio'].widget = forms.HiddenInput()
-        self.fields['tipo_relacion'].label = 'Motivos de tu notificacion'
+        self.fields['tipo_relacion'].label = 'Motivos de tu notificación'
 
 
 class FormularioAutosuggestProductos(forms.ModelForm):

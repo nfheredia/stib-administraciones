@@ -5,6 +5,8 @@ from django.contrib import messages
 from django.core.urlresolvers import reverse
 from django.views.generic import FormView, CreateView
 from django.db.models import Q
+from django.core.mail import EmailMessage
+from django.template.loader import render_to_string
 from braces.views import LoginRequiredMixin, StaffuserRequiredMixin
 
 from .forms import (FormDefinirTipoComunicacion,
@@ -19,6 +21,9 @@ from .models import (RelacionesUsuariosProductos,
 from ..productos.models import Productos
 from ..servicios.models import Servicios
 from ..edificios.models import Edificios
+from ..perfiles.models import Perfiles
+
+from ..settings_local import STIB_TO_EMAIL
 
 
 class EstableverTipoComunicacion(LoginRequiredMixin, StaffuserRequiredMixin, FormView):
@@ -47,6 +52,45 @@ class NotificarCreateViewMixin(LoginRequiredMixin, StaffuserRequiredMixin, Creat
     def get_success_url(self):
         messages.success(self.request, 'La notificación se envió con éxito.')
         return reverse('notificaciones:definir')
+
+    def form_valid(self, form):
+        self._enviar_aviso_por_email(form)
+        return super(NotificarCreateViewMixin, self).form_valid(form)
+
+    def _enviar_aviso_por_email(self, form):
+        try:
+            # -- obtengo Id de usuario
+            if self.request.POST.get('edificio') is None:
+                user = self.request.POST.get('usuario')
+            else:
+                user = Edificios.objects.values('user').get(pk=self.request.POST.get('edificio'))
+                user = user['user']
+
+            # -- obtengo direccion de mail
+            email = Perfiles.objects.values('email_1').get(user=user)
+
+            # -- tiene email cargado?
+            if 'email_1' in email and len(email['email_1']) > 0:
+                subject = "[STIB] [%s] " % form.cleaned_data['tipo_relacion']
+                if self.request.POST.get('edificio') is not None:
+                    subject += str(form.cleaned_data['edificio'])
+                else:
+                    subject += "Aviso importante"
+
+                print email['email_1']
+                ctx = {'link_vista': 'http://google.com'}
+                body = render_to_string("emails/email_notificaciones.html", ctx)
+                msg = EmailMessage(subject=subject,
+                                   body=body,
+                                   from_email='no-reply@stibadministraciones.com',
+                                   to=(email['email_1'], ))
+                msg.content_subtype = 'html'
+                msg.send()
+                return True
+            else:
+                return False
+        except:
+            return False
 
 
 class NotificarProductosUsuarios(NotificarCreateViewMixin):
@@ -138,7 +182,7 @@ def get_autocomplete_edificios_result(request):
     for edificio in edificios:
         dic_result = {}
         dic_result['id'] = edificio.id
-        dic_result['label'] = edificio.nombre +" - "+edificio.direccion
+        dic_result['label'] = edificio.nombre + " - " + edificio.direccion
         results_list.append(dic_result)
 
     return HttpResponse(json.dumps(results_list), mimetype="application/json")
