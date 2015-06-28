@@ -23,8 +23,6 @@ from ..servicios.models import Servicios
 from ..edificios.models import Edificios
 from ..perfiles.models import Perfiles
 
-from ..settings_local import STIB_TO_EMAIL
-
 
 class EstableverTipoComunicacion(LoginRequiredMixin, StaffuserRequiredMixin, FormView):
     """
