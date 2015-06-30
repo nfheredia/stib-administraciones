@@ -3,14 +3,14 @@
 {% load relaciones_tags %}
 
 {% block title %}
-    Notificaciones para Edificios
+    Notificaciones para Administraciones
 {% endblock %}
 
 {% block content %}
     {% autopaginate notificaciones 5 %}
     <div class="row">
         <div class="col-lg-12">
-            <h1 class="page-header">Notificaciones para Edificios</h1>
+            <h1 class="page-header">Notificaciones para Administraciones</h1>
         </div>
     </div>
     <div class="row">
@@ -21,7 +21,7 @@
                         <th>Entidad</th>
                         <th>Nombre</th>
                         <th>Día de envio</th>
-                        <th>Edificio</th>
+                        <th>Administracion</th>
                         <th>Título</th>
                         <th>Descripción</th>
                         <th>Leido</th>
@@ -40,13 +40,10 @@
                                 {% endif %}
                                 {% if notificacion.producto.nombre %}
                                     <td>Producto</td>
-                                    <td>
-										{{notificacion.producto.nombre}}
-										{% show_pop_up_entidad notificacion.producto %}	
-									</td>
+                                    <td>{{notificacion.producto.nombre}}</td>
                                 {% endif %}
                                 <td>{{notificacion.creado|date:"SHORT_DATE_FORMAT"}}</td>
-                                <td>{{notificacion.edificio.nombre}} - {{notificacion.edificio.direccion}}</td>
+                                <td>{{notificacion.usuario.perfil.nombre}}</td>
                                 <td>{{notificacion.titulo}}</td>
                                 <td>
                                     {{notificacion.descripcion|truncatechars:15}}

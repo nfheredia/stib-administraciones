@@ -207,5 +207,26 @@ class NotificacionesEdificiosView(TemplateView):
         )
 
 
+class NotificacionesAdministracionesView(TemplateView):
+	"""
+	Ver las notificaciones de las administraciones, combinamos
+	los productos y servicios...
+	"""
+	template_name = 'relaciones/notificaciones_administraciones_list.html'
+
+	def get(self, request, *args, **kwargs):
+		# -- mix queries --
+		query = sorted(
+		    chain(RelacionesUsuariosProductos.objects.all(),
+		          RelacionesUsuariosServicios.objects.all()),
+		    key=attrgetter('creado'),
+		    reverse=True)
+
+		# -- return context --
+		return self.render_to_response(
+		    self.get_context_data(notificaciones=query)
+		)
+
+
 
 
