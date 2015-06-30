@@ -18,4 +18,12 @@ $(function() {
         $("#recursos_modal").modal("show");
     });
 
+    /* --------------------------------------------
+        Open bootstrap pop-over
+    --------------------------------------------- */
+    $('.open_popover').popover({
+        animation: true,
+        html: true
+    });
+
 });

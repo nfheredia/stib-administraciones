@@ -1,9 +1,11 @@
 # -*- coding: utf-8 -*-
 import json
+from itertools import chain
+from operator import attrgetter
 from django.http import HttpResponse
 from django.contrib import messages
 from django.core.urlresolvers import reverse
-from django.views.generic import FormView, CreateView
+from django.views.generic import FormView, CreateView, TemplateView, ListView
 from django.db.models import Q
 from django.core.mail import EmailMessage
 from django.template.loader import render_to_string
@@ -44,7 +46,6 @@ class EstableverTipoComunicacion(LoginRequiredMixin, StaffuserRequiredMixin, For
 
 
 class NotificarCreateViewMixin(LoginRequiredMixin, StaffuserRequiredMixin, CreateView):
-
     template_name = 'relaciones/notificar_form.html'
 
     def get_success_url(self):
@@ -75,7 +76,6 @@ class NotificarCreateViewMixin(LoginRequiredMixin, StaffuserRequiredMixin, Creat
                 else:
                     subject += "Aviso importante"
 
-                print email['email_1']
                 ctx = {'link_vista': 'http://google.com'}
                 body = render_to_string("emails/email_notificaciones.html", ctx)
                 msg = EmailMessage(subject=subject,
@@ -101,7 +101,7 @@ class NotificarProductosUsuarios(NotificarCreateViewMixin):
 
     def get_context_data(self, **kwargs):
         ctx = super(NotificarProductosUsuarios, self).get_context_data(**kwargs)
-        ctx['page_title'] = 'Notificaciones de Productos para Administraciones '
+        ctx['page_title'] = 'Notificaciones de Productos para Administraciones'
         return ctx
 
 
@@ -115,7 +115,7 @@ class NotificarServiciosUsuarios(NotificarCreateViewMixin):
 
     def get_context_data(self, **kwargs):
         ctx = super(NotificarServiciosUsuarios, self).get_context_data(**kwargs)
-        ctx['page_title'] = 'Notificaciones de Servicios para Administraciones '
+        ctx['page_title'] = 'Notificaciones de Servicios para Administraciones'
         return ctx
 
 
@@ -184,6 +184,28 @@ def get_autocomplete_edificios_result(request):
         results_list.append(dic_result)
 
     return HttpResponse(json.dumps(results_list), mimetype="application/json")
+
+
+class NotificacionesEdificiosView(TemplateView):
+    """
+    Ver las notificaciones de los Edificios, combinamos
+    los productos y servicios...
+    """
+    template_name = 'relaciones/notificaciones_edificios_list.html'
+
+    def get(self, request, *args, **kwargs):
+        # -- mix queries --
+        query = sorted(
+            chain(RelacionesEdificiosProductos.objects.all(),
+                  RelacionesEdificiosServicios.objects.all()),
+            key=attrgetter('creado'),
+            reverse=True)
+
+        # -- return context --
+        return self.render_to_response(
+            self.get_context_data(notificaciones=query)
+        )
+
 
 
 

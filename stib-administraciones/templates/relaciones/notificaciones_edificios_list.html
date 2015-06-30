@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+{% load i18n pagination_tags %}
+{% load relaciones_tags %}
+
+{% block title %}
+    Notificaciones para Edificios
+{% endblock %}
+
+{% block content %}
+    {% autopaginate notificaciones 5 %}
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="page-header">Notificaciones para Edificios</h1>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-12">
+            <table cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered">
+                <thead>
+                    <tr>
+                        <th>Entidad</th>
+                        <th>Nombre</th>
+                        <th>Día de envio</th>
+                        <th>Edificio</th>
+                        <th>Título</th>
+                        <th>Descripción</th>
+                        <th>Leido</th>
+                        <th>Mail</th>
+                        <th>Tipo sugerencia</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% autoescape off %}
+                    {% if notificaciones %}
+                        {% for notificacion in notificaciones %}
+                            <tr>
+                                {% if notificacion.servicio.nombre %}
+                                    <td>Servicio</td>
+                                    <td>{{notificacion.servicio.nombre}}</td>
+                                {% endif %}
+                                {% if notificacion.producto.nombre %}
+                                    <td>Producto</td>
+                                    <td>{{notificacion.producto.nombre}}</td>
+                                {% endif %}
+                                <td>{{notificacion.creado|date:"SHORT_DATE_FORMAT"}}</td>
+                                <td>{{notificacion.edificio.nombre}} - {{notificacion.edificio.direccion}}</td>
+                                <td>{{notificacion.titulo}}</td>
+                                <td>
+                                    {{notificacion.descripcion|truncatechars:15}}
+                                    {% if notificacion.descripcion|length > 15 %}
+                                        <a tabindex="0" data-toggle="popover"
+                                           data-trigger="focus" class='open_popover'
+                                           title="<b>Descripción</b>"
+                                           data-content="{{notificacion.descripcion}}">
+                                            [+]
+                                        </a>
+                                    {% endif %}
+                                </td>
+                                <td>{{notificacion.leido|icon_by_boolean}}</td>
+                                <td>{{notificacion.enviado|icon_by_boolean}}</td>
+                                <td>{{notificacion.tipo_relacion.nombre}}</td>
+                            </tr>
+                        {% endfor %}
+                    {% endif %}
+                    {% endautoescape %}
+                </tbody>
+            </table>
+            {% paginate %}
+        </div>
+    </div>
+{% endblock %}
