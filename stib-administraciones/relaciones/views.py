@@ -33,6 +33,7 @@ class EstableverTipoComunicacion(LoginRequiredMixin, StaffuserRequiredMixin, For
     """
     template_name = 'relaciones/establecer_tipo_comunicacion.html'
     form_class = FormDefinirTipoComunicacion
+    raise_exception = True
 
     def form_valid(self, form):
         """
@@ -47,6 +48,7 @@ class EstableverTipoComunicacion(LoginRequiredMixin, StaffuserRequiredMixin, For
 
 class NotificarCreateViewMixin(LoginRequiredMixin, StaffuserRequiredMixin, CreateView):
     template_name = 'relaciones/notificar_form.html'
+    raise_exception = True
 
     def get_success_url(self):
         messages.success(self.request, 'La notificación se envió con éxito.')
@@ -186,9 +188,10 @@ def get_autocomplete_edificios_result(request):
     return HttpResponse(json.dumps(results_list), mimetype="application/json")
 
 
-class NotificacionesViewMixin(object):
+class NotificacionesViewMixin(LoginRequiredMixin, StaffuserRequiredMixin):
 
     queries = []
+    raise_exception = True
 
     def get_context_data(self, **kwargs):
         ctx = super(NotificacionesViewMixin, self).get_context_data(**kwargs)
