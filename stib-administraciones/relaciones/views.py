@@ -186,47 +186,41 @@ def get_autocomplete_edificios_result(request):
     return HttpResponse(json.dumps(results_list), mimetype="application/json")
 
 
-class NotificacionesEdificiosView(TemplateView):
+class NotificacionesViewMixin(object):
+
+    queries = []
+
+    def get_context_data(self, **kwargs):
+        ctx = super(NotificacionesViewMixin, self).get_context_data(**kwargs)
+        ctx['results'] = self._get_queries_results()
+        return ctx
+
+    def _get_queries_results(self):
+        """
+        iteramos las queries, usamos el método from_iterable
+        del objecto chain porque le pasamos una tupla de queries
+        """
+        return sorted(
+            chain.from_iterable(self.queries),
+            key=attrgetter('creado'),
+            reverse=True
+        )
+
+
+class NotificacionesEdificiosView(NotificacionesViewMixin, TemplateView):
     """
     Ver las notificaciones de los Edificios, combinamos
     los productos y servicios...
     """
     template_name = 'relaciones/notificaciones_edificios_list.html'
-
-    def get(self, request, *args, **kwargs):
-        # -- mix queries --
-        query = sorted(
-            chain(RelacionesEdificiosProductos.objects.all(),
-                  RelacionesEdificiosServicios.objects.all()),
-            key=attrgetter('creado'),
-            reverse=True)
-
-        # -- return context --
-        return self.render_to_response(
-            self.get_context_data(notificaciones=query)
-        )
+    queries = [RelacionesEdificiosProductos.objects.all(), RelacionesEdificiosServicios.objects.all()]
 
 
-class NotificacionesAdministracionesView(TemplateView):
-	"""
-	Ver las notificaciones de las administraciones, combinamos
-	los productos y servicios...
-	"""
-	template_name = 'relaciones/notificaciones_administraciones_list.html'
-
-	def get(self, request, *args, **kwargs):
-		# -- mix queries --
-		query = sorted(
-		    chain(RelacionesUsuariosProductos.objects.all(),
-		          RelacionesUsuariosServicios.objects.all()),
-		    key=attrgetter('creado'),
-		    reverse=True)
-
-		# -- return context --
-		return self.render_to_response(
-		    self.get_context_data(notificaciones=query)
-		)
-
-
-
+class NotificacionesAdministracionesView(NotificacionesViewMixin, TemplateView):
+    """
+    Ver las notificaciones de las administraciones, combinamos
+    los productos y servicios...
+    """
+    template_name = 'relaciones/notificaciones_administraciones_list.html'
+    queries = [RelacionesUsuariosProductos.objects.all(), RelacionesUsuariosServicios.objects.all()]
 
