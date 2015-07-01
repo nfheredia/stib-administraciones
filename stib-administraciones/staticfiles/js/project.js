@@ -26,4 +26,9 @@ $(function() {
         html: true
     });
 
+	$('#open_notificaciones_modal').click(function(){
+        $("#notificaciones_modal").modal("show");
+    });
+
+
 });

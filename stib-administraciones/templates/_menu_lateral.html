@@ -25,7 +25,7 @@
                             <a href="{% url 'notificaciones:definir' %}"><i class="fa fa-chevron-circle-right"></i> Enviar</a>
                         </li>
                         <li class="notificaciones">
-                            <a href="{% url 'notificaciones:definir' %}"><i class="fa fa-bars"></i> Historial</a>
+                            <a id="open_notificaciones_modal"><i class="fa fa-bars"></i> Historial</a>
                         </li>
                     </ul>
                 </li>
@@ -59,3 +59,38 @@
     </div>
     <!-- /.sidebar-collapse -->
 </nav>
+
+
+<!-- modal 'notificaciones' -->
+<div class="modal fade" id="notificaciones_modal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title">
+                Ver Notificaciones de ...
+            </h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <a href="{% url 'notificaciones:administraciones-list' %}" class="pull-right">
+                            <i class="fa fa-user fa-5x"></i><br>
+                            Administraciones
+                        </a>
+                    </div>
+                    <div class="col-sm-6">
+                        <a href="{% url 'notificaciones:edificios-list' %}">
+                            <i class="fa fa-building fa-5x"></i><br>
+                            Edificios
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- / modal 'notificaciones' -->
+
