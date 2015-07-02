@@ -31,3 +31,11 @@ def show_popover_descripcion(descripcion):
     de las notificaciones
     """
     return {'descripcion': descripcion}
+
+
+@register.inclusion_tag('relaciones/_show_search_form.html')
+def show_search_form(form):
+    """
+    mostrar el form para realizar busquedas
+    """
+    return {'search_form': form}

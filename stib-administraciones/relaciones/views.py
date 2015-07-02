@@ -4,6 +4,7 @@ from itertools import chain
 from operator import attrgetter
 from django.http import HttpResponse
 from django.contrib import messages
+from django.shortcuts import render_to_response, render
 from django.core.urlresolvers import reverse
 from django.views.generic import FormView, CreateView, TemplateView, ListView
 from django.db.models import Q
@@ -16,7 +17,8 @@ from .forms import (FormDefinirTipoComunicacion,
                     FormNotificacionUsuariosServicios,
                     FormNotificacionEdificiosProductos,
                     FormNotificacionEdificiosServicios,
-                    FormNotificacionesEdificiosSearch)
+                    FormNotificacionesEdificiosSearch,
+                    FormNotificacionesAdministracionesSearch)
 from .models import (RelacionesUsuariosProductos,
                      RelacionesUsuariosServicios,
                      RelacionesEdificiosProductos,
@@ -189,54 +191,62 @@ def get_autocomplete_edificios_result(request):
     return HttpResponse(json.dumps(results_list), mimetype="application/json")
 
 
-class NotificacionesViewMixin(LoginRequiredMixin, StaffuserRequiredMixin):
-
-    queries = []
-    raise_exception = True
-
-    def get_queryset(self):
-        qs = self._get_queries_results()
-        return qs
-
-    def _get_queries_results(self):
-        """
-        iteramos las queries, usamos el método from_iterable
-        del objecto chain porque le pasamos una tupla de queries
-        """
-        return sorted(
-            chain.from_iterable(self.queries),
-            key=attrgetter('creado'),
-            reverse=True
-        )
+def _get_queries_results(queries):
+	"""
+	iteramos las queries, usamos el método from_iterable
+	del objecto chain porque le pasamos una tupla de queries
+	"""
+	return sorted(
+		chain.from_iterable(queries),
+		key=attrgetter('creado'),
+		reverse=True
+	)
 
 
-class NotificacionesEdificiosView(NotificacionesViewMixin, ListView, FormView):
+def listar_notificaciones_edificios(request):
     """
     Ver las notificaciones de los Edificios, combinamos
     los productos y servicios...
     """
-    template_name = 'relaciones/notificaciones_edificios_list.html'
     queries = [RelacionesEdificiosProductos.objects.all(), RelacionesEdificiosServicios.objects.all()]
-    success_url = '/notificaciones/edificios/list'
-    form_class = FormNotificacionesEdificiosSearch
-    context_object_name = 'results'
 
-    # def get_context_data(self, **kwargs):
-    #     ctx = super(NotificacionesEdificiosView, self).get_context_data(**kwargs)
-    #     ctx['search_form'] = FormNotificacionesEdificiosSearch
-    #     return ctx
-    #
-    # def form_valid(self, form):
-    #     self.queries = [RelacionesEdificiosProductos.objects.filter(titulo="forro"),
-    #                   RelacionesEdificiosServicios.objects.all()]
-    #     return self.form_valid(self)
+    if request.method == "POST":
+        q_prod = queries[0] # query base de productos
+        q_servicios = queries[1] # query base de servicios
+        
+        # -- titulo?
+        titulo = request.POST['titulo']
+        if titulo:
+            q_prod = q_prod.filter(titulo__icontains=titulo)
+        # -- descripcion?
+        descripcion = request.POST['descripcion']
+        if descripcion:
+            q_prod = q_prod.filter(descripcion__icontains=descripcion)
+        # -- leido?
+        leido = request.POST.get('leido', False)
+        q_prod = q_prod.filter(leido=leido)
+        # -- mail enviado?
+        mail = request.POST.get('mail', False)
+        q_prod = q_prod.filter(enviado=mail)
 
 
-class NotificacionesAdministracionesView(NotificacionesViewMixin, TemplateView):
+        queries = [q_prod, RelacionesEdificiosServicios.objects.all()]
+    
+    ctx = {'results': _get_queries_results(queries),
+		   'search_form': FormNotificacionesEdificiosSearch}
+
+    return render(request, 'relaciones/notificaciones_edificios_list.html', ctx)
+
+
+def listar_notificaciones_admnistraciones(request):
     """
     Ver las notificaciones de las administraciones, combinamos
     los productos y servicios...
     """
-    template_name = 'relaciones/notificaciones_administraciones_list.html'
     queries = [RelacionesUsuariosProductos.objects.all(), RelacionesUsuariosServicios.objects.all()]
+    
+    ctx = {'results': _get_queries_results(queries),
+            'search_form': FormNotificacionesAdministracionesSearch}
+
+    return render(request, 'relaciones/notificaciones_administraciones_list.html', ctx)
 
