@@ -3,7 +3,7 @@ from django import forms
 from django.db import models
 from django.contrib.auth import get_user_model
 from .models import RelacionesUsuariosProductos, RelacionesUsuariosServicios, RelacionesEdificiosProductos, \
-    RelacionesEdificiosServicios
+    RelacionesEdificiosServicios, TipoRelaciones
 
 
 class FormDefinirTipoComunicacion(forms.Form):
@@ -137,5 +137,34 @@ class FormNotificacionEdificiosServicios(FormularioAutosuggestEdificios, Formula
         fields = (
         'titulo', 'descripcion', 'edificio', 'edificio_nombre', 'servicio_nombre', 'servicio', 'tipo_relacion',
         'enviado', )
+
+
+class FormNotificacionesEdificiosSearch(forms.Form):
+    """
+    Formulario para la búsqueda de notificaciones
+    de edificios.
+    """
+    ENTIDADES = (
+        (0, 'Todas'),
+        (1, 'Productos'),
+        (2, 'Servicios'),
+    )
+    titulo = forms.CharField(required=False, max_length=150, label="Título")
+    descripcion = forms.CharField(required=False, max_length=150, label="Descripción")
+    leido = forms.BooleanField(required=False, label="Leído")
+    mail = forms.BooleanField(required=False, label="Mail enviado")
+    fecha_desde = forms.DateField(required=False, label="Fecha Desde")
+    fecha_hasta = forms.DateField(required=False, label="Fecha Hasta")
+    entidades = forms.ChoiceField(required=False, choices=ENTIDADES)
+    motivos = forms.ModelChoiceField(queryset=TipoRelaciones.objects.all(), required=False)
+    producto_nombre = forms.CharField(max_length=150, required=False,
+                                      label="Producto", help_text='Escriba el nombre del producto')
+    producto = forms.CharField(widget=forms.HiddenInput)
+    servicio_nombre = forms.CharField(max_length=150, required=False,
+                                      label="Servicio", help_text='Escriba el nombre del servicio')
+    servicio = forms.CharField(widget=forms.HiddenInput)
+    edificio_nombre = forms.CharField(max_length=150, required=False,
+                                      label="Edificio", help_text='Escriba el nombre del edificio')
+    edificio = forms.CharField(widget=forms.HiddenInput)
 
 

@@ -19,8 +19,6 @@ urlpatterns = patterns('',
     url(r'^perfiles/', include('stib-administraciones.perfiles.urls', namespace='perfiles')),
     # -- imperavi editor
     url(r'^imperavi/', include('imperavi.urls')),
-    # -- tinymce
-    (r'^tinymce/', include('tinymce.urls')),
     # -- feedbacks
     url(r'^feedbacks/', include('stib-administraciones.feedbacks.urls')),
     # -- novedades

@@ -15,7 +15,8 @@ from .forms import (FormDefinirTipoComunicacion,
                     FormNotificacionUsuariosProductos,
                     FormNotificacionUsuariosServicios,
                     FormNotificacionEdificiosProductos,
-                    FormNotificacionEdificiosServicios)
+                    FormNotificacionEdificiosServicios,
+                    FormNotificacionesEdificiosSearch)
 from .models import (RelacionesUsuariosProductos,
                      RelacionesUsuariosServicios,
                      RelacionesEdificiosProductos,
@@ -193,10 +194,9 @@ class NotificacionesViewMixin(LoginRequiredMixin, StaffuserRequiredMixin):
     queries = []
     raise_exception = True
 
-    def get_context_data(self, **kwargs):
-        ctx = super(NotificacionesViewMixin, self).get_context_data(**kwargs)
-        ctx['results'] = self._get_queries_results()
-        return ctx
+    def get_queryset(self):
+        qs = self._get_queries_results()
+        return qs
 
     def _get_queries_results(self):
         """
@@ -210,13 +210,26 @@ class NotificacionesViewMixin(LoginRequiredMixin, StaffuserRequiredMixin):
         )
 
 
-class NotificacionesEdificiosView(NotificacionesViewMixin, TemplateView):
+class NotificacionesEdificiosView(NotificacionesViewMixin, ListView, FormView):
     """
     Ver las notificaciones de los Edificios, combinamos
     los productos y servicios...
     """
     template_name = 'relaciones/notificaciones_edificios_list.html'
     queries = [RelacionesEdificiosProductos.objects.all(), RelacionesEdificiosServicios.objects.all()]
+    success_url = '/notificaciones/edificios/list'
+    form_class = FormNotificacionesEdificiosSearch
+    context_object_name = 'results'
+
+    # def get_context_data(self, **kwargs):
+    #     ctx = super(NotificacionesEdificiosView, self).get_context_data(**kwargs)
+    #     ctx['search_form'] = FormNotificacionesEdificiosSearch
+    #     return ctx
+    #
+    # def form_valid(self, form):
+    #     self.queries = [RelacionesEdificiosProductos.objects.filter(titulo="forro"),
+    #                   RelacionesEdificiosServicios.objects.all()]
+    #     return self.form_valid(self)
 
 
 class NotificacionesAdministracionesView(NotificacionesViewMixin, TemplateView):
