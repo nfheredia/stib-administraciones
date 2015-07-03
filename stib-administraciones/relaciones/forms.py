@@ -146,10 +146,15 @@ class FormNotificacionesSearchMixin(forms.Form):
         (1, 'Productos'),
         (2, 'Servicios'),
     )
+    SI_NO = (
+        (0, ""),
+        (1, "Si"),
+        (2, "No"),
+    )
     titulo = forms.CharField(required=False, max_length=150, label="Título")
     descripcion = forms.CharField(required=False, max_length=150, label="Descripción")
-    leido = forms.BooleanField(initial=True, required=False, label="Leído")
-    mail = forms.BooleanField(initial=True, required=False, label="Mail enviado")
+    leido = forms.ChoiceField(choices=SI_NO, required=False, label="Leído")
+    mail = forms.ChoiceField(choices=SI_NO, required=False, label="Mail enviado")
     fecha_desde = forms.DateField(required=False, label="Fecha Desde")
     fecha_hasta = forms.DateField(required=False, label="Fecha Hasta")
     entidades = forms.ChoiceField(required=False, choices=ENTIDADES)

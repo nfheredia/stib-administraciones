@@ -192,15 +192,15 @@ def get_autocomplete_edificios_result(request):
 
 
 def _get_queries_results(queries):
-	"""
-	iteramos las queries, usamos el método from_iterable
-	del objecto chain porque le pasamos una tupla de queries
-	"""
-	return sorted(
-		chain.from_iterable(queries),
-		key=attrgetter('creado'),
-		reverse=True
-	)
+    """
+    iteramos las queries, usamos el método from_iterable
+    del objecto chain porque le pasamos una tupla de queries
+    """
+    return sorted(
+        chain.from_iterable(queries),
+        key=attrgetter('creado'),
+        reverse=True
+    )
 
 
 def listar_notificaciones_edificios(request):
@@ -211,29 +211,53 @@ def listar_notificaciones_edificios(request):
     queries = [RelacionesEdificiosProductos.objects.all(), RelacionesEdificiosServicios.objects.all()]
 
     if request.method == "POST":
-        q_prod = queries[0] # query base de productos
-        q_servicios = queries[1] # query base de servicios
-        
-        # -- titulo?
+        q_prod = queries[0]  # query base de productos
+        q_servicios = queries[1]  # query base de servicios
+
+
+
+        entidades = request.POST.get('entidades', 0)
+        if entidades == "1":
+            q_servicios = "" # -- exluyo la busqueda sobre servicios
+        elif entidades == "2":
+            q_prod = "" # -- exluyo la busqueda sobre productos
+
+        # -- titulo? --
         titulo = request.POST['titulo']
         if titulo:
-            q_prod = q_prod.filter(titulo__icontains=titulo)
-        # -- descripcion?
+            if q_prod != "":
+                q_prod = q_prod.filter(titulo__icontains=titulo)
+            if q_servicios != "":
+                q_servicios = q_servicios.filter(titulo__icontains=titulo)
+
+        # -- descripcion? --
         descripcion = request.POST['descripcion']
         if descripcion:
-            q_prod = q_prod.filter(descripcion__icontains=descripcion)
-        # -- leido?
-        leido = request.POST.get('leido', False)
-        q_prod = q_prod.filter(leido=leido)
+            if q_prod != "":
+                q_prod = q_prod.filter(descripcion__icontains=descripcion)
+            if q_servicios != "":
+                q_servicios = q_servicios.filter(descripcion__icontains=descripcion)
+
+        # -- leido? --
+        leido = request.POST.get('leido', 0)
+        if leido != "0":
+            if q_prod:
+                q_prod = q_prod.filter(leido=True if leido == 1 else False)
+            if q_servicios:
+                q_servicios = q_servicios.filter(leido=True if leido == 1 else False)
+
         # -- mail enviado?
-        mail = request.POST.get('mail', False)
-        q_prod = q_prod.filter(enviado=mail)
+        mail = request.POST.get('mail')
+        if mail != "0":
+            if q_prod:
+                q_prod = q_prod.filter(enviado=True if mail == 1 else False)
+            if q_servicios:
+                q_servicios = q_servicios.filter(enviado=True if mail == 1 else False)
 
+        queries = [q_prod, q_servicios]
 
-        queries = [q_prod, RelacionesEdificiosServicios.objects.all()]
-    
     ctx = {'results': _get_queries_results(queries),
-		   'search_form': FormNotificacionesEdificiosSearch}
+           'search_form': FormNotificacionesEdificiosSearch}
 
     return render(request, 'relaciones/notificaciones_edificios_list.html', ctx)
 
@@ -244,9 +268,9 @@ def listar_notificaciones_admnistraciones(request):
     los productos y servicios...
     """
     queries = [RelacionesUsuariosProductos.objects.all(), RelacionesUsuariosServicios.objects.all()]
-    
+
     ctx = {'results': _get_queries_results(queries),
-            'search_form': FormNotificacionesAdministracionesSearch}
+           'search_form': FormNotificacionesAdministracionesSearch}
 
     return render(request, 'relaciones/notificaciones_administraciones_list.html', ctx)
 
