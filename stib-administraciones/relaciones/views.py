@@ -214,15 +214,14 @@ def listar_notificaciones_edificios(request):
         q_prod = queries[0]  # query base de productos
         q_servicios = queries[1]  # query base de servicios
 
-
-
+        # -- sobre que entidades queremos realizar la busqueda?
         entidades = request.POST.get('entidades', 0)
-        if entidades == "1":
+        if entidades == "1": # -- productos?
             q_servicios = "" # -- exluyo la busqueda sobre servicios
-        elif entidades == "2":
+        elif entidades == "2": # -- servicios?
             q_prod = "" # -- exluyo la busqueda sobre productos
 
-        # -- titulo? --
+        # -- titulo?
         titulo = request.POST['titulo']
         if titulo:
             if q_prod != "":
@@ -230,7 +229,7 @@ def listar_notificaciones_edificios(request):
             if q_servicios != "":
                 q_servicios = q_servicios.filter(titulo__icontains=titulo)
 
-        # -- descripcion? --
+        # -- descripcion?
         descripcion = request.POST['descripcion']
         if descripcion:
             if q_prod != "":
@@ -238,21 +237,49 @@ def listar_notificaciones_edificios(request):
             if q_servicios != "":
                 q_servicios = q_servicios.filter(descripcion__icontains=descripcion)
 
-        # -- leido? --
-        leido = request.POST.get('leido', 0)
-        if leido != "0":
-            if q_prod:
+        # -- leido?
+        leido = request.POST['leido']
+        if leido:
+            if q_prod != "":
                 q_prod = q_prod.filter(leido=True if leido == 1 else False)
-            if q_servicios:
+            if q_servicios != "" :
                 q_servicios = q_servicios.filter(leido=True if leido == 1 else False)
 
         # -- mail enviado?
-        mail = request.POST.get('mail')
-        if mail != "0":
-            if q_prod:
+        mail = request.POST['mail']
+        if mail:
+            if q_prod != "":
                 q_prod = q_prod.filter(enviado=True if mail == 1 else False)
-            if q_servicios:
+            if q_servicios != "" :
                 q_servicios = q_servicios.filter(enviado=True if mail == 1 else False)
+        
+        # -- motivos?
+        motivo = request.POST['motivos']
+        if motivo:
+            if q_prod != "" :
+                q_prod = q_prod.filter(tipo_relacion=motivo)
+            if q_servicios != "":
+                q_servicios = q_servicios.filter(tipo_relacion=motivo)
+
+		# -- producto?
+        producto = request.POST['producto']
+        if producto:
+            if q_prod != "":
+                q_prod = q_prod.filter(producto=producto)
+
+        # -- servicio?
+        servicio = request.POST['servicio']
+        if servicio:
+            if q_servicios != "" :
+                q_servicios = q_servicios.filter(servicio=servicio)
+
+        # -- edificio?
+        edificio = request.POST['edificio']
+        if edificio:
+            if q_prod != "" :
+                q_prod = q_prod.filter(edificio=edificio)
+            if q_servicios != "":
+                q_servicios = q_servicios.filter(edificio=edificio)
 
         queries = [q_prod, q_servicios]
 

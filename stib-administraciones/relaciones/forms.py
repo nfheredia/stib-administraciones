@@ -147,7 +147,7 @@ class FormNotificacionesSearchMixin(forms.Form):
         (2, 'Servicios'),
     )
     SI_NO = (
-        (0, ""),
+        ('', "-------"),
         (1, "Si"),
         (2, "No"),
     )
