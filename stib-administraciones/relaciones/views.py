@@ -10,6 +10,7 @@ from django.views.generic import FormView, CreateView
 from django.db.models import Q
 from django.core.mail import EmailMessage
 from django.template.loader import render_to_string
+from django.contrib.admin.views.decorators import staff_member_required
 from braces.views import LoginRequiredMixin, StaffuserRequiredMixin
 
 from .forms import (FormDefinirTipoComunicacion,
@@ -150,6 +151,7 @@ class NotificarServiciosEdificios(NotificarCreateViewMixin):
         return ctx
 
 
+@staff_member_required
 def get_autocomplete_result(request):
     """
     Busqueda de productos y servicios, se utiliza en una llamada
@@ -174,6 +176,7 @@ def get_autocomplete_result(request):
     return HttpResponse(json.dumps(results_list), mimetype="application/json")
 
 
+@staff_member_required
 def get_autocomplete_edificios_result(request):
     """
     Busqueda de edificios, se utiliza en una llamada
@@ -307,6 +310,7 @@ def _get_filter_results(request, query_prod_base, query_serv_base):
     return [q_prod, q_servicios]
 
 
+@staff_member_required
 def listar_notificaciones_edificios(request):
     """
     Listar las notificaciones de los Edificios, combinamos
@@ -331,6 +335,7 @@ def listar_notificaciones_edificios(request):
     return render(request, 'relaciones/notificaciones_edificios_list.html', ctx)
 
 
+@staff_member_required
 def listar_notificaciones_admnistraciones(request):
     """
     Listar las notificaciones de las administraciones, combinamos
