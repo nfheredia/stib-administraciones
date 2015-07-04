@@ -4,9 +4,9 @@ from itertools import chain
 from operator import attrgetter
 from django.http import HttpResponse
 from django.contrib import messages
-from django.shortcuts import render_to_response, render
+from django.shortcuts import render
 from django.core.urlresolvers import reverse
-from django.views.generic import FormView, CreateView, TemplateView, ListView
+from django.views.generic import FormView, CreateView
 from django.db.models import Q
 from django.core.mail import EmailMessage
 from django.template.loader import render_to_string
