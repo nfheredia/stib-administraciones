@@ -34,8 +34,10 @@ def show_popover_descripcion(descripcion):
 
 
 @register.inclusion_tag('relaciones/_show_search_form.html')
-def show_search_form(request, form):
+def show_search_form(request, form, collapse_filters):
     """
     mostrar el form para realizar busquedas
     """
-    return {'search_form': form, 'current_path': request.get_full_path()}
+    return {'search_form': form,
+            'current_path': request.get_full_path(),
+            'collapse_filters': collapse_filters}

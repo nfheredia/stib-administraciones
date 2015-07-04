@@ -5,16 +5,16 @@
                 <div class="panel panel-default">
                         <div class="panel-heading" role="tab" id="headingTwo">
                             <h4 class="panel-title">
-                                <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFilter" aria-expanded="false" aria-controls="collapseFilter">
                                     <i class="fa fa-search"></i> Filtrar resultados
                                 </a>
                             </h4>
                         </div>
-                        <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
+                        <div id="collapseFilter" class="panel-collapse collapse {% if collapse_filters %}in{% endif %}" role="tabpanel" aria-labelledby="headingTwo">
                             <div class="panel-body">
                                 <form method="post">
                                     {% csrf_token %}
-									{{search_form.producto}}
+                                    {{search_form.producto}}
                                     {{search_form.servicio}}
                                     {{search_form.edificio}}
                                     <div class="row">

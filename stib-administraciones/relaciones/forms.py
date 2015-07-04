@@ -155,16 +155,40 @@ class FormNotificacionesSearchMixin(forms.Form):
     descripcion = forms.CharField(required=False, max_length=150, label="Descripción")
     leido = forms.ChoiceField(choices=SI_NO, required=False, label="Leído")
     mail = forms.ChoiceField(choices=SI_NO, required=False, label="Mail enviado")
-    fecha_desde = forms.DateField(required=False, label="Fecha Desde")
-    fecha_hasta = forms.DateField(required=False, label="Fecha Hasta")
-    entidades = forms.ChoiceField(required=False, choices=ENTIDADES)
+    fecha_desde = forms.DateField(required=False, label="Fecha Desde",
+                                  input_formats=['%d/%m/%Y'],
+                                  help_text='Formato: dd/mm/yyyy')
+    fecha_hasta = forms.DateField(required=False, label="Fecha Hasta",
+                                  input_formats=['%d/%m/%Y'],
+                                  help_text='Formato: dd/mm/yyyy')
+    entidades = forms.ChoiceField(required=False, choices=ENTIDADES,
+                                  help_text='Sobre que entidades se realizará la búsqueda')
     motivos = forms.ModelChoiceField(queryset=TipoRelaciones.objects.all(), required=False)
     producto_nombre = forms.CharField(max_length=150, required=False,
                                       label="Producto", help_text='Escriba el nombre del producto')
-    producto = forms.CharField(widget=forms.HiddenInput)
+    producto = forms.CharField(widget=forms.HiddenInput, required=False)
     servicio_nombre = forms.CharField(max_length=150, required=False,
                                       label="Servicio", help_text='Escriba el nombre del servicio')
-    servicio = forms.CharField(widget=forms.HiddenInput)    
+    servicio = forms.CharField(widget=forms.HiddenInput, required=False)
+
+    def clean(self):
+        cleaned_data = super(FormNotificacionesSearchMixin, self).clean()
+        # -- fecha desde/hasta correctas??
+        fecha_desde = cleaned_data.get("fecha_desde")
+        fecha_hasta = cleaned_data.get("fecha_hasta")
+        if fecha_desde is not None and fecha_hasta is None:
+            msg = "Debes ingresar una fecha"
+            self._errors['fecha_hasta'] = [msg]
+        if fecha_hasta is not None and fecha_desde is None:
+            msg = "Debes ingresar una fecha"
+            self._errors['fecha_desde'] = [msg]
+        if fecha_desde is not None and fecha_hasta is not None:
+            if fecha_desde > fecha_hasta:
+                msg = "La 'fecha desde' debe ser menos a la 'fecha hasta'"
+                self._errors['fecha_desde'] = [msg]
+                self._errors['fecha_hasta'] = [msg]
+        # -- / fecha desde/hasta correctas??
+        return cleaned_data
 
 
 class FormNotificacionesEdificiosSearch(FormNotificacionesSearchMixin):
@@ -174,7 +198,7 @@ class FormNotificacionesEdificiosSearch(FormNotificacionesSearchMixin):
     """
     edificio_nombre = forms.CharField(max_length=150, required=False,
                                       label="Edificio", help_text='Escriba el nombre del edificio')
-    edificio = forms.CharField(widget=forms.HiddenInput)
+    edificio = forms.CharField(widget=forms.HiddenInput, required=False)
 
 
 class FormNotificacionesAdministracionesSearch(FormNotificacionesSearchMixin):
@@ -182,6 +206,7 @@ class FormNotificacionesAdministracionesSearch(FormNotificacionesSearchMixin):
     Formulario para la búsqueda de notificaciones
     de administraciones.
     """
-    usuarios = forms.ModelChoiceField(queryset=get_user_model().objects.filter(is_staff=False), required=False, label='Administraciones')
+    usuarios = forms.ModelChoiceField(queryset=get_user_model().objects.filter(is_staff=False),
+                                      required=False, label='Administraciones')
 
 

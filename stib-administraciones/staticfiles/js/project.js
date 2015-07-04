@@ -30,5 +30,15 @@ $(function() {
         $("#notificaciones_modal").modal("show");
     });
 
+     /* ---------------------
+     -- common datepicker --
+     ----------------------- */
+    $('.dateinput').datepicker({
+        format: 'dd/mm/yyyy'
+    }).on('changeDate', function(ev){
+        // -- hide dropdown when change dates
+        $('.dropdown-menu').hide();
+    });
+
 
 });

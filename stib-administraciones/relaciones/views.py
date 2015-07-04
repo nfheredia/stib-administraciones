@@ -58,7 +58,11 @@ class NotificarCreateViewMixin(LoginRequiredMixin, StaffuserRequiredMixin, Creat
         return reverse('notificaciones:definir')
 
     def form_valid(self, form):
-        self._enviar_aviso_por_email(form)
+        # -- enviar por mail, solo si desde
+        # -- el form se indicar True
+        if form.cleaned_data['enviado']:
+            self._enviar_aviso_por_email(form)
+
         return super(NotificarCreateViewMixin, self).form_valid(form)
 
     def _enviar_aviso_por_email(self, form):
@@ -203,101 +207,149 @@ def _get_queries_results(queries):
     )
 
 
+def _get_filter_results(request, query_prod_base, query_serv_base):
+    """
+    Filtros para los listados de notificaciones
+    de productos y servicios
+    """
+    q_prod = query_prod_base  # query base de productos
+    q_servicios = query_serv_base  # query base de servicios
+
+    # -- sobre que entidades queremos realizar la busqueda?
+    entidades = request.POST.get('entidades', 0)
+    if entidades == "1":  # -- productos?
+        q_servicios = ""  # -- exluyo la busqueda sobre servicios
+    elif entidades == "2":  # -- servicios?
+        q_prod = ""  # -- exluyo la busqueda sobre productos
+
+    # -- titulo?
+    titulo = request.POST['titulo']
+    if titulo:
+        if q_prod != "":
+            q_prod = q_prod.filter(titulo__icontains=titulo)
+        if q_servicios != "":
+            q_servicios = q_servicios.filter(titulo__icontains=titulo)
+
+    # -- descripcion?
+    descripcion = request.POST['descripcion']
+    if descripcion:
+        if q_prod != "":
+            q_prod = q_prod.filter(descripcion__icontains=descripcion)
+        if q_servicios != "":
+            q_servicios = q_servicios.filter(descripcion__icontains=descripcion)
+
+    # -- leido?
+    leido = request.POST['leido']
+    if leido:
+        if q_prod != "":
+            q_prod = q_prod.filter(leido=True if leido == 1 else False)
+        if q_servicios != "":
+            q_servicios = q_servicios.filter(leido=True if leido == 1 else False)
+
+    # -- mail enviado?
+    mail = request.POST['mail']
+    if mail:
+        if q_prod != "":
+            q_prod = q_prod.filter(enviado=True if mail == 1 else False)
+        if q_servicios != "":
+            q_servicios = q_servicios.filter(enviado=True if mail == 1 else False)
+
+    # -- motivos?
+    motivo = request.POST['motivos']
+    if motivo:
+        if q_prod != "":
+            q_prod = q_prod.filter(tipo_relacion=motivo)
+        if q_servicios != "":
+            q_servicios = q_servicios.filter(tipo_relacion=motivo)
+
+    # -- producto?
+    producto = request.POST['producto']
+    if producto:
+        if q_prod != "":
+            q_prod = q_prod.filter(producto=producto)
+
+    # -- servicio?
+    servicio = request.POST['servicio']
+    if servicio:
+        if q_servicios != "":
+            q_servicios = q_servicios.filter(servicio=servicio)
+
+    # -- edificio?
+    edificio = request.POST.get('edificio', False)
+    if edificio:
+        if q_prod != "":
+            q_prod = q_prod.filter(edificio=edificio)
+        if q_servicios != "":
+            q_servicios = q_servicios.filter(edificio=edificio)
+
+    # -- fechas desde/hasta
+    fecha_desde = request.POST['fecha_desde']
+    fecha_hasta = request.POST['fecha_hasta']
+    if fecha_desde and fecha_hasta:
+        fecha_desde = fecha_desde.split('/')
+        fecha_hasta = fecha_hasta.split('/')
+        fecha_desde = fecha_desde[2] + "-" + fecha_desde[1] + "-" + fecha_desde[0]
+        fecha_hasta = fecha_hasta[2] + "-" + fecha_hasta[1] + "-" + fecha_hasta[0]
+        print fecha_desde
+        if q_prod != "":
+            q_prod = q_prod.filter(creado__gte=fecha_desde, creado__lte=fecha_hasta)
+        if q_servicios != "":
+            q_servicios = q_servicios.filter(creado__gte=fecha_desde, creado__lte=fecha_hasta)
+
+    # -- usuarios?
+    usuario = request.POST.get('usuarios', False)
+    if usuario:
+        if q_prod != "":
+            q_prod = q_prod.filter(usuario=usuario)
+        if q_servicios != "":
+            q_servicios = q_servicios.filter(usuario=usuario)
+
+    return [q_prod, q_servicios]
+
+
 def listar_notificaciones_edificios(request):
     """
-    Ver las notificaciones de los Edificios, combinamos
+    Listar las notificaciones de los Edificios, combinamos
     los productos y servicios...
     """
     queries = [RelacionesEdificiosProductos.objects.all(), RelacionesEdificiosServicios.objects.all()]
+    ctx = {
+        'search_form': FormNotificacionesEdificiosSearch,
+        'collapse_filters': False
+    }
 
     if request.method == "POST":
-        q_prod = queries[0]  # query base de productos
-        q_servicios = queries[1]  # query base de servicios
+        search_form = FormNotificacionesEdificiosSearch(request.POST)
+        if search_form.is_valid():
+            queries = _get_filter_results(request, queries[0], queries[1])
+        else:
+            ctx['search_form'] = search_form
+            ctx['collapse_filters'] = True
 
-        # -- sobre que entidades queremos realizar la busqueda?
-        entidades = request.POST.get('entidades', 0)
-        if entidades == "1": # -- productos?
-            q_servicios = "" # -- exluyo la busqueda sobre servicios
-        elif entidades == "2": # -- servicios?
-            q_prod = "" # -- exluyo la busqueda sobre productos
-
-        # -- titulo?
-        titulo = request.POST['titulo']
-        if titulo:
-            if q_prod != "":
-                q_prod = q_prod.filter(titulo__icontains=titulo)
-            if q_servicios != "":
-                q_servicios = q_servicios.filter(titulo__icontains=titulo)
-
-        # -- descripcion?
-        descripcion = request.POST['descripcion']
-        if descripcion:
-            if q_prod != "":
-                q_prod = q_prod.filter(descripcion__icontains=descripcion)
-            if q_servicios != "":
-                q_servicios = q_servicios.filter(descripcion__icontains=descripcion)
-
-        # -- leido?
-        leido = request.POST['leido']
-        if leido:
-            if q_prod != "":
-                q_prod = q_prod.filter(leido=True if leido == 1 else False)
-            if q_servicios != "" :
-                q_servicios = q_servicios.filter(leido=True if leido == 1 else False)
-
-        # -- mail enviado?
-        mail = request.POST['mail']
-        if mail:
-            if q_prod != "":
-                q_prod = q_prod.filter(enviado=True if mail == 1 else False)
-            if q_servicios != "" :
-                q_servicios = q_servicios.filter(enviado=True if mail == 1 else False)
-        
-        # -- motivos?
-        motivo = request.POST['motivos']
-        if motivo:
-            if q_prod != "" :
-                q_prod = q_prod.filter(tipo_relacion=motivo)
-            if q_servicios != "":
-                q_servicios = q_servicios.filter(tipo_relacion=motivo)
-
-		# -- producto?
-        producto = request.POST['producto']
-        if producto:
-            if q_prod != "":
-                q_prod = q_prod.filter(producto=producto)
-
-        # -- servicio?
-        servicio = request.POST['servicio']
-        if servicio:
-            if q_servicios != "" :
-                q_servicios = q_servicios.filter(servicio=servicio)
-
-        # -- edificio?
-        edificio = request.POST['edificio']
-        if edificio:
-            if q_prod != "" :
-                q_prod = q_prod.filter(edificio=edificio)
-            if q_servicios != "":
-                q_servicios = q_servicios.filter(edificio=edificio)
-
-        queries = [q_prod, q_servicios]
-
-    ctx = {'results': _get_queries_results(queries),
-           'search_form': FormNotificacionesEdificiosSearch}
+    ctx['results'] = _get_queries_results(queries)
 
     return render(request, 'relaciones/notificaciones_edificios_list.html', ctx)
 
 
 def listar_notificaciones_admnistraciones(request):
     """
-    Ver las notificaciones de las administraciones, combinamos
+    Listar las notificaciones de las administraciones, combinamos
     los productos y servicios...
     """
     queries = [RelacionesUsuariosProductos.objects.all(), RelacionesUsuariosServicios.objects.all()]
 
-    ctx = {'results': _get_queries_results(queries),
-           'search_form': FormNotificacionesAdministracionesSearch}
+    ctx = {'search_form': FormNotificacionesAdministracionesSearch,
+           'collapse_filters': False}
+
+    if request.method == 'POST':
+        search_form = FormNotificacionesAdministracionesSearch(request.POST)
+        if search_form.is_valid():
+            queries = _get_filter_results(request, queries[0], queries[1])
+        else:
+            ctx['search_form'] = search_form
+            ctx['collapse_filters'] = True
+
+    ctx['results'] = _get_queries_results(queries)
 
     return render(request, 'relaciones/notificaciones_administraciones_list.html', ctx)
 
