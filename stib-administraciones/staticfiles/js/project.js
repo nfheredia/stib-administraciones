@@ -40,19 +40,18 @@ $(function() {
         $('.dropdown-menu').hide();
     });
 
-    /* **************************************************
+    /* --------------------------------------------
         Autocomplete de edificios que pertencen
         a la administracion logueada
         - utilizamos jquery autocomplete
-    *************************************************** */
-    $( "#edificio_nombre" ).autocomplete({
+    ----------------------------------------------- */
+    $("#id_edificio_nombre").autocomplete({
         source: "/edificios/search/autocomplete/edificios/administracion",
         selectFirst:true,
         minLength:3,
+        open: function() { $('#ui-id-1').width(250) },
         select: function(event,ui) {
             $("#id_edificio").val(ui.item.id)
         }
     });
-
-
 });

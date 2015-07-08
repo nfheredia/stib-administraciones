@@ -292,3 +292,7 @@ ul {
   border-bottom: 1px solid #5E5E5E;
 }
 
+.ui-autocomplete {
+    z-index: 100;
+}
+

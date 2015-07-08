@@ -9,8 +9,9 @@ from django.views.generic import (
     View
 )
 from django.contrib import messages
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 from django.core.urlresolvers import reverse
+from django.db.models import Q
 from braces.views import (
     LoginRequiredMixin,
     StaffuserRequiredMixin
@@ -149,7 +150,8 @@ def search_autocomplete_edificios_por_administracion(request):
     q = request.GET['term']
     # -- busqueda por nombre o direccion de edificio y que sea
     # -- del usuario logueado
-    edificios = Edificios.objects.filter(Q(nombre__icontains=q) | Q(direccion__icontains=q)).filter(user=request.user.id)
+    edificios = Edificios.objects.filter(Q(nombre__icontains=q) | Q(direccion__icontains=q)).\
+        filter(user=request.user.id)
 
     results_list = []
 
@@ -170,9 +172,8 @@ class SearchEdificiosForm(LoginRequiredMixin, View):
     def post(self, request, *args, **kwargs):
         id_edificio = request.POST.get("id_edificio", False)
         if id_edificio:
-        	messages.success(request, 'Encontramos el edificio que estas buscando')
-		destino = reverse("edificios:administraciones", kwargs={'pk': id_edificio})
+            url_destino = reverse("edificios:administraciones", kwargs={'pk': id_edificio})
         else:
-           messages.error(request, 'No Encontramos el edificio que estas buscando')
-           destino = "/"
-        return HttpResponseRedirect(destino)
+            messages.error(request, 'No se encontró el edificio que estas buscando.')
+            url_destino = "/"
+        return HttpResponseRedirect(url_destino)

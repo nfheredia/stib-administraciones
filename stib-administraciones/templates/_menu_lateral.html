@@ -1,23 +1,6 @@
 <nav class="navbar-default navbar-static-side" role="navigation">
     <div class="sidebar-collapse">
         <ul class="nav" id="side-menu">
-            <li class="sidebar-search">
-				<form method='POST' action="{% url 'edificios:search-edificios' %}" role='form' class='form-inline'>
-                    {% csrf_token %}
-		            <div class="input-group custom-search-form">		
-						<input id="id_edificio" name="id_edificio" type="hidden" value='2'>
-			            <input  type="text" class="form-control" placeholder="Busca"  data-provide='typeahead' name="nombre_edificio" id="nombre_edificio">	
-					
-			            <span class="input-group-btn">
-			                <button type='submit' class="btn btn-default" type="button">
-			                    <i class="fa fa-search"></i>
-			                </button>
-			            </span>
-		            </div>
-				<form>
-                <!-- /input-group -->
-            </li>
-
             {% if request.user.is_staff %}
                 <li>
                     <a href="{% url 'edificios:list' %}"><i class="fa fa-building fa-fw"></i> Edificios </a>
@@ -36,6 +19,21 @@
             {% else %}
                 <!-- Lista de edificios del usuario logueado -->
                 {% if request.user.is_authenticated %}
+                    <!-- form para buscar edificios -->
+                    <li class="sidebar-search">
+                        <form method='POST' action="{% url 'edificios:search-edificios' %}" role='form' class='form-inline'>
+                            {% csrf_token %}
+                            <div class="input-group custom-search-form">
+                                <input  type="text" class="form-control" placeholder="Buscá tu cliente"  data-provide='typeahead' name="nombre_edificio" id="id_edificio_nombre">
+                                <input id="id_edificio" name="id_edificio" type="hidden">
+                                <span class="input-group-btn">
+                                    <button type='submit' class="btn btn-default" type="button">
+                                        <i class="fa fa-search"></i>
+                                    </button>
+                                </span>
+                            </div>
+                        </form>
+                    </li><!-- / form para buscar edificios -->
                     {% if edificios_usuarios %}
                         <li class="edificio active">
                             <a href="#"><i class="fa fa-building fa-fw"></i> Mis Clientes<span class="fa arrow"></span></a>
