@@ -1,7 +1,7 @@
 <a tabindex="0" data-toggle="popover"
    data-trigger="focus" class='open_popover'
    title="<b>{{nombre}}</b>"
-   data-content="{{descripcion}}">
+   data-content="{% autoescape on %}{{descripcion}}{% endautoescape %}">
     {{nombre}}
 </a>
 
