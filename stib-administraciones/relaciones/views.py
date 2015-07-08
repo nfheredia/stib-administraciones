@@ -62,7 +62,8 @@ class NotificarCreateViewMixin(LoginRequiredMixin, StaffuserRequiredMixin, Creat
         # -- enviar por mail, solo si desde
         # -- el form se indicar True
         if form.cleaned_data['enviado']:
-            self._enviar_aviso_por_email(form)
+            if self._enviar_aviso_por_email(form):
+                form.instance.mail_recibido = True
 
         return super(NotificarCreateViewMixin, self).form_valid(form)
 
@@ -72,14 +73,13 @@ class NotificarCreateViewMixin(LoginRequiredMixin, StaffuserRequiredMixin, Creat
             if self.request.POST.get('edificio') is None:
                 user = self.request.POST.get('usuario')
             else:
-                user = Edificios.objects.values('user').get(pk=self.request.POST.get('edificio'))
-                user = user['user']
+                user = Edificios.usuario_por_edificio(self.request.POST.get('edificio'))
 
             # -- obtengo direccion de mail
-            email = Perfiles.objects.values('email_1').get(user=user)
+            email = Perfiles.obtener_mail_por_usuario(user)
 
             # -- tiene email cargado?
-            if 'email_1' in email and len(email['email_1']) > 0:
+            if len(email) > 0:
                 subject = "[STIB] [%s] " % form.cleaned_data['tipo_relacion']
                 if self.request.POST.get('edificio') is not None:
                     subject += str(form.cleaned_data['edificio'])
@@ -91,7 +91,7 @@ class NotificarCreateViewMixin(LoginRequiredMixin, StaffuserRequiredMixin, Creat
                 msg = EmailMessage(subject=subject,
                                    body=body,
                                    from_email='no-reply@stibadministraciones.com',
-                                   to=(email['email_1'], ))
+                                   to=(email, ))
                 msg.content_subtype = 'html'
                 msg.send()
                 return True

@@ -12,6 +12,7 @@ from django.contrib import messages
 from django.http import HttpResponseRedirect, HttpResponse
 from django.core.urlresolvers import reverse
 from django.db.models import Q
+from django.contrib.auth.decorators import login_required
 from braces.views import (
     LoginRequiredMixin,
     StaffuserRequiredMixin
@@ -141,6 +142,7 @@ class EdificiosAdministracionesFachadaUpdateView(LoginRequiredMixin, EdificiosAd
     success_msg = 'La foto de fachada se editó correctamente.'
 
 
+@login_required
 def search_autocomplete_edificios_por_administracion(request):
     """
     Devuelve un ajax de los edificios que pertencen
@@ -150,8 +152,8 @@ def search_autocomplete_edificios_por_administracion(request):
     q = request.GET['term']
     # -- busqueda por nombre o direccion de edificio y que sea
     # -- del usuario logueado
-    edificios = Edificios.objects.filter(Q(nombre__icontains=q) | Q(direccion__icontains=q)).\
-        filter(user=request.user.id)
+    edificios = Edificios.edificios_usuarios_object.por_usuarios(request.user.id)\
+        .filter(Q(nombre__icontains=q) | Q(direccion__icontains=q))
 
     results_list = []
 

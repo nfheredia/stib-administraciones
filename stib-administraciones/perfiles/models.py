@@ -26,6 +26,15 @@ class Perfiles(TimeStampedModel):
         """ Muestro el nombre, sirve para el sitio de admin """
         return self.nombre
 
+    @classmethod
+    def obtener_mail_por_usuario(clas, user_id):
+        """
+        obtenemos el mail del usuario que
+        se pasa como parámetro
+        """
+        result = clas.objects.values('email_1').get(user=user_id)
+        return result['email_1']
+
     class Meta:
         verbose_name = 'Perfiles'
         verbose_name_plural = 'Perfiles'

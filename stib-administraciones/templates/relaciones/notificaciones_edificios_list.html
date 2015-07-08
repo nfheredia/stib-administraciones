@@ -48,7 +48,8 @@
                         <th>Título</th>
                         <th>Descripción</th>
                         <th>Leído</th>
-                        <th>Mail</th>
+                        <th>Mail Enviado</th>
+                        <th>Mail Recibido</th>
                         <th>Motivos</th>
                     </tr>
                 </thead>
@@ -84,6 +85,7 @@
                                 </td>
                                 <td>{{notificacion.leido|icon_by_boolean}}</td>
                                 <td>{{notificacion.enviado|icon_by_boolean}}</td>
+                                <td>{{notificacion.mail_recibido|icon_by_boolean}}</td>
                                 <td>{{notificacion.tipo_relacion.nombre}}</td>
                             </tr>
                         {% endfor %}

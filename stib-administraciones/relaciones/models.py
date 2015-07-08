@@ -20,6 +20,7 @@ class Relaciones(TimeStampedModel):
                                   help_text='ATENCIÓN: Se enviará el mail si la '
                                             'administración tiene configurado su dirección'
                                             'de correo')
+    mail_recibido = models.BooleanField(default=False)
 
     class Meta:
         abstract = True

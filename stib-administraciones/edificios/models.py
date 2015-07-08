@@ -39,6 +39,14 @@ class Edificios(TimeStampedModel):
     def get_absolute_url(self):
         return '/edificios'
 
+    @classmethod
+    def usuario_por_edificio(cls, edificio_id):
+        """
+        obtenemos el usuaro de un edificio en particular
+        """
+        result = cls.objects.values('user').get(pk=edificio_id)
+        return result['user']
+
     def __unicode__(self):
         return self.nombre + ' - ' + self.direccion
 
