@@ -1,13 +1,16 @@
 # -*- coding: utf-8 -*-
+import json
 from django.views.generic import (
     ListView,
     CreateView,
     UpdateView,
     DeleteView,
-    DetailView
+    DetailView,
+    View
 )
 from django.contrib import messages
-
+from django.http import HttpResponseRedirect
+from django.core.urlresolvers import reverse
 from braces.views import (
     LoginRequiredMixin,
     StaffuserRequiredMixin
@@ -135,3 +138,41 @@ class EdificiosAdministracionesComentarioUpdateView(LoginRequiredMixin, Edificio
 class EdificiosAdministracionesFachadaUpdateView(LoginRequiredMixin, EdificiosAdministracionesUpdateMixin, UpdateView):
     fields = ['foto_fachada']
     success_msg = 'La foto de fachada se editó correctamente.'
+
+
+def search_autocomplete_edificios_por_administracion(request):
+    """
+    Devuelve un ajax de los edificios que pertencen
+    a la adminsitracion logueda
+    """
+    # -- término a buscar --
+    q = request.GET['term']
+    # -- busqueda por nombre o direccion de edificio y que sea
+    # -- del usuario logueado
+    edificios = Edificios.objects.filter(Q(nombre__icontains=q) | Q(direccion__icontains=q)).filter(user=request.user.id)
+
+    results_list = []
+
+    for edificio in edificios:
+        dic_result = {}
+        dic_result['id'] = edificio.id
+        dic_result['label'] = edificio.nombre + " - " + edificio.direccion
+        results_list.append(dic_result)
+
+    return HttpResponse(json.dumps(results_list), mimetype="application/json")
+
+
+class SearchEdificiosForm(LoginRequiredMixin, View):
+    """
+    busqueda del edificio, y redirigimos a la pagina
+    principal con detalles del edificio
+    """
+    def post(self, request, *args, **kwargs):
+        id_edificio = request.POST.get("id_edificio", False)
+        if id_edificio:
+        	messages.success(request, 'Encontramos el edificio que estas buscando')
+		destino = reverse("edificios:administraciones", kwargs={'pk': id_edificio})
+        else:
+           messages.error(request, 'No Encontramos el edificio que estas buscando')
+           destino = "/"
+        return HttpResponseRedirect(destino)

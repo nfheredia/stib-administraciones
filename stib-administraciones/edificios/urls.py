@@ -10,6 +10,8 @@ from .views import (
     EdificiosAdministracionesComentarioUpdateView,
     EdificiosAdministracionesDetallesUpdateView,
     EdificiosAdministracionesFachadaUpdateView,
+    search_autocomplete_edificios_por_administracion,
+    SearchEdificiosForm
 )
 
 urlpatterns = patterns('',
@@ -52,6 +54,20 @@ urlpatterns = patterns('',
         r'^administracion/fachada/update/(?P<pk>\d+)$',
         EdificiosAdministracionesFachadaUpdateView.as_view(),
         name='administraciones_fachada_update'
+    ),
+    # -- url para realizar llamada ejax y obtener los edificios
+    # -- de la administracion logueada, se utiliza desde un
+    # -- autocomplete
+    url(
+        r'^search/autocomplete/edificios/administracion$',
+        search_autocomplete_edificios_por_administracion,
+        name='search-autocomplete-edificios-por-administracion'
+    ),
+    # -- url para procesar el form de la busqueda del edificio
+    url(
+        r'^search/edificios$',
+        SearchEdificiosForm.as_view(),
+        name='search-edificios'
     ),
 
 )
