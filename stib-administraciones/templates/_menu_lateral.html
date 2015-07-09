@@ -3,6 +3,9 @@
         <ul class="nav" id="side-menu">
             {% if request.user.is_staff %}
                 <li>
+                    <a href="/admin" target="_blank"><i class="fa fa-cog"></i> Backend </a>
+                </li>
+                <li>
                     <a href="{% url 'edificios:list' %}"><i class="fa fa-building fa-fw"></i> Edificios </a>
                 </li>
                 <li class="notificaciones">
