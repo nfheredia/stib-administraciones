@@ -49,6 +49,7 @@
                         <th>Mail Enviado</th>
                         <th>Mail Recibido</th>
                         <th>Motivo</th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -83,6 +84,14 @@
                                 <td>{{notificacion.enviado|icon_by_boolean}}</td>
                                 <td>{{notificacion.mail_recibido|icon_by_boolean}}</td>
                                 <td>{{notificacion.tipo_relacion.nombre}}</td>
+                                <td>
+									{% if notificacion.servicio.nombre %}
+										<a href="{% url 'notificaciones:delete-administraciones-servicios' notificacion.id %}">Eliminar</a>
+                                    {% elif notificacion.producto.nombre %}
+										<a href="{% url 'notificaciones:delete-administraciones-productos' notificacion.id %}">Eliminar</a>
+									{% endif %}
+
+                                </td>
                             </tr>
                         {% endfor %}
                     {% endif %}

@@ -8,9 +8,13 @@ from .views import (EstableverTipoComunicacion,
                     get_autocomplete_edificios_result,
                     NotificarServiciosEdificios,
                     listar_notificaciones_admnistraciones,
-                    listar_notificaciones_edificios)
+                    listar_notificaciones_edificios,
+                    NotificacionesEdificiosProductosDeleteView,
+                    NotificacionesEdificiosServiciosDeleteView,
+                    NotificacionesAdministracionesProductosDeleteView,
+                    NotificacionesAdministracionesServiciosDeleteView)
 
-urlpatterns = patterns('stib-administraciones.productos.views',
+urlpatterns = patterns('',
     url(
        regex=r'^$',
        view=EstableverTipoComunicacion.as_view(),
@@ -55,7 +59,27 @@ urlpatterns = patterns('stib-administraciones.productos.views',
        regex=r'^administraciones/list$',
        view=listar_notificaciones_admnistraciones,
        name='administraciones-list'
-    )
+    ),
+    url(
+       regex=r'^edificios/productos/delete/(?P<pk>\d+)$',
+       view=NotificacionesEdificiosProductosDeleteView.as_view(),
+       name='delete-edificios-productos'
+    ),
+    url(
+       regex=r'^edificios/servicios/delete/(?P<pk>\d+)$',
+       view=NotificacionesEdificiosServiciosDeleteView.as_view(),
+       name='delete-edificios-servicios'
+    ),
+    url(
+       regex=r'^administraciones/productos/delete/(?P<pk>\d+)$',
+       view=NotificacionesAdministracionesProductosDeleteView.as_view(),
+       name='delete-administraciones-productos'
+    ),
+    url(
+       regex=r'^administraciones/servicios/delete/(?P<pk>\d+)$',
+       view=NotificacionesAdministracionesServiciosDeleteView.as_view(),
+       name='delete-administraciones-servicios'
+    ),
 )
 
 

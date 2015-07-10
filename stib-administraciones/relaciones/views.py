@@ -5,8 +5,8 @@ from operator import attrgetter
 from django.http import HttpResponse
 from django.contrib import messages
 from django.shortcuts import render
-from django.core.urlresolvers import reverse
-from django.views.generic import FormView, CreateView
+from django.core.urlresolvers import reverse, reverse_lazy
+from django.views.generic import FormView, CreateView, DeleteView
 from django.db.models import Q
 from django.core.mail import EmailMessage
 from django.template.loader import render_to_string
@@ -358,3 +358,37 @@ def listar_notificaciones_admnistraciones(request):
 
     return render(request, 'relaciones/notificaciones_administraciones_list.html', ctx)
 
+
+class NotificacionesDeleteViewMixin(object):
+    """ Mixin para el Delete de las Notificaciones """
+    template_name = 'relaciones/notificaciones_confirm_delete.html'
+
+    success_url = None
+
+    def get_success_url(self):
+        messages.success(self.request, 'La notificacion fue eliminada.')
+        return self.success_url
+
+
+class NotificacionesEdificiosProductosDeleteView(LoginRequiredMixin, StaffuserRequiredMixin, NotificacionesDeleteViewMixin, DeleteView):
+    """ Eliminar notificaciones para edificios de productos """
+    model = RelacionesEdificiosProductos
+    success_url = reverse_lazy('notificaciones:edificios-list')
+
+
+class NotificacionesEdificiosServiciosDeleteView(LoginRequiredMixin, StaffuserRequiredMixin, NotificacionesDeleteViewMixin, DeleteView):
+    """ Eliminar notificaciones para edificios de servicios """
+    model = RelacionesEdificiosServicios
+    success_url = reverse_lazy('notificaciones:edificios-list')
+
+
+class NotificacionesAdministracionesProductosDeleteView(LoginRequiredMixin, StaffuserRequiredMixin, NotificacionesDeleteViewMixin, DeleteView):
+    """ Eliminar notificaciones de productos para administraciones """
+    model = RelacionesUsuariosProductos
+    success_url = reverse_lazy('notificaciones:administraciones-list')
+
+
+class NotificacionesAdministracionesServiciosDeleteView(LoginRequiredMixin, StaffuserRequiredMixin, NotificacionesDeleteViewMixin, DeleteView):
+    """ Eliminar notificaciones de servicios para administraciones """
+    model = RelacionesUsuariosServicios
+    success_url = reverse_lazy('notificaciones:administraciones-list')
