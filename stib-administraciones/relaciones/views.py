@@ -30,7 +30,7 @@ from ..edificios.models import Edificios
 from ..perfiles.models import Perfiles
 
 
-class EstableverTipoComunicacion(LoginRequiredMixin, StaffuserRequiredMixin, FormView):
+class EstablecerTipoComunicacion(LoginRequiredMixin, StaffuserRequiredMixin, FormView):
     """
     Vista que presentara un formulario
     para definir el tipo de comunicacion
@@ -47,7 +47,7 @@ class EstableverTipoComunicacion(LoginRequiredMixin, StaffuserRequiredMixin, For
         entidad = form.cleaned_data["entidad"]
         destinatario = form.cleaned_data["destinatario"]
         self.success_url = entidad + "-" + destinatario
-        return super(EstableverTipoComunicacion, self).form_valid(form)
+        return super(EstablecerTipoComunicacion, self).form_valid(form)
 
 
 class NotificarCreateViewMixin(LoginRequiredMixin, StaffuserRequiredMixin, CreateView):

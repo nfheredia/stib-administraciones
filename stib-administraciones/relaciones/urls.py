@@ -1,6 +1,6 @@
 from django.conf.urls import patterns, url
 
-from .views import (EstableverTipoComunicacion,
+from .views import (EstablecerTipoComunicacion,
                     NotificarProductosUsuarios,
                     NotificarServiciosUsuarios,
                     get_autocomplete_result,
@@ -17,7 +17,7 @@ from .views import (EstableverTipoComunicacion,
 urlpatterns = patterns('',
     url(
        regex=r'^$',
-       view=EstableverTipoComunicacion.as_view(),
+       view=EstablecerTipoComunicacion.as_view(),
        name='definir'
     ),
     url(
