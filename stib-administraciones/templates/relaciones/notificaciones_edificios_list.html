@@ -94,6 +94,10 @@
                                     {% elif notificacion.producto.nombre %}
                                         <a href="{% url 'notificaciones:delete-edificios-productos' notificacion.id %}">Eliminar</a>
                                     {% endif %}
+
+                                    <a href="{% url 'notificaciones:reenviar-mail-edificios' notificacion.edificio.id notificacion.tipo_relacion.nombre %}">
+                                        Reenviar Email
+                                    </a>
                                 </td>
                             </tr>
                         {% endfor %}

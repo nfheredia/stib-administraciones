@@ -2,11 +2,11 @@
 import json
 from itertools import chain
 from operator import attrgetter
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib import messages
 from django.shortcuts import render
 from django.core.urlresolvers import reverse, reverse_lazy
-from django.views.generic import FormView, CreateView, DeleteView
+from django.views.generic import FormView, CreateView, DeleteView, RedirectView, View
 from django.db.models import Q
 from django.core.mail import EmailMessage
 from django.template.loader import render_to_string
@@ -400,3 +400,44 @@ class NotificacionesAdministracionesServiciosDeleteView(LoginRequiredMixin, Staf
     model = RelacionesUsuariosServicios
     success_url = reverse_lazy('notificaciones:administraciones-list')
     raise_exception = True
+
+
+class ReenviarEmailEdificios(LoginRequiredMixin, StaffuserRequiredMixin, RedirectView):
+
+    def _get_email_to(self, edificio_id):
+        """ obtenemos el email de la administracion que tiene ese edificio """
+        user = Edificios.usuario_por_edificio(edificio_id)
+        return Perfiles.obtener_mail_por_usuario(user)
+
+    def get_redirect_url(self, *args, **kwargs):
+        """ reenviamos el email y redirigimos """
+        edificio = kwargs.get('edificio', None)
+        tipo_notificacion = kwargs.get('tipo_notificacion', None)
+
+        if edificio is not None and tipo_notificacion is not None and ('Novedades' in tipo_notificacion or 'Sugerencias' in tipo_notificacion):
+            email_to = self._get_email_to(edificio)
+            subject = "[STIB] - [%s] " % tipo_notificacion
+            ctx = {'link_vista': 'http://google.com'}
+            messages.success(self.request, "Se ha reenviado el mail de notificación.")
+        else:
+            messages.error(self.request, "Error al tratar de reenviar el mail de notificación.")
+
+        return reverse("notificaciones:edificios-list")
+
+
+class ReenviarEmailAdministraciones(LoginRequiredMixin, StaffuserRequiredMixin, RedirectView):
+
+    def _get_email_to(self):
+        pass
+
+    def get_redirect_url(self, *args, **kwargs):
+        pass
+
+
+def _send_email(email_to, subject, context, *args):
+    try:
+        pass
+    except:
+        return False
+
+
