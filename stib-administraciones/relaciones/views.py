@@ -366,29 +366,37 @@ class NotificacionesDeleteViewMixin(object):
     success_url = None
 
     def get_success_url(self):
-        messages.success(self.request, 'La notificacion fue eliminada.')
+        messages.success(self.request, 'La notificación fue eliminada.')
         return self.success_url
 
 
-class NotificacionesEdificiosProductosDeleteView(LoginRequiredMixin, StaffuserRequiredMixin, NotificacionesDeleteViewMixin, DeleteView):
+class NotificacionesEdificiosProductosDeleteView(LoginRequiredMixin, StaffuserRequiredMixin,
+                                                 NotificacionesDeleteViewMixin, DeleteView):
     """ Eliminar notificaciones para edificios de productos """
     model = RelacionesEdificiosProductos
     success_url = reverse_lazy('notificaciones:edificios-list')
+    raise_exception = True
 
 
-class NotificacionesEdificiosServiciosDeleteView(LoginRequiredMixin, StaffuserRequiredMixin, NotificacionesDeleteViewMixin, DeleteView):
+class NotificacionesEdificiosServiciosDeleteView(LoginRequiredMixin, StaffuserRequiredMixin,
+                                                 NotificacionesDeleteViewMixin, DeleteView):
     """ Eliminar notificaciones para edificios de servicios """
     model = RelacionesEdificiosServicios
     success_url = reverse_lazy('notificaciones:edificios-list')
+    raise_exception = True
 
 
-class NotificacionesAdministracionesProductosDeleteView(LoginRequiredMixin, StaffuserRequiredMixin, NotificacionesDeleteViewMixin, DeleteView):
+class NotificacionesAdministracionesProductosDeleteView(LoginRequiredMixin, StaffuserRequiredMixin,
+                                                        NotificacionesDeleteViewMixin, DeleteView):
     """ Eliminar notificaciones de productos para administraciones """
     model = RelacionesUsuariosProductos
     success_url = reverse_lazy('notificaciones:administraciones-list')
+    raise_exception = True
 
 
-class NotificacionesAdministracionesServiciosDeleteView(LoginRequiredMixin, StaffuserRequiredMixin, NotificacionesDeleteViewMixin, DeleteView):
+class NotificacionesAdministracionesServiciosDeleteView(LoginRequiredMixin, StaffuserRequiredMixin,
+                                                        NotificacionesDeleteViewMixin, DeleteView):
     """ Eliminar notificaciones de servicios para administraciones """
     model = RelacionesUsuariosServicios
     success_url = reverse_lazy('notificaciones:administraciones-list')
+    raise_exception = True
