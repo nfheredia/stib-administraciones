@@ -89,15 +89,36 @@
                                 <td>{{notificacion.mail_recibido|icon_by_boolean}}</td>
                                 <td>{{notificacion.tipo_relacion.nombre}}</td>
                                 <td>
-                                    {% if notificacion.servicio.nombre %}
-                                        <a href="{% url 'notificaciones:delete-edificios-servicios' notificacion.id %}">Eliminar</a>
-                                    {% elif notificacion.producto.nombre %}
-                                        <a href="{% url 'notificaciones:delete-edificios-productos' notificacion.id %}">Eliminar</a>
-                                    {% endif %}
-
-                                    <a href="{% url 'notificaciones:reenviar-mail-edificios' notificacion.edificio.id notificacion.tipo_relacion.nombre %}">
-                                        Reenviar Email
-                                    </a>
+                                    <div class="btn-group">
+                                        <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        Opciones <span class="caret"></span>
+                                        </button>
+                                        <ul class="dropdown-menu pull-right">
+                                            {% if notificacion.servicio.nombre %}
+                                                <li>
+                                                    <a href="{% url 'notificaciones:delete-edificios-servicios' notificacion.id %}">
+                                                        <i class="fa fa-trash-o"></i> Eliminar
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a href="{% url 'notificaciones:reenviar-mail-edificios-servicios' notificacion.id %}">
+                                                        <i class="fa fa-share"></i> Reenviar Email
+                                                    </a>
+                                                </li>
+                                            {% elif notificacion.producto.nombre %}
+                                                <li>
+                                                    <a href="{% url 'notificaciones:delete-edificios-productos' notificacion.id %}">
+                                                        <i class="fa fa-trash-o"></i> Eliminar
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a href="{% url 'notificaciones:reenviar-mail-edificios-productos' notificacion.id %}">
+                                                        <i class="fa fa-share"></i> Reenviar Email
+                                                    </a>
+                                                </li>
+                                            {% endif %}
+                                        </ul>
+                                    </div>
                                 </td>
                             </tr>
                         {% endfor %}

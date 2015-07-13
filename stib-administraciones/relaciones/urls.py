@@ -13,7 +13,10 @@ from .views import (EstablecerTipoComunicacion,
                     NotificacionesEdificiosServiciosDeleteView,
                     NotificacionesAdministracionesProductosDeleteView,
                     NotificacionesAdministracionesServiciosDeleteView,
-                    ReenviarEmailEdificios)
+                    reenviar_email_edificios_productos,
+                    reenviar_email_edificios_servicios,
+                    reenviar_email_administraciones_productos,
+                    reenviar_email_administraciones_servicios)
 
 urlpatterns = patterns('',
                        url(
@@ -82,9 +85,24 @@ urlpatterns = patterns('',
                            name='delete-administraciones-servicios'
                        ),
                        url(
-                           regex=r'^reenviar/mail/edificios/(?P<edificio>\d+)/(?P<tipo_notificacion>\w+)$',
-                           view=ReenviarEmailEdificios.as_view(),
-                           name='reenviar-mail-edificios'
+                           regex=r'^reenviar/mail/edificios/productos/(?P<notificacion>\d+)$',
+                           view=reenviar_email_edificios_productos,
+                           name='reenviar-mail-edificios-productos'
+                       ),
+                       url(
+                           regex=r'^reenviar/mail/edificios/servicios/(?P<notificacion>\d+)$',
+                           view=reenviar_email_edificios_servicios,
+                           name='reenviar-mail-edificios-servicios'
+                       ),
+                       url(
+                           regex=r'^reenviar/mail/administraciones/productos/(?P<notificacion>\d+)$',
+                           view=reenviar_email_administraciones_productos,
+                           name='reenviar-mail-administraciones-productos'
+                       ),
+                       url(
+                           regex=r'^reenviar/mail/administraciones/servicios/(?P<notificacion>\d+)$',
+                           view=reenviar_email_administraciones_servicios,
+                           name='reenviar-mail-administraciones-servicios'
                        ),
 )
 

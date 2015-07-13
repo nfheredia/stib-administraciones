@@ -30,6 +30,10 @@ from ..edificios.models import Edificios
 from ..perfiles.models import Perfiles
 
 
+reenvio_email_massages = {'success': 'Se ha reenviado el mail de notificación.',
+                          'error': 'Error al enviar el mail de notificación.'}
+
+
 class EstablecerTipoComunicacion(LoginRequiredMixin, StaffuserRequiredMixin, FormView):
     """
     Vista que presentara un formulario
@@ -87,14 +91,8 @@ class NotificarCreateViewMixin(LoginRequiredMixin, StaffuserRequiredMixin, Creat
                     subject += "Aviso importante"
 
                 ctx = {'link_vista': 'http://google.com'}
-                body = render_to_string("emails/email_notificaciones.html", ctx)
-                msg = EmailMessage(subject=subject,
-                                   body=body,
-                                   from_email='no-reply@stibadministraciones.com',
-                                   to=(email, ))
-                msg.content_subtype = 'html'
-                msg.send()
-                return True
+
+                return _send_email(email, subject, ctx)
             else:
                 return False
         except:
@@ -402,42 +400,112 @@ class NotificacionesAdministracionesServiciosDeleteView(LoginRequiredMixin, Staf
     raise_exception = True
 
 
-class ReenviarEmailEdificios(LoginRequiredMixin, StaffuserRequiredMixin, RedirectView):
-
-    def _get_email_to(self, edificio_id):
-        """ obtenemos el email de la administracion que tiene ese edificio """
-        user = Edificios.usuario_por_edificio(edificio_id)
-        return Perfiles.obtener_mail_por_usuario(user)
-
-    def get_redirect_url(self, *args, **kwargs):
-        """ reenviamos el email y redirigimos """
-        edificio = kwargs.get('edificio', None)
-        tipo_notificacion = kwargs.get('tipo_notificacion', None)
-
-        if edificio is not None and tipo_notificacion is not None and ('Novedades' in tipo_notificacion or 'Sugerencias' in tipo_notificacion):
-            email_to = self._get_email_to(edificio)
-            subject = "[STIB] - [%s] " % tipo_notificacion
-            ctx = {'link_vista': 'http://google.com'}
-            messages.success(self.request, "Se ha reenviado el mail de notificación.")
+def reenviar_email_edificios_productos(request, notificacion):
+    """
+    - reenvío de email para avisar de una nueva notificación de productos
+    para un Edificio
+    """
+    if request.method == 'GET':
+        notificacion = RelacionesEdificiosProductos.objects.get(pk=notificacion)
+        if _reenviar_email_notificaciones(notificacion):
+            messages.success(request, reenvio_email_massages['success'])
         else:
-            messages.error(self.request, "Error al tratar de reenviar el mail de notificación.")
+            messages.error(request, reenvio_email_massages['error'])
 
-        return reverse("notificaciones:edificios-list")
-
-
-class ReenviarEmailAdministraciones(LoginRequiredMixin, StaffuserRequiredMixin, RedirectView):
-
-    def _get_email_to(self):
-        pass
-
-    def get_redirect_url(self, *args, **kwargs):
-        pass
+    return HttpResponseRedirect(reverse("notificaciones:edificios-list"))
 
 
-def _send_email(email_to, subject, context, *args):
-    try:
-        pass
-    except:
+def reenviar_email_edificios_servicios(request, notificacion):
+    """
+    - reenvío de email para avisar de una nueva notificación de servicios
+    para un Edificio
+    """
+    if request.method == 'GET':
+        notificacion = RelacionesEdificiosServicios.objects.get(pk=notificacion)
+        if _reenviar_email_notificaciones(notificacion):
+            messages.success(request, reenvio_email_massages['success'])
+        else:
+            messages.error(request, reenvio_email_massages['error'])
+
+    return HttpResponseRedirect(reverse("notificaciones:edificios-list"))
+
+
+def reenviar_email_administraciones_productos(request, notificacion):
+    """
+    reenvio de email para avisar de una nueva notificación de productos
+    para una 'Administracion'
+    """
+    if request.method == 'GET':
+        notificacion = RelacionesUsuariosProductos.objects.get(pk=notificacion)
+        if _reenviar_email_notificaciones(notificacion):
+            messages.success(request, reenvio_email_massages['success'])
+        else:
+            messages.error(request, reenvio_email_massages['error'])
+
+    return HttpResponseRedirect(reverse("notificaciones:administraciones-list"))
+
+
+def reenviar_email_administraciones_servicios(request, notificacion):
+    """
+    reenvio de email para avisar de una nueva notificación de servicios
+    para una 'Administracion'
+    """
+    if request.method == 'GET':
+        notificacion = RelacionesUsuariosServicios.objects.get(pk=notificacion)
+        if _reenviar_email_notificaciones(notificacion):
+            messages.success(request, reenvio_email_massages['success'])
+        else:
+            messages.error(request, reenvio_email_massages['error'])
+
+    return HttpResponseRedirect(reverse("notificaciones:administraciones-list"))
+
+
+def _reenviar_email_notificaciones(obj_notificacion):
+    """
+    * Funciona que maneja en reenvio de emails.
+    * obj_notificacion : es un objeto del tipo
+        RelacionesEdificiosProductos, RelacionesEdificiosServicios,
+        RelacionesUsuariosSProductos o RelacionesUsuariosServicios
+    """
+    # -- subject dependiendo el Tipo de Notificacion (Novedades/Servicios)
+    subject = "[STIB] - [%s] " % obj_notificacion.tipo_relacion.nombre
+
+    if isinstance(obj_notificacion, RelacionesEdificiosServicios) or \
+            isinstance(obj_notificacion, RelacionesEdificiosProductos):
+        # -- obtenemos el usuario del edificio del que queremos
+        # -- enviar la notificaciones
+        user = Edificios.usuario_por_edificio(obj_notificacion.edificio.id)
+        subject += obj_notificacion.edificio.nombre + " - " + obj_notificacion.edificio.direccion
+    else:
+        user = obj_notificacion.usuario.id
+        subject += ' Aviso Importante'
+
+    # -- obtenemos el email al que enviaremos el recordatorio
+    email_to = Perfiles.obtener_mail_por_usuario(user)
+
+    ctx = {'link_vista': 'http://google.com'}
+    # -- mail enviado??
+    if _send_email(email_to, subject, ctx):
+        # -- marcamos como email recibido
+        obj_notificacion.mail_recibido = True
+        obj_notificacion.save()
+        return True
+    else:
         return False
 
 
+def _send_email(email_to, subject, context, *args):
+    """
+    Envío de email
+    """
+    try:
+        body = render_to_string("emails/email_notificaciones.html", context)
+        msg = EmailMessage(subject=subject,
+                           body=body,
+                           from_email='no-reply@stibadministraciones.com',
+                           to=(email_to, ))
+        msg.content_subtype = 'html'
+        msg.send()
+        return True
+    except:
+        return False
