@@ -51,6 +51,7 @@
                         <th>Mail Enviado</th>
                         <th>Mail Recibido</th>
                         <th>Motivo</th>
+                        <th>Estado</th>
                         <th></th>
                     </tr>
                 </thead>
@@ -88,6 +89,7 @@
                                 <td>{{notificacion.enviado|icon_by_boolean}}</td>
                                 <td>{{notificacion.mail_recibido|icon_by_boolean}}</td>
                                 <td>{{notificacion.tipo_relacion.nombre}}</td>
+                                <td>{{notificacion.estado|mostrar_estados}}</td>
                                 <td>
                                     <div class="btn-group">
                                         <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

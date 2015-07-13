@@ -11,6 +11,14 @@ class Relaciones(TimeStampedModel):
     """
     Modelo abstracto, reusable
     """
+
+    ESTADOS = (
+        (1, 'Nuevo'),
+        (2, 'Aceptado'),
+        (3, 'Pendiente'),
+        (4, 'Cancelado'),
+    )
+
     titulo = models.CharField(blank=False, max_length=150, null=False,
                               verbose_name='Título')
     descripcion = models.TextField(blank=True, verbose_name='Descripción')
@@ -21,6 +29,8 @@ class Relaciones(TimeStampedModel):
                                             'administración tiene configurado su dirección'
                                             'de correo')
     mail_recibido = models.BooleanField(default=False)
+    estado = models.IntegerField(choices=ESTADOS, default=1, blank=False, null=False,
+                                 help_text="Indica el estado que se encuentra una notificación.")
 
     class Meta:
         abstract = True

@@ -15,6 +15,24 @@ def icon_by_boolean(value):
         return '<i class="fa fa-times"></i>'
 
 
+@register.filter
+def mostrar_estados(estado):
+    """
+    dependiendo el estado que tenga la notificacion,
+    mostramos el texto del mismo, con diferentes colores
+    """
+    if estado == 1:
+        return '<span class="label label-default">Nuevo</span>'
+    elif estado == 2:
+        return '<span class="label label-success">Aceptado</span>'
+    elif estado == 3:
+        return '<span class="label label-warning">Pendiente</span>'
+    elif estado == 4:
+        return '<span class="label label-danger">Cancelado</span>'
+    else:
+        return ''
+
+
 @register.inclusion_tag('relaciones/_popover_entidad.html')
 def show_popover_entidad(obj):
     """

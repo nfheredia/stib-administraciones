@@ -92,7 +92,7 @@ class FormNotificacionUsuariosProductos(FormNotificacionesUsuarios, FormularioAu
     class Meta:
         model = RelacionesUsuariosProductos
         fields = ('titulo', 'descripcion', 'usuario', 'producto_nombre',
-                  'producto', 'tipo_relacion', 'enviado', )
+                  'producto', 'tipo_relacion', 'estado', 'enviado', )
 
 
 class FormNotificacionUsuariosServicios(FormNotificacionesUsuarios, FormularioAutosuggestServicios):
@@ -108,7 +108,7 @@ class FormNotificacionUsuariosServicios(FormNotificacionesUsuarios, FormularioAu
     class Meta:
         model = RelacionesUsuariosServicios
         fields = ('titulo', 'descripcion', 'usuario', 'servicio_nombre',
-                  'servicio', 'tipo_relacion', 'enviado', )
+                  'servicio', 'tipo_relacion', 'estado', 'enviado', )
 
 
 class FormNotificacionEdificiosProductos(FormularioAutosuggestEdificios, FormularioAutosuggestProductos):
@@ -122,7 +122,7 @@ class FormNotificacionEdificiosProductos(FormularioAutosuggestEdificios, Formula
         model = RelacionesEdificiosProductos
         fields = (
         'titulo', 'descripcion', 'edificio', 'edificio_nombre', 'producto_nombre', 'producto', 'tipo_relacion',
-        'enviado', )
+        'estado', 'enviado', )
 
 
 class FormNotificacionEdificiosServicios(FormularioAutosuggestEdificios, FormularioAutosuggestServicios):
@@ -136,7 +136,7 @@ class FormNotificacionEdificiosServicios(FormularioAutosuggestEdificios, Formula
         model = RelacionesEdificiosServicios
         fields = (
         'titulo', 'descripcion', 'edificio', 'edificio_nombre', 'servicio_nombre', 'servicio', 'tipo_relacion',
-        'enviado', )
+        'estado', 'enviado', )
 
 
 class FormNotificacionesSearchMixin(forms.Form):
