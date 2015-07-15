@@ -170,6 +170,7 @@ class FormNotificacionesSearchMixin(forms.Form):
     servicio_nombre = forms.CharField(max_length=150, required=False,
                                       label="Servicio", help_text='Escriba el nombre del servicio')
     servicio = forms.CharField(widget=forms.HiddenInput, required=False)
+    mail_recibido = forms.ChoiceField(choices=SI_NO, required=False, label="Mail recibido")
 
     def clean(self):
         cleaned_data = super(FormNotificacionesSearchMixin, self).clean()

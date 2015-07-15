@@ -243,9 +243,11 @@ def _get_filter_results(request, query_prod_base, query_serv_base):
     leido = request.POST['leido']
     if leido:
         if q_prod != "":
+            print leido
             q_prod = q_prod.filter(leido=True if leido == 1 else False)
         if q_servicios != "":
-            q_servicios = q_servicios.filter(leido=True if leido == 1 else False)
+            print leido
+            q_servicios = q_servicios.filter(leido=True if leido == "1" else False)
 
     # -- mail enviado?
     mail = request.POST['mail']
@@ -253,7 +255,16 @@ def _get_filter_results(request, query_prod_base, query_serv_base):
         if q_prod != "":
             q_prod = q_prod.filter(enviado=True if mail == 1 else False)
         if q_servicios != "":
-            q_servicios = q_servicios.filter(enviado=True if mail == 1 else False)
+            q_servicios = q_servicios.filter(enviado=True if mail == "1" else False)
+
+    # -- mail recibido?
+    mail_recibido_value = request.POST['mail_recibido']
+    if mail_recibido_value:
+        if q_prod != "":
+            q_prod = q_prod.filter(mail_recibido=True if mail_recibido_value == "1" else False)
+        if q_servicios != "":
+            print mail_recibido_value
+            q_servicios = q_servicios.filter(mail_recibido=True if mail_recibido_value == "1" else False)
 
     # -- motivos?
     motivo = request.POST['motivos']
@@ -291,7 +302,6 @@ def _get_filter_results(request, query_prod_base, query_serv_base):
         fecha_hasta = fecha_hasta.split('/')
         fecha_desde = fecha_desde[2] + "-" + fecha_desde[1] + "-" + fecha_desde[0]
         fecha_hasta = fecha_hasta[2] + "-" + fecha_hasta[1] + "-" + fecha_hasta[0]
-        print fecha_desde
         if q_prod != "":
             q_prod = q_prod.filter(creado__gte=fecha_desde, creado__lte=fecha_hasta)
         if q_servicios != "":
@@ -300,6 +310,7 @@ def _get_filter_results(request, query_prod_base, query_serv_base):
     # -- usuarios?
     usuario = request.POST.get('usuarios', False)
     if usuario:
+        print usuario
         if q_prod != "":
             q_prod = q_prod.filter(usuario=usuario)
         if q_servicios != "":
