@@ -263,7 +263,6 @@ def _get_filter_results(request, query_prod_base, query_serv_base):
         if q_prod != "":
             q_prod = q_prod.filter(mail_recibido=True if mail_recibido_value == "1" else False)
         if q_servicios != "":
-            print mail_recibido_value
             q_servicios = q_servicios.filter(mail_recibido=True if mail_recibido_value == "1" else False)
 
     # -- motivos?
@@ -310,11 +309,19 @@ def _get_filter_results(request, query_prod_base, query_serv_base):
     # -- usuarios?
     usuario = request.POST.get('usuarios', False)
     if usuario:
-        print usuario
         if q_prod != "":
             q_prod = q_prod.filter(usuario=usuario)
         if q_servicios != "":
             q_servicios = q_servicios.filter(usuario=usuario)
+
+    # -- estado?
+    estado = request.POST.get('estado', False)
+    if estado:
+        print estado
+        if q_prod != "":
+            q_prod = q_prod.filter(estado=estado)
+        if q_servicios != "":
+            q_servicios = q_servicios.filter(estado=estado)
 
     return [q_prod, q_servicios]
 
@@ -499,6 +506,7 @@ def _reenviar_email_notificaciones(obj_notificacion):
     if _send_email(email_to, subject, ctx):
         # -- marcamos como email recibido
         obj_notificacion.mail_recibido = True
+        obj_notificacion.enviado = True
         obj_notificacion.save()
         return True
     else:
