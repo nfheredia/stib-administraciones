@@ -1,6 +1,6 @@
 from django.conf.urls import patterns, url
 
-from .views import PerfilesUpdateView
+from .views import PerfilesUpdateView, get_autocomplete_nombre_comercial
 
 urlpatterns = patterns('stib-administraciones.perfiles.views',
     url(
@@ -12,5 +12,11 @@ urlpatterns = patterns('stib-administraciones.perfiles.views',
         r'^no-msg-bienvenida/$',
         'no_mostrar_msg_bienvenida',
         name='no_mostrar_msg_bienvenida'
+    ),
+    # -- Url para auto-sugerir perfiles de usuarios no staff
+    url(
+        r'^autocomplete/nombre/comercial$',
+        get_autocomplete_nombre_comercial,
+        name='autocomplete-nombre-comercial'
     ),
 )

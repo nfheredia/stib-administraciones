@@ -13,6 +13,8 @@ class Perfiles(TimeStampedModel):
     """
     user = models.OneToOneField(User, related_name="perfil")
     nombre = models.CharField(blank=False, max_length=150, verbose_name=u"Nombre")
+    nombre_comercial = models.CharField(blank=False, max_length=150, verbose_name=u"Nombre Comercial",
+                                        help_text=u"Nombre de la administración que solo STIB utilizará.")
     telefono_fijo = models.CharField(blank=True, max_length=15, null=True, verbose_name=u"Teléfono Fijo")
     telefono_emergencia = models.CharField(blank=True, max_length=15, null=True, verbose_name=u"Teléfono de emergencia")
     email_1 = models.EmailField(blank=False, verbose_name=u"Email")

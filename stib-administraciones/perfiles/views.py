@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
 
+import json
 from django.views.generic import UpdateView
 from django.contrib import messages
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
+from django.contrib.admin.views.decorators import staff_member_required
 
 from braces.views import LoginRequiredMixin
 
@@ -44,3 +46,29 @@ def no_mostrar_msg_bienvenida(request):
     perfil.alerta_bienvenida = 0
     perfil.save()
     return HttpResponseRedirect('/')
+
+
+@staff_member_required
+def get_autocomplete_nombre_comercial(request):
+    """
+    Busqueda de perfiles a través de su 'Nombre Comercial',
+    se utiliza en una llamada ajax en el formulario
+    para auto-sugerir el resultado.
+    NOTA: Solo debe mostrar las sugerencias para perfiles
+    que no son de usuarios staff
+    """
+    # -- término a buscar --
+    q = request.GET['term']
+
+    perfiles = Perfiles.objects.filter(nombre_comercial__icontains=q, user__is_staff=False)
+
+    result_list = []
+
+    for perfil in perfiles:
+        result_temp = {}
+        result_temp['id'] = perfil.id
+        result_temp['user_id'] = perfil.user_id
+        result_temp['label'] = perfil.nombre_comercial
+        result_list.append(result_temp)
+
+    return HttpResponse(json.dumps(result_list), mimetype='application/json')
