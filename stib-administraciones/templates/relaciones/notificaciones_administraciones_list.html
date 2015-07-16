@@ -42,7 +42,7 @@
                         <th>Entidad</th>
                         <th>Nombre</th>
                         <th>Fecha</th>
-                        <th>Administracion</th>
+                        <th>Administración</th>
                         <th>Título</th>
                         <th>Descripción</th>
                         <th>Leído</th>
@@ -73,7 +73,7 @@
                                     </td>
                                 {% endif %}<!--- / es un producto ??? --->
                                 <td>{{notificacion.creado|date:"SHORT_DATE_FORMAT"}}</td>
-                                <td>{{notificacion.usuario.perfil.nombre}}</td>
+                                <td>{{notificacion.usuario.perfil.nombre_comercial}}</td>
                                 <td>{{notificacion.titulo}}</td>
                                 <td>
                                     {{notificacion.descripcion|truncatechars:15}}

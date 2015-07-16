@@ -71,6 +71,10 @@ class NotificarCreateViewMixin(LoginRequiredMixin, StaffuserRequiredMixin, Creat
 
         return super(NotificarCreateViewMixin, self).form_valid(form)
 
+    def form_invalid(self, form):
+        print form
+        return super(NotificarCreateViewMixin, self).form_invalid(form)
+
     def _enviar_aviso_por_email(self, form):
         try:
             # -- obtengo Id de usuario

@@ -33,12 +33,17 @@ class FormDefinirTipoComunicacion(forms.Form):
 class FormNotificacionesUsuarios(forms.ModelForm):
     """
     Formulario base para el envio de notificaciones
-    a usuarios adminsitraciones(no staff)
+    a usuarios adminsitraciones(no staff).
+    Va a tener un campo (administracion_nombre_comercial) que será
+    un auto-suggest
     """
+    administracion_nombre_comercial = forms.CharField(max_length=150, required=True)
+
     def __init__(self, *args, **kwargs):
         super(FormNotificacionesUsuarios, self).__init__(*args, **kwargs)
-        self.fields['usuario'].label = 'Administraciones'
-        self.fields['usuario'].queryset = get_user_model().objects.filter(is_staff=False)
+        self.fields['administracion_nombre_comercial'].label = 'Administración'
+        self.fields['administracion_nombre_comercial'].help_text = 'Escriba el nombre de la administración'
+        self.fields['usuario'].widget = forms.HiddenInput()
         self.fields['tipo_relacion'].label = 'Motivos de tu notificacion'
 
 
@@ -84,15 +89,13 @@ class FormNotificacionUsuariosProductos(FormNotificacionesUsuarios, FormularioAu
     Formulario que presentara los campos necesarios para
     enviar una notificacion a una administracion sobre un producto.
     - Se re-arma el formulario porque se usa un auto-suggest
-    para el campo producto.
-    - Se filtran los usuarios para mostrar solo los que NO
-    son usuarios de 'staff'
+    para el campo producto y administraciones.
     """
 
     class Meta:
         model = RelacionesUsuariosProductos
-        fields = ('titulo', 'descripcion', 'usuario', 'producto_nombre',
-                  'producto', 'tipo_relacion', 'estado', 'enviado', )
+        fields = ('titulo', 'descripcion', 'administracion_nombre_comercial', 'usuario',
+                  'producto_nombre', 'producto', 'tipo_relacion', 'estado', 'enviado', )
 
 
 class FormNotificacionUsuariosServicios(FormNotificacionesUsuarios, FormularioAutosuggestServicios):
@@ -100,15 +103,13 @@ class FormNotificacionUsuariosServicios(FormNotificacionesUsuarios, FormularioAu
     Formulario que presentara los campos necesarios para
     enviar una notificacion a una administracion sobre un servicio.
     - Se re-arma el formulario porque se usa un auto-suggest
-    para el campo servicio.
-    - Se filtran los usuarios para mostrar solo los que NO
-    son usuarios de 'staff'
+    para el campo servicio y administraciones.
     """
 
     class Meta:
         model = RelacionesUsuariosServicios
-        fields = ('titulo', 'descripcion', 'usuario', 'servicio_nombre',
-                  'servicio', 'tipo_relacion', 'estado', 'enviado', )
+        fields = ('titulo', 'descripcion', 'administracion_nombre_comercial', 'usuario',
+                  'servicio_nombre', 'servicio', 'tipo_relacion', 'estado', 'enviado', )
 
 
 class FormNotificacionEdificiosProductos(FormularioAutosuggestEdificios, FormularioAutosuggestProductos):

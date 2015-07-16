@@ -30,7 +30,7 @@
                                     <td>{{ edificio.nombre }}</td>
                                     <td>{{ edificio.codigo }}</td>
                                     <td>{{ edificio.direccion }}</td>
-                                    <td>{{ edificio.user.perfil.nombre }}</td>
+                                    <td>{{ edificio.user.perfil.nombre_comercial }}</td>
                                     <td>
                                         <a href="{% url 'edificios:update' edificio.id %}"><i class="fa fa-pencil"></i></a>
                                         <a href="{% url 'edificios:delete' edificio.id %}"><i class="fa fa-trash-o"></i></a>
