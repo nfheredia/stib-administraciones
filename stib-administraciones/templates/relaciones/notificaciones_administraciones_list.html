@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% load i18n pagination_tags %}
 {% load relaciones_tags %}
+{% load staticfiles %}
 
 {% block title %}
     Notificaciones para Administraciones
@@ -128,3 +129,8 @@
         </div>
     </div>
 {% endblock %}
+
+{% block javascript %}
+    {{ block.super }}
+    <script src="{% static 'js/notificaciones-autocomplete.js' %}"></script>
+{% endblock javascript %}

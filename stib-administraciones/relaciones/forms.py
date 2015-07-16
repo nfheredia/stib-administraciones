@@ -217,7 +217,10 @@ class FormNotificacionesAdministracionesSearch(FormNotificacionesSearchMixin):
     Formulario para la búsqueda de notificaciones
     de administraciones.
     """
-    usuarios = forms.ModelChoiceField(queryset=get_user_model().objects.filter(is_staff=False),
-                                      required=False, label='Administraciones')
+    administracion_nombre_comercial = forms.CharField(max_length=150, required=True,
+                                                      label='Administración',
+                                                      help_text='Escriba el nombre de la administración')
+    usuario = forms.CharField(widget=forms.HiddenInput, required=False)
+
 
 

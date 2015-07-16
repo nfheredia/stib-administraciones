@@ -311,7 +311,7 @@ def _get_filter_results(request, query_prod_base, query_serv_base):
             q_servicios = q_servicios.filter(creado__gte=fecha_desde, creado__lte=fecha_hasta)
 
     # -- usuarios?
-    usuario = request.POST.get('usuarios', False)
+    usuario = request.POST.get('usuario', False)
     if usuario:
         if q_prod != "":
             q_prod = q_prod.filter(usuario=usuario)
