@@ -19,6 +19,7 @@ from braces.views import (
 )
 
 from .models import Edificios
+from .forms import FormSearch
 
 
 class EdificiosMixin(object):
@@ -42,6 +43,11 @@ class EdificiosListView(LoginRequiredMixin, StaffuserRequiredMixin, ListView):
     # -- si alguien no autorizado quiere ingresar,
     # -- lanzamos un 403
     raise_exception = True
+
+    def get_context_data(self, **kwargs):
+        ctx = super(EdificiosListView, self).get_context_data(**kwargs)
+        ctx['form_search'] = FormSearch
+        return ctx
 
 
 class EdificiosCreateView(LoginRequiredMixin, StaffuserRequiredMixin, EdificiosMixin, CreateView):
