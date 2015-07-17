@@ -202,25 +202,26 @@ class FormNotificacionesSearchMixin(forms.Form):
         return cleaned_data
 
 
-class FormNotificacionesEdificiosSearch(FormNotificacionesSearchMixin):
-    """
-    Formulario para la búsqueda de notificaciones
-    de edificios.
-    """
-    edificio_nombre = forms.CharField(max_length=150, required=False,
-                                      label="Edificio", help_text='Escriba el nombre del edificio')
-    edificio = forms.CharField(widget=forms.HiddenInput, required=False)
-
-
 class FormNotificacionesAdministracionesSearch(FormNotificacionesSearchMixin):
     """
     Formulario para la búsqueda de notificaciones
     de administraciones.
     """
-    administracion_nombre_comercial = forms.CharField(max_length=150, required=True,
+    administracion_nombre_comercial = forms.CharField(max_length=150, required=False,
                                                       label='Administración',
                                                       help_text='Escriba el nombre de la administración')
     usuario = forms.CharField(widget=forms.HiddenInput, required=False)
+
+
+class FormNotificacionesEdificiosSearch(FormNotificacionesAdministracionesSearch):
+    """
+    Formulario para la búsqueda de notificaciones
+    de edificios.
+    Incluimos ademas el campo de administraciones
+    """
+    edificio_nombre = forms.CharField(max_length=150, required=False,
+                                      label="Edificio", help_text='Escriba el nombre del edificio')
+    edificio = forms.CharField(widget=forms.HiddenInput, required=False)
 
 
 

@@ -223,78 +223,76 @@ def _get_filter_results(request, query_prod_base, query_serv_base):
     # -- sobre que entidades queremos realizar la busqueda?
     entidades = request.POST.get('entidades', 0)
     if entidades == "1":  # -- productos?
-        q_servicios = ""  # -- exluyo la busqueda sobre servicios
+        q_servicios = False  # -- exluyo la busqueda sobre servicios
     elif entidades == "2":  # -- servicios?
-        q_prod = ""  # -- exluyo la busqueda sobre productos
+        q_prod = False  # -- exluyo la busqueda sobre productos
 
     # -- titulo?
     titulo = request.POST['titulo']
     if titulo:
-        if q_prod != "":
+        if q_prod is not False:
             q_prod = q_prod.filter(titulo__icontains=titulo)
-        if q_servicios != "":
+        if q_servicios is not False:
             q_servicios = q_servicios.filter(titulo__icontains=titulo)
 
     # -- descripcion?
     descripcion = request.POST['descripcion']
     if descripcion:
-        if q_prod != "":
+        if q_prod is not False:
             q_prod = q_prod.filter(descripcion__icontains=descripcion)
-        if q_servicios != "":
+        if q_servicios is not False:
             q_servicios = q_servicios.filter(descripcion__icontains=descripcion)
 
     # -- leido?
     leido = request.POST['leido']
     if leido:
-        if q_prod != "":
-            print leido
+        if q_prod is not False:
             q_prod = q_prod.filter(leido=True if leido == 1 else False)
-        if q_servicios != "":
-            print leido
+        if q_servicios is not False:
             q_servicios = q_servicios.filter(leido=True if leido == "1" else False)
 
     # -- mail enviado?
     mail = request.POST['mail']
     if mail:
-        if q_prod != "":
+        if q_prod is not False:
             q_prod = q_prod.filter(enviado=True if mail == 1 else False)
-        if q_servicios != "":
+        if q_servicios is not False:
             q_servicios = q_servicios.filter(enviado=True if mail == "1" else False)
 
     # -- mail recibido?
     mail_recibido_value = request.POST['mail_recibido']
     if mail_recibido_value:
-        if q_prod != "":
+        if q_prod is not False:
             q_prod = q_prod.filter(mail_recibido=True if mail_recibido_value == "1" else False)
-        if q_servicios != "":
+        if q_servicios is not False:
             q_servicios = q_servicios.filter(mail_recibido=True if mail_recibido_value == "1" else False)
 
     # -- motivos?
     motivo = request.POST['motivos']
     if motivo:
-        if q_prod != "":
+        if q_prod is not False:
             q_prod = q_prod.filter(tipo_relacion=motivo)
-        if q_servicios != "":
+        if q_servicios is not False:
             q_servicios = q_servicios.filter(tipo_relacion=motivo)
 
     # -- producto?
     producto = request.POST['producto']
     if producto:
-        if q_prod != "":
+        if q_prod is not False:
             q_prod = q_prod.filter(producto=producto)
 
     # -- servicio?
     servicio = request.POST['servicio']
     if servicio:
-        if q_servicios != "":
+        if q_servicios is not False:
             q_servicios = q_servicios.filter(servicio=servicio)
 
     # -- edificio?
     edificio = request.POST.get('edificio', False)
     if edificio:
-        if q_prod != "":
+        if q_prod is not False:
             q_prod = q_prod.filter(edificio=edificio)
-        if q_servicios != "":
+        if q_servicios is not False:
             q_servicios = q_servicios.filter(edificio=edificio)
 
     # -- fechas desde/hasta
@@ -305,29 +303,41 @@ def _get_filter_results(request, query_prod_base, query_serv_base):
         fecha_hasta = fecha_hasta.split('/')
         fecha_desde = fecha_desde[2] + "-" + fecha_desde[1] + "-" + fecha_desde[0]
         fecha_hasta = fecha_hasta[2] + "-" + fecha_hasta[1] + "-" + fecha_hasta[0]
-        if q_prod != "":
+        if q_prod is not False:
             q_prod = q_prod.filter(creado__gte=fecha_desde, creado__lte=fecha_hasta)
-        if q_servicios != "":
+        if q_servicios is not False:
             q_servicios = q_servicios.filter(creado__gte=fecha_desde, creado__lte=fecha_hasta)
 
     # -- usuarios?
     usuario = request.POST.get('usuario', False)
     if usuario:
-        if q_prod != "":
-            q_prod = q_prod.filter(usuario=usuario)
-        if q_servicios != "":
-            q_servicios = q_servicios.filter(usuario=usuario)
+        # -- si estamos filtrando notificaciones de edificios
+        # -- realizamos la busqueda de usuario a traves del edificio
+        # -- antes debemos asegurarno de que la query no sea false
+        if isinstance("" if q_prod is False else q_prod[0], RelacionesEdificiosProductos) or \
+                isinstance("" if q_servicios is False else q_servicios[0], RelacionesEdificiosServicios):
+            if q_prod is not False:
+                q_prod = q_prod.filter(edificio__user=usuario)
+            if q_servicios is not False:
+                q_servicios = q_servicios.filter(edificio__user=usuario)
+        else:
+            if q_prod is not False:
+                q_prod = q_prod.filter(usuario=usuario)
+            if q_servicios is not False:
+                q_servicios = q_servicios.filter(usuario=usuario)
 
     # -- estado?
     estado = request.POST.get('estado', False)
     if estado:
-        print estado
-        if q_prod != "":
+        if q_prod is not False:
             q_prod = q_prod.filter(estado=estado)
-        if q_servicios != "":
+        if q_servicios is not False:
             q_servicios = q_servicios.filter(estado=estado)
 
-    return [q_prod, q_servicios]
+    # -- no se puede devolver un boolean,
+    # -- si es boolean, devolvemos un string vacio
+    return ["" if q_prod is False else q_prod,
+            "" if q_servicios is False else q_servicios]
 
 
 @staff_member_required
