@@ -49,6 +49,32 @@ class EdificiosListView(LoginRequiredMixin, StaffuserRequiredMixin, ListView):
         ctx['form_search'] = FormSearch
         return ctx
 
+    def get_queryset(self):
+        """ queryset y filtros si es que los hay """
+        qs = super(EdificiosListView, self).get_queryset()
+
+        nombre = self.request.GET.get('nombre', False)
+        if nombre:
+            qs = qs.filter(nombre__icontains = nombre)
+
+        direccion = self.request.GET.get('direccion', False)
+        if direccion:
+            qs = qs.filter(direccion__icontains = direccion)
+
+        codigo = self.request.GET.get('codigo', False)
+        if codigo:
+            qs = qs.filter(codigo = codigo)
+
+        comentario = self.request.GET.get('comentario', None)
+        if comentario:
+            qs = qs.filter(comentario__icontains = comentario)
+
+        usuario = self.request.GET.get('usuario', None)
+        if usuario:
+            qs = qs.filter(user = usuario)
+
+        return qs
+
 
 class EdificiosCreateView(LoginRequiredMixin, StaffuserRequiredMixin, EdificiosMixin, CreateView):
     """

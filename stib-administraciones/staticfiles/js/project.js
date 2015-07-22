@@ -54,4 +54,17 @@ $(function() {
             $("#id_edificio").val(ui.item.id)
         }
     });
+
+    /* **************************************************
+        Autocomplete de adminsitraciones
+        - utilizamos jquery autocomplete
+    *************************************************** */
+    $( "#id_administracion_nombre_comercial" ).autocomplete({
+        source: "/perfiles/autocomplete/nombre/comercial",
+        selectFirst:true,
+        minLength:3,
+        select: function(event,ui) {
+            $("#id_usuario").val(ui.item.user_id)
+        }
+    });
 });
