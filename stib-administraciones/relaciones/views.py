@@ -432,6 +432,7 @@ class NotificacionesAdministracionesServiciosDeleteView(LoginRequiredMixin, Staf
     raise_exception = True
 
 
+@staff_member_required
 def reenviar_email_edificios_productos(request, notificacion):
     """
     - reenvío de email para avisar de una nueva notificación de productos
@@ -447,6 +448,7 @@ def reenviar_email_edificios_productos(request, notificacion):
     return HttpResponseRedirect(reverse("notificaciones:edificios-list"))
 
 
+@staff_member_required
 def reenviar_email_edificios_servicios(request, notificacion):
     """
     - reenvío de email para avisar de una nueva notificación de servicios
@@ -462,6 +464,7 @@ def reenviar_email_edificios_servicios(request, notificacion):
     return HttpResponseRedirect(reverse("notificaciones:edificios-list"))
 
 
+@staff_member_required
 def reenviar_email_administraciones_productos(request, notificacion):
     """
     reenvio de email para avisar de una nueva notificación de productos
@@ -477,6 +480,7 @@ def reenviar_email_administraciones_productos(request, notificacion):
     return HttpResponseRedirect(reverse("notificaciones:administraciones-list"))
 
 
+@staff_member_required
 def reenviar_email_administraciones_servicios(request, notificacion):
     """
     reenvio de email para avisar de una nueva notificación de servicios

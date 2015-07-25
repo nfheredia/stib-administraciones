@@ -39,6 +39,7 @@ urlpatterns = patterns('',
     url(r'^llaves/', include('stib-administraciones.llaves.urls', namespace='llaves')),
     # -- comunicacion/notificaciones
     url(r'^notificaciones/', include('stib-administraciones.relaciones.urls', namespace='notificaciones')),
+    url(r'^notas/tecnicas/', include('stib-administraciones.notas_tecnicas.urls', namespace='notas-tecnicas')),
 
 ) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

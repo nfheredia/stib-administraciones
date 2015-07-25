@@ -19,6 +19,17 @@
                         </li>
                     </ul>
                 </li>
+                <li class="notas_tecnicas">
+                    <a href="#"><i class="fa fa-bullhorn fa-fw"></i> Notas Técnicas <span class="fa arrow"></span></a>
+                    <ul class="nav nav-second-level">
+                        <li class="notas_tecnicas">
+                            <a href="{% url 'notas-tecnicas:create' %}"><i class="fa fa-chevron-circle-right"></i> Enviar</a>
+                        </li>
+                        <li class="notas_tecnicas">
+                            <a href='#'><i class="fa fa-bars"></i> Historial</a>
+                        </li>
+                    </ul>
+                </li>
             {% else %}
                 <!-- Lista de edificios del usuario logueado -->
                 {% if request.user.is_authenticated %}
