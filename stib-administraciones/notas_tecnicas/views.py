@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
-from django.views.generic import CreateView
+from django.views.generic import CreateView, ListView, DeleteView
 from django.template.loader import render_to_string
 from django.core.mail import EmailMessage
 from django.contrib import messages
-from django.core.urlresolvers import reverse
+from django.core.urlresolvers import reverse, reverse_lazy
 from braces.views import LoginRequiredMixin, StaffuserRequiredMixin
 
 from .models import NotasTecnicas
@@ -59,6 +59,23 @@ class NotasTecnicasCreateView(LoginRequiredMixin, StaffuserRequiredMixin, Create
         except:
             messages.error(self.request, "Se produjo un error en el envío del email.")
             return False
+
+
+class NotasTecnicasListView(LoginRequiredMixin, StaffuserRequiredMixin, ListView):
+    """ Listado de notas técnicas """
+    model = NotasTecnicas
+    context_object_name = 'notas_tecnicas'
+    raise_exception = True
+
+
+class NotasTecnicasDeleteView(LoginRequiredMixin, StaffuserRequiredMixin, DeleteView):
+    """ Borrado de Nota Técnica """
+    model = NotasTecnicas
+    raise_exception = True
+
+    def get_success_url(self):
+        messages.success(self.request, 'La nota técnica fue eliminada.')
+        return reverse('notas-tecnicas:list')
 
 
 def _send_email(email_to, subject, context, *args):

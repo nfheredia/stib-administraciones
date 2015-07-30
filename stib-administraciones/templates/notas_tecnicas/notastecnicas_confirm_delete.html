@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block title %}Eliminar Nota Técnica{% endblock title %}
+
+{% block content %}
+    <br>
+    <div class="alert alert-danger">
+        <h1 class="page-header">
+           <i class="fa fa-warning"></i> Eliminar Nota Técnica
+        </h1>
+        <form action="" method="post">
+            {% csrf_token %}
+            <p><b>ATENCIÓN:</b> Está seguro de eliminar la Nota Técnica?
+            <br>
+            - Tenga en cuenta que se eliminaran todos los registros relacionados<br>
+            - Las notas técnicas eliminadas ya no podran ser vistas por las administraciones
+           </p>
+            <button type="submit" class='btn btn-danger'><i class="fa fa-trash-o"></i> Eliminar</button>
+        </form>
+    </div>
+{% endblock %}
