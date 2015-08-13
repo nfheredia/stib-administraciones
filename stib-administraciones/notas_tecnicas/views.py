@@ -7,7 +7,7 @@ from django.core.urlresolvers import reverse, reverse_lazy
 from braces.views import LoginRequiredMixin, StaffuserRequiredMixin
 
 from .models import NotasTecnicas
-from .forms import NotasTecnicasCreateForm
+from .forms import NotasTecnicasCreateForm, NotasTecnicasSearchForm
 from ..edificios.models import Edificios
 from ..perfiles.models import Perfiles
 
@@ -66,6 +66,11 @@ class NotasTecnicasListView(LoginRequiredMixin, StaffuserRequiredMixin, ListView
     model = NotasTecnicas
     context_object_name = 'notas_tecnicas'
     raise_exception = True
+
+    def get_context_data(self, **kwargs):
+        ctx = super(NotasTecnicasListView, self).get_context_data(**kwargs)
+        ctx['search_form'] = NotasTecnicasSearchForm
+        return ctx
 
 
 class NotasTecnicasDeleteView(LoginRequiredMixin, StaffuserRequiredMixin, DeleteView):

@@ -2,6 +2,7 @@
 {% load i18n pagination_tags %}
 {% load relaciones_tags %}
 {% load staticfiles %}
+{% load crispy_forms_tags %}
 
 {% block title %}
     Notas Técnicas
@@ -19,6 +20,75 @@
             </h1>
         </div>
     </div>
+    <!-- Search Form -->
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+                <div class="panel panel-default">
+                    <div class="panel-heading" role="tab" id="headingTwo">
+                        <h4 class="panel-title">
+                            <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFilter" aria-expanded="false" aria-controls="collapseFilter">
+                                <i class="fa fa-search"></i> Filtrar resultados
+                            </a>
+                        </h4>
+                    </div>
+                    <div id="collapseFilter" class="panel-collapse collapse {% if collapse_filters %}in{% endif %}" role="tabpanel" aria-labelledby="headingTwo">
+                        <div class="panel-body">
+                            <form method="post">
+                                {% csrf_token %}
+                                {{search_form.producto}}
+                                {{search_form.servicio}}
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        {{search_form.titulo|as_crispy_field}}
+                                    </div>
+                                    <div class="col-lg-6">
+                                        {{search_form.descripcion|as_crispy_field}}
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        {{search_form.leido|as_crispy_field}}
+                                    </div>
+                                    <div class="col-lg-6">
+                                        {{search_form.mail|as_crispy_field}}
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        {{search_form.mail_recibido|as_crispy_field}}
+                                    </div>
+                                    <div class="col-lg-6">
+                                        {{search_form.estado|as_crispy_field}}
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        {{search_form.fecha_desde|as_crispy_field}}
+                                    </div>
+                                    <div class="col-lg-6">
+                                        {{search_form.fecha_hasta|as_crispy_field}}
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        {{search_form.edificio}}
+                                        {{search_form.edificio_nombre|as_crispy_field}}
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <button type="submit" class="btn btn-primary"><i class="fa fa-search"></i> Buscar</button>
+                                        <a href="{% url 'notas-tecnicas:list' %}">Limpiar filtros</a>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div><!-- / Search Form -->
     <div class="row">
         <div class="col-lg-12">
             <table cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered">
