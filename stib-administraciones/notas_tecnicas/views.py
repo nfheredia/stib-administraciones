@@ -72,6 +72,12 @@ class NotasTecnicasListView(LoginRequiredMixin, StaffuserRequiredMixin, ListView
         ctx['search_form'] = NotasTecnicasSearchForm
         return ctx
 
+    def get_queryset(self):
+        qs = super(NotasTecnicasListView, self).get_queryset()
+
+
+
+        return qs
 
 class NotasTecnicasDeleteView(LoginRequiredMixin, StaffuserRequiredMixin, DeleteView):
     """ Borrado de Nota Técnica """
