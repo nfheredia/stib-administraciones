@@ -31,6 +31,7 @@ class NotasTecnicas(TimeStampedModel):
     descripcion = models.TextField(blank=True, verbose_name='Descripción')
     enviado = models.BooleanField(default=False)
     mail_recibido = models.BooleanField(default=False)
+    leido = models.BooleanField(verbose_name="Leido", default=False)
     estado = models.IntegerField(choices=ESTADOS, default=1, blank=False, null=False,
                                  help_text="Indica el estado que se encuentra la nota técnica.")
     forma_pago = models.CharField(blank=True, max_length=150, null=True,

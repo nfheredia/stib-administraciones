@@ -75,9 +75,46 @@ class NotasTecnicasListView(LoginRequiredMixin, StaffuserRequiredMixin, ListView
     def get_queryset(self):
         qs = super(NotasTecnicasListView, self).get_queryset()
 
-
+        # -- busqueda x titulo? --
+        titulo = self.request.GET.get('titulo', None)
+        if titulo:
+            qs = qs.filter(titulo__icontains=titulo)
+        # -- busqueda x descripcion? --
+        descripcion = self.request.GET.get('descripcion', None)
+        if descripcion:
+            qs = qs.filter(descripcion__icontains=descripcion)
+        # -- leido? --
+        leido = self.request.GET.get('leido', None)
+        if leido:
+            qs = qs.filter(leido=True if leido == "1" else False)
+        # -- Mail enviado? --
+        mail_enviado = self.request.GET.get('mail', None)
+        if mail_enviado:
+            qs = qs.filter(enviado=True if mail_enviado == "1" else False)
+        # -- Mail recibido? --
+        mail_recibido = self.request.GET.get('mail_recibido', None)
+        if mail_recibido:
+            qs = qs.filter(mail_recibido=True if mail_recibido == "1" else False)
+        # -- estado? --
+        estado = self.request.GET.get('estado')
+        if estado:
+            qs = qs.filter(estado=estado)
+        # -- fechas desde/hasta --
+        fecha_desde = self.request.GET.get('fecha_desde')
+        fecha_hasta = self.request.GET.get('fecha_hasta')
+        if fecha_desde and fecha_hasta:
+            fecha_desde = fecha_desde.split('/')
+            fecha_hasta = fecha_hasta.split('/')
+            fecha_desde = fecha_desde[2] + "-" + fecha_desde[1] + "-" + fecha_desde[0]
+            fecha_hasta = fecha_hasta[2] + "-" + fecha_hasta[1] + "-" + fecha_hasta[0]
+            qs = qs.filter(creado__gte=fecha_desde, creado__lte=fecha_hasta)
+        # -- edificio? --
+        edificio = self.request.GET.get('edificio', None)
+        if edificio:
+            qs = qs.filter(edificio=edificio)
 
         return qs
+
 
 class NotasTecnicasDeleteView(LoginRequiredMixin, StaffuserRequiredMixin, DeleteView):
     """ Borrado de Nota Técnica """

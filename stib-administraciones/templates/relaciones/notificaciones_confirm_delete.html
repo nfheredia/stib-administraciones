@@ -16,6 +16,12 @@
             - Los notificaciones eliminadas ya no podran ser vistas por las administraciones
            </p>
             <button type="submit" class='btn btn-danger'><i class="fa fa-trash-o"></i> Eliminar</button>
+            {% if '/edificios/' in  request.get_full_path %}
+                <a href="{% url 'notificaciones:edificios-list' %}">Cancelar</a>
+            {% endif %}
+            {% if '/administraciones/' in  request.get_full_path %}
+                <a href="{% url 'notificaciones:administraciones-list' %}">Cancelar</a>
+            {% endif %}
         </form>
     </div>
 {% endblock %}

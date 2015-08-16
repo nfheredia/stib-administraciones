@@ -34,8 +34,7 @@
                     </div>
                     <div id="collapseFilter" class="panel-collapse collapse {% if collapse_filters %}in{% endif %}" role="tabpanel" aria-labelledby="headingTwo">
                         <div class="panel-body">
-                            <form method="post">
-                                {% csrf_token %}
+                            <form method="get">
                                 <div class="row">
                                     <div class="col-lg-6">
                                         {{search_form.titulo|as_crispy_field}}
