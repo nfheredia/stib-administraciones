@@ -1,6 +1,9 @@
 # -*- coding: utf-8 -*-
 from django.conf.urls import patterns, url
-from .views import NotasTecnicasCreateView, NotasTecnicasListView, NotasTecnicasDeleteView
+from .views import (NotasTecnicasCreateView,
+                    NotasTecnicasListView,
+                    NotasTecnicasDeleteView,
+                    reenviar_email)
 
 urlpatterns = patterns('',
 
@@ -23,6 +26,13 @@ urlpatterns = patterns('',
         r'^delete/(?P<pk>\d+)$',
         NotasTecnicasDeleteView.as_view(),
         name='delete'
+    ),
+
+    # -- reenviar email
+    url(
+        r'^reenviar/mail/(?P<pk>\d+)$',
+        reenviar_email,
+        name='reenviar-mail'
     ),
 
 )

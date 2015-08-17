@@ -3,7 +3,9 @@ from django.views.generic import CreateView, ListView, DeleteView
 from django.template.loader import render_to_string
 from django.core.mail import EmailMessage
 from django.contrib import messages
-from django.core.urlresolvers import reverse, reverse_lazy
+from django.core.urlresolvers import reverse
+from django.contrib.admin.views.decorators import staff_member_required
+from django.http import HttpResponseRedirect
 from braces.views import LoginRequiredMixin, StaffuserRequiredMixin
 
 from .models import NotasTecnicas
@@ -131,7 +133,7 @@ def _send_email(email_to, subject, context, *args):
     Envío de email
     """
     try:
-        body = render_to_string("emails/email_notificaciones.html", context)
+        body = render_to_string("emails/email_notas_tecnicas.html", context)
         msg = EmailMessage(subject=subject,
                            body=body,
                            from_email='no-reply@stibadministraciones.com',
@@ -141,3 +143,34 @@ def _send_email(email_to, subject, context, *args):
         return True
     except:
         return False
+
+
+@staff_member_required
+def reenviar_email(request, pk):
+    try:
+        # -- obtener informacion de la nota técnica
+        nt = NotasTecnicas.objects.get(pk=pk)
+        # -- obtener el usuario(administracion) dueño del edificio
+        user = Edificios.usuario_por_edificio(nt.edificio.id)
+        # -- obtengo direccion de mail
+        email = Perfiles.obtener_mail_por_usuario(user)
+
+        if len(email) > 0:
+            subject = "[STIB] Nota Técnica - " + str(nt.edificio)
+            ctx = {'link_vista': 'http://google.com'}
+
+            if _send_email(email, subject, ctx):
+                nt.mail_recibido = True
+                nt.enviado = True
+                nt.save()
+
+            messages.success(request, "Se ha reenviado el email correctamente.")
+
+        else:
+            messages.error(request, 'Error al reenviar el email, verifique el email de la administración'
+                                    ' encargada del edificio.')
+
+        return HttpResponseRedirect(reverse("notas-tecnicas:list"))
+    except:
+        messages.error(request, 'Error inesperado al reenviar el email.')
+        return HttpResponseRedirect(reverse("notas-tecnicas:list"))
