@@ -25,8 +25,14 @@ class UserDetailView(LoginRequiredMixin, DetailView):
 
 
 class UserRedirectView(LoginRequiredMixin, RedirectView):
-    # -- Ir a Inicio una vez logueado
-    pattern_name = 'inicio'
+
+    def get_redirect_url(self, *args, **kwargs):
+        # -- dependiendo del rol del usuario que se logue
+        # -- ir al Inicio o al dashboard
+        if self.request.user.is_staff:
+            return reverse('inicio')
+        else:
+            return reverse('dashboard:index')
 
 
 class UserUpdateView(LoginRequiredMixin, UpdateView):

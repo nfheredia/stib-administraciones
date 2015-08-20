@@ -183,6 +183,7 @@ LOCAL_APPS = (
     'stib-administraciones.feedbacks', # feedbacks
     'stib-administraciones.novedades', # novedades
     'stib-administraciones.notas_tecnicas', # notas tecnicas
+    'stib-administraciones.dashboard', # dashboard
 )
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps

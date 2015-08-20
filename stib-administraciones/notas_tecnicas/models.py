@@ -42,4 +42,7 @@ class NotasTecnicas(TimeStampedModel):
                                         verbose_name="Iva")
     precio = models.FloatField(blank=False, null=False, verbose_name="Precio", default='0.00')
 
+    class Meta:
+        ordering = ['-creado']
+
 

@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+{% load thumbnail %}
+{% load staticfiles %}
+{% load relaciones_tags %}
+
+{% block content %}
+    {% autoescape off %}
+    <br>
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <i class="fa fa-bars text-white"></i> Últimas 5 notas técnicas
+                </div>
+                <div class="panel-body">
+                    <div class="well">
+                    {% for nt in notas_tecnicas %}
+                        <div class="row" style="margin-bottom:5px">
+                            <div class="col-lg-4">
+                                <a href="{% url 'edificios:administraciones' nt.edificio.id %}">
+                                {% if nt.edificio.foto_fachada %}
+                                    <img src="{% thumbnail nt.edificio.foto_fachada 100x100 crop %}" alt="No imagen">
+                                {% else %}
+                                    <img src="{% static 'images/sin-imagen-100x100.jpg' %}">
+                                {% endif %}
+                                {{nt.edificio.direccion}}
+                                </a>
+                            </div>
+                            <div class="col-lg-6">
+                                <div style="padding-top:25%">
+                                    {{nt.estado|mostrar_estados}} <strong>{{nt.titulo}}</strong>
+                                    <br>
+                                    <i class="fa fa-clock-o"></i> {{nt.creado|date:"SHORT_DATE_FORMAT"}}
+                                </div>
+                            </div>
+                            <div class="col-lg-2">
+                                 <div style="padding-top:85%">
+                                     <a class="btn btn-success">Ver</a>
+                                 </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <i class="fa fa-bars text-white"></i> Últimas 5 notificaciones de mis clientes
+                </div>
+                <div class="panel-body">
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <i class="fa fa-bars text-white"></i> Mis últimas 5 notificaciones
+                </div>
+                <div class="panel-body">
+
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endautoescape %}
+{% endblock %}
