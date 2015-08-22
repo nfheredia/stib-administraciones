@@ -38,7 +38,7 @@ class DashboardIndexView(LoginRequiredMixin, TemplateView):
 
         # -- obtengo las notificaciones de la dminsitracion logueada
         notificaciones_productos_administracion = RelacionesUsuariosProductos.objects.filter(usuario=self.request.user.id)[:5]
-        notificaciones_servicios_administracion = RelacionesUsuariosProductos.objects.filter(usuario=self.request.user.id)[:5]
+        notificaciones_servicios_administracion = RelacionesUsuariosServicios.objects.filter(usuario=self.request.user.id)[:5]
         ctx['notificaciones_usuarios'] = sorted(
             chain.from_iterable([notificaciones_productos_administracion, notificaciones_servicios_administracion]),
             key=attrgetter('creado'),
