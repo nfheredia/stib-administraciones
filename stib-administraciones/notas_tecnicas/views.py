@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from django.views.generic import CreateView, ListView, DeleteView
+from django.views.generic import CreateView, ListView, DeleteView, DetailView
 from django.template.loader import render_to_string
 from django.core.mail import EmailMessage
 from django.contrib import messages
@@ -174,3 +174,17 @@ def reenviar_email(request, pk):
     except:
         messages.error(request, 'Error inesperado al reenviar el email.')
         return HttpResponseRedirect(reverse("notas-tecnicas:list"))
+
+
+class NotasTecnicasDetailView(LoginRequiredMixin, DetailView):
+    """
+    Ver el detalle de una Nota Tecnica
+    """
+    model = NotasTecnicas
+
+    def get_queryset(self):
+        qs = super(NotasTecnicasDetailView, self).get_queryset()
+        # -- debemos ademas estar seguros que la nota tecnica
+        # -- sea de la administracion logueada
+        qs.filter(edificio__user=self.request.user.id)
+        return qs

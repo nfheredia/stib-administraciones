@@ -3,7 +3,8 @@ from django.conf.urls import patterns, url
 from .views import (NotasTecnicasCreateView,
                     NotasTecnicasListView,
                     NotasTecnicasDeleteView,
-                    reenviar_email)
+                    reenviar_email,
+                    NotasTecnicasDetailView)
 
 urlpatterns = patterns('',
 
@@ -33,6 +34,13 @@ urlpatterns = patterns('',
         r'^reenviar/mail/(?P<pk>\d+)$',
         reenviar_email,
         name='reenviar-mail'
+    ),
+
+    # -- detalle de una nota técnica
+    url(
+        r'^(?P<pk>\d+)$',
+        NotasTecnicasDetailView.as_view(),
+        name='detail'
     ),
 
 )
