@@ -40,6 +40,11 @@ $(function() {
         $('.dropdown-menu').hide();
     });
 
+    /* -------------------
+    - Bootstrap tooltip
+    - -------------------- */
+    $('[data-toggle="tooltip"]').tooltip();
+
     /* --------------------------------------------
         Autocomplete de edificios que pertencen
         a la administracion logueada

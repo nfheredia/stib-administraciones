@@ -10,7 +10,7 @@
         <div class="col-lg-6">
             <div class="panel panel-primary">
                 <div class="panel-heading">
-                    <i class="fa fa-bars text-white"></i> Últimas 5 notas técnicas
+                    <i class="fa fa-file-text-o fa-fw"></i> Últimas 3 notas técnicas
                 </div>
                 <div class="panel-body dashboard_block_panel">
                     {% for nt in notas_tecnicas %}
@@ -19,11 +19,10 @@
                             <div class="col-sm-4">
                                 <a href="{% url 'edificios:administraciones' nt.edificio.id %}">
                                 {% if nt.edificio.foto_fachada %}
-                                    <img src="{% thumbnail nt.edificio.foto_fachada 100x100 crop %}" alt="No imagen">
+                                    <img data-toggle="tooltip" data-placement="right" title="{{nt.edificio.direccion}} - {{nt.edificio.nombre}}" src="{% thumbnail nt.edificio.foto_fachada 100x100 crop %}" alt="No imagen">
                                 {% else %}
-                                    <img src="{% static 'images/sin-imagen-100x100.jpg' %}">
+                                    <img data-toggle="tooltip" data-placement="right" title="{{nt.edificio.direccion}} - {{nt.edificio.nombre}}" src="{% static 'images/sin-imagen-100x100.jpg' %}">
                                 {% endif %}
-                                {{nt.edificio.direccion}}
                                 </a>
                             </div>
                             <div class="col-sm-6">
@@ -46,7 +45,7 @@
         <div class="col-lg-6">
             <div class="panel panel-primary">
                 <div class="panel-heading">
-                    <i class="fa fa-bars text-white"></i> Últimas 5 notificaciones de mis clientes
+                    <i class="fa fa-bullhorn fa-fw"></i> Últimas 3 notificaciones de mis clientes
                 </div>
                 <div class="panel-body dashboard_block_panel">
                     {% for ne in notificaciones_edificios %}
@@ -55,20 +54,19 @@
                                 {% if ne.producto %}
                                     <a href="{% url 'productos:detail' ne.producto.id %}">
                                         {% if ne.producto.image %}
-                                            <img src="{% thumbnail ne.producto.image 100x100 crop %}" alt="No imagen">
+                                            <img data-toggle="tooltip" data-placement="right" title="{{ne.producto}}" src="{% thumbnail ne.producto.image 100x100 crop %}" alt="No imagen">
                                         {% else %}
-                                            <img src="{% static 'images/sin-imagen-100x100.jpg' %}">
+                                            <img data-toggle="tooltip" data-placement="right" title="{{ne.producto}}" src="{% static 'images/sin-imagen-100x100.jpg' %}">
                                         {% endif %}
-                                        {{ne.producto}}
+
                                     </a>
                                 {% else %}
                                     <a href="{% url 'servicios:detail' ne.servicio.id %}">
                                         {% if ne.servicio.image %}
-                                            <img src="{% thumbnail ne.servicio.image 100x100 crop %}" alt="No imagen">
+                                            <img data-toggle="tooltip" data-placement="right" title="{{ne.servicio}}" src="{% thumbnail ne.servicio.image 100x100 crop %}" alt="No imagen">
                                         {% else %}
-                                            <img src="{% static 'images/sin-imagen-100x100.jpg' %}">
+                                            <img data-toggle="tooltip" data-placement="right" title="{{ne.servicio}}" src="{% static 'images/sin-imagen-100x100.jpg' %}">
                                         {% endif %}
-                                        {{ne.servicio}}
                                     </a>
                                 {% endif %}
                                 </a>
@@ -81,7 +79,7 @@
                                 </div>
                             </div>
                             <div class="col-sm-2">
-                                <div class="ver_col"">
+                                <div class="ver_col">
                                     <a class="btn btn-success">Ver</a>
                                 </div>
                             </div>
@@ -96,10 +94,46 @@
         <div class="col-lg-6">
             <div class="panel panel-primary">
                 <div class="panel-heading">
-                    <i class="fa fa-bars text-white"></i> Mis últimas 5 notificaciones
+                    <i class="fa fa-bullhorn fa-fw"></i> Mis últimas 3 notificaciones
                 </div>
-                <div class="panel-body">
+                <div class="panel-body dashboard_block_panel">
+                    {% for nu in notificaciones_usuarios %}
+                        <div class="row row_box {% if forloop.counter|divisibleby:2 == False %}alt0{% else %}alt1{% endif %}"">
+                            <div class="col-sm-4">
+                                {% if nu.producto %}
+                                    <a href="{% url 'productos:detail' nu.producto.id %}">
+                                        {% if nu.producto.image %}
+                                            <img data-toggle="tooltip" data-placement="right" title="{{nu.producto}}" src="{% thumbnail nu.producto.image 100x100 crop %}" alt="No imagen">
+                                        {% else %}
+                                            <img data-toggle="tooltip" data-placement="right" title="{{nu.producto}}" src="{% static 'images/sin-imagen-100x100.jpg' %}">
+                                        {% endif %}
 
+                                    </a>
+                                {% else %}
+                                    <a href="{% url 'servicios:detail' nu.servicio.id %}">
+                                        {% if ne.servicio.image %}
+                                            <img data-toggle="tooltip" data-placement="right" title="{{nu.servicio}}" src="{% thumbnail nu.servicio.image 100x100 crop %}" alt="No imagen">
+                                        {% else %}
+                                            <img data-toggle="tooltip" data-placement="right" title="{{nu.servicio}}" src="{% static 'images/sin-imagen-100x100.jpg' %}">
+                                        {% endif %}
+                                    </a>
+                                {% endif %}
+                                </a>
+                            </div>
+                            <div class="col-sm-6" >
+                                <div class="title_col">
+                                    {{nu.estado|mostrar_estados}} <strong>{{nu.titulo}}</strong>
+                                    <br>
+                                    <i class="fa fa-clock-o"></i> {{nu.creado|date:"SHORT_DATE_FORMAT"}}
+                                </div>
+                            </div>
+                            <div class="col-sm-2">
+                                <div class="ver_col">
+                                    <a class="btn btn-success">Ver</a>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
                 </div>
             </div>
         </div>

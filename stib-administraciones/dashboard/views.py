@@ -5,7 +5,10 @@ from django.views.generic import TemplateView
 from braces.views import LoginRequiredMixin
 
 from ..notas_tecnicas.models import NotasTecnicas
-from ..relaciones.models import RelacionesEdificiosProductos, RelacionesEdificiosServicios
+from ..relaciones.models import (RelacionesEdificiosProductos,
+                                 RelacionesEdificiosServicios,
+                                 RelacionesUsuariosProductos,
+                                 RelacionesUsuariosServicios)
 
 
 class DashboardIndexView(LoginRequiredMixin, TemplateView):
@@ -21,7 +24,7 @@ class DashboardIndexView(LoginRequiredMixin, TemplateView):
         ctx = super(DashboardIndexView, self).get_context_data(**kwargs)
         #-- obtengo notas tecnicas de los edificios que pertenecen a la
         #-- administracion logueada
-        ctx['notas_tecnicas'] = NotasTecnicas.objects.filter(edificio__user=self.request.user.id)[:5]
+        ctx['notas_tecnicas'] = NotasTecnicas.objects.filter(edificio__user=self.request.user.id)[:3]
 
         # -- obtengo las notificaciones de los edificios que pertenecen
         # -- a la administracion logueada
@@ -31,6 +34,15 @@ class DashboardIndexView(LoginRequiredMixin, TemplateView):
             chain.from_iterable([notificaciones_productos_edificios, notificaciones_servicios_edificios]),
             key=attrgetter('creado'),
             reverse=True
-        )
+        )[:3]
+
+        # -- obtengo las notificaciones de la dminsitracion logueada
+        notificaciones_productos_administracion = RelacionesUsuariosProductos.objects.filter(usuario=self.request.user.id)[:5]
+        notificaciones_servicios_administracion = RelacionesUsuariosProductos.objects.filter(usuario=self.request.user.id)[:5]
+        ctx['notificaciones_usuarios'] = sorted(
+            chain.from_iterable([notificaciones_productos_administracion, notificaciones_servicios_administracion]),
+            key=attrgetter('creado'),
+            reverse=True
+        )[:3]
 
         return ctx
