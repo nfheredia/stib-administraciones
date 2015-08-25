@@ -10,6 +10,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404
 from braces.views import LoginRequiredMixin, StaffuserRequiredMixin
 
+from ..settings_local import STIB_TO_EMAIL
 from .models import NotasTecnicas
 from .forms import NotasTecnicasCreateForm, NotasTecnicasSearchForm
 from ..edificios.models import Edificios
@@ -56,8 +57,9 @@ class NotasTecnicasCreateView(LoginRequiredMixin, StaffuserRequiredMixin, Create
                     subject += str(form.cleaned_data['edificio'])
 
                 ctx = {'link_vista': 'http://google.com'}
+                body = render_to_string("emails/email_notas_tecnicas.html", ctx)
 
-                return _send_email(email, subject, ctx)
+                return _send_email(email, subject, body)
             else:
                 return False
         except:
@@ -130,16 +132,18 @@ class NotasTecnicasDeleteView(LoginRequiredMixin, StaffuserRequiredMixin, Delete
         return reverse('notas-tecnicas:list')
 
 
-def _send_email(email_to, subject, context, *args):
+def _send_email(email_to, subject, body, *args):
     """
     Envío de email
     """
     try:
-        body = render_to_string("emails/email_notas_tecnicas.html", context)
+        if isinstance(email_to, tuple) is False:
+            email_to = (email_to, )
+
         msg = EmailMessage(subject=subject,
                            body=body,
                            from_email='no-reply@stibadministraciones.com',
-                           to=(email_to, ))
+                           to=email_to)
         msg.content_subtype = 'html'
         msg.send()
         return True
@@ -160,8 +164,8 @@ def reenviar_email(request, pk):
         if len(email) > 0:
             subject = "[STIB] Nota Técnica - " + str(nt.edificio)
             ctx = {'link_vista': 'http://google.com'}
-
-            if _send_email(email, subject, ctx):
+            body = render_to_string("emails/email_notas_tecnicas.html", ctx)
+            if _send_email(email, subject, body):
                 nt.mail_recibido = True
                 nt.enviado = True
                 nt.save()
@@ -194,11 +198,31 @@ class NotasTecnicasDetailView(LoginRequiredMixin, DetailView):
 
 @login_required(redirect_field_name='accounts/login/')
 def enviar_cambio_estado(request):
+    """
+    Cambio de estado de una nota técnica y avisar
+    por email al personal de stib
+    """
     if request.method == "POST" or request.POST.get("nota_tecnica"):
-        nota_tecnica = get_object_or_404(NotasTecnicas, pk=request.POST.get("nota_tecnica"))
-        nota_tecnica.estado = request.POST.get("estado")
         try:
+            nota_tecnica = get_object_or_404(NotasTecnicas, pk=request.POST.get("nota_tecnica"))
+            nota_tecnica.estado = request.POST.get("estado")
             nota_tecnica.save()
+
+            # -- envio de email notificando el cambio de estado
+            subject = "Nota Técnica - Cambio de estado"
+            ctx = {
+                'administracion': nota_tecnica.edificio.user.perfil.nombre_comercial,
+                'edificio': nota_tecnica.edificio,
+                'estado': NotasTecnicas.ESTADOS[1][1],
+                'descripcion': nota_tecnica.descripcion,
+                'fecha': nota_tecnica.creado,
+                'comentario': request.POST.get("comentario")
+            }
+
+            body = render_to_string('emails/email_cambio_estado_nota_tecnica.html', ctx)
+            _send_email(STIB_TO_EMAIL, subject, body)
+            # -- / envio de email notificando el cambio de estado
+
             messages.success(request, "Se ha cambiado el estado de la Nota Técnica.")
         except:
             messages.error(request, "Error al cambiar el estado de la Nota Técnica.")

@@ -110,12 +110,12 @@
                 <form role="form" method="POST" action="{% url 'notas-tecnicas:cambio-estado' %}">
                     {% csrf_token %}
                     <div class="modal-body">
-                        Si tenés un comentario que hacer antes enviar tu respuesta, utiliza el siguiente formulario.
+                        Tu comentario nos interesa!!! Si tenés algo que decirnos antes enviar tu respuesta, utiliza el siguiente formulario.
                         <br><br>
                         <div class="form-group">
                             <input type="hidden" name="nota_tecnica" id="nota_tecnica" value="{{object.id}}">
                             <input type="hidden" name="estado" id="estado" value="">
-                            <textarea class="form-control" rows="3"></textarea>
+                            <textarea class="form-control" rows="3" name="comentario"></textarea>
                         </div>
                     </div>
                     <div class="modal-footer">

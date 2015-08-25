@@ -1,0 +1,14 @@
+La administración <b>"{{administracion}}"</b> ha realizado un cambio de estado
+en una de sus notas técnicas:
+<br><br>
+<b>Edificio:</b> {{edificio}}
+<br>
+<b>Estado:</b> {{estado}}
+<br>
+<b>Enviada el día:</b> {{fecha|date:"SHORT_DATE_FORMAT"}}
+<br>
+<b>Descripción Nota Técnica:</b> {% autoescape off %}{{descripcion}}{% endautoescape %}
+{% if comentario %}
+    <br>
+    <b>Comentario extra:</b> {{comentario}}
+{% endif %}
