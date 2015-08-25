@@ -6,6 +6,8 @@ from django.contrib import messages
 from django.core.urlresolvers import reverse
 from django.contrib.admin.views.decorators import staff_member_required
 from django.http import HttpResponseRedirect
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import get_object_or_404
 from braces.views import LoginRequiredMixin, StaffuserRequiredMixin
 
 from .models import NotasTecnicas
@@ -188,3 +190,20 @@ class NotasTecnicasDetailView(LoginRequiredMixin, DetailView):
         # -- sea de la administracion logueada
         qs.filter(edificio__user=self.request.user.id)
         return qs
+
+
+@login_required(redirect_field_name='accounts/login/')
+def enviar_cambio_estado(request):
+    if request.method == "POST" or request.POST.get("nota_tecnica"):
+        nota_tecnica = get_object_or_404(NotasTecnicas, pk=request.POST.get("nota_tecnica"))
+        nota_tecnica.estado = request.POST.get("estado")
+        try:
+            nota_tecnica.save()
+            messages.success(request, "Se ha cambiado el estado de la Nota Técnica.")
+        except:
+            messages.error(request, "Error al cambiar el estado de la Nota Técnica.")
+
+        return HttpResponseRedirect(reverse('notas-tecnicas:detail', args=[request.POST.get("nota_tecnica")]))
+    else:
+        messages.success(request, "Error.")
+        return HttpResponseRedirect("/");

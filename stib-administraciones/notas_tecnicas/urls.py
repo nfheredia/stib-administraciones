@@ -4,7 +4,8 @@ from .views import (NotasTecnicasCreateView,
                     NotasTecnicasListView,
                     NotasTecnicasDeleteView,
                     reenviar_email,
-                    NotasTecnicasDetailView)
+                    NotasTecnicasDetailView,
+                    enviar_cambio_estado)
 
 urlpatterns = patterns('',
 
@@ -41,6 +42,13 @@ urlpatterns = patterns('',
         r'^(?P<pk>\d+)$',
         NotasTecnicasDetailView.as_view(),
         name='detail'
+    ),
+
+    # -- enviar cambio de estado
+    url(
+        r'^cambio/estado$',
+        enviar_cambio_estado,
+        name='cambio-estado'
     ),
 
 )

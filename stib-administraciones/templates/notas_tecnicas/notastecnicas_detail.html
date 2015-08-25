@@ -62,11 +62,11 @@
                     <a class="btn btn-success" id="aceptar_nota_tecnica">
                         <i class="fa fa-thumbs-o-up"></i> Aceptarla
                     </a>
-                    <a class="btn btn-warning">
+                    <a class="btn btn-warning" id="pendiente_nota_tecnica">
                         <i class="fa fa-hand-paper-o"></i> Mantener Pendiente
                     </a>
-                    <a class="btn btn-danger" id="rechazar_nota_tecnica">
-                        <i class="fa fa-thumbs-o-down"></i> Rechazarla
+                    <a class="btn btn-danger" id="cancelar_nota_tecnica">
+                        <i class="fa fa-thumbs-o-down"></i> Cancelarla
                     </a>
                 </div>
                 <div class="col-lg-3">
@@ -107,19 +107,21 @@
                     ¿Está seguro de <span id="estado_name"></span> la nota técnica?
                 </h4>
                 </div>
-                <form role="form">
-                <div class="modal-body">
-                    Si tenés un comentario que hacer antes enviar tu respuesta, utiliza el siguiente formulario.
-                    <br><br>
-                    <div class="form-group">
-                        <input type="hidden" name="estado" id="estado" value="">
-                        <textarea class="form-control" rows="3"></textarea>
+                <form role="form" method="POST" action="{% url 'notas-tecnicas:cambio-estado' %}">
+                    {% csrf_token %}
+                    <div class="modal-body">
+                        Si tenés un comentario que hacer antes enviar tu respuesta, utiliza el siguiente formulario.
+                        <br><br>
+                        <div class="form-group">
+                            <input type="hidden" name="nota_tecnica" id="nota_tecnica" value="{{object.id}}">
+                            <input type="hidden" name="estado" id="estado" value="">
+                            <textarea class="form-control" rows="3"></textarea>
+                        </div>
                     </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="submit" class="btn btn-primary" data-dismiss="modal">Enviar</button>
-                    <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
-                </div>
+                    <div class="modal-footer">
+                        <input type="submit" class="btn btn-primary" value="Si">
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">No</button>
+                    </div>
                 </form>
             </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->
@@ -132,14 +134,20 @@
     <script>
         $(function() {
              $('#aceptar_nota_tecnica').click(function(){
-                $("#estado").val("1");
+                $("#estado").val("2");
                 $("#estado_name").html("Aceptar");
                 $("#modal_nota_tecnica_estado").modal("show");
             });
 
-            $('#rechazar_nota_tecnica').click(function(){
-                $("#estado").val("2");
-                $("#estado_name").html("Rechazar");
+            $('#cancelar_nota_tecnica').click(function(){
+                $("#estado").val("4");
+                $("#estado_name").html("Cancelar");
+                $("#modal_nota_tecnica_estado").modal("show");
+            });
+
+            $('#pendiente_nota_tecnica').click(function(){
+                $("#estado").val("3");
+                $("#estado_name").html("Mantener Pendiente");
                 $("#modal_nota_tecnica_estado").modal("show");
             });
         });
