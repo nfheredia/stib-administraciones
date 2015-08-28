@@ -45,4 +45,11 @@ class NotasTecnicas(TimeStampedModel):
     class Meta:
         ordering = ['-creado']
 
+    @classmethod
+    def marcar_leido(cls, pk):
+        """ Marcar la nota tecnica como leida """
+        obj = cls.objects.get(pk=pk)
+        obj.leido = 1
+        obj.save()
+
 

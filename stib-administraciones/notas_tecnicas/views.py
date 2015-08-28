@@ -189,10 +189,15 @@ class NotasTecnicasDetailView(LoginRequiredMixin, DetailView):
     model = NotasTecnicas
 
     def get_queryset(self):
-        qs = super(NotasTecnicasDetailView, self).get_queryset()
+        qs = NotasTecnicas.objects.filter(pk=self.kwargs['pk'])
         # -- debemos ademas estar seguros que la nota tecnica
         # -- sea de la administracion logueada
         qs.filter(edificio__user=self.request.user.id)
+
+        # -- si no esta leido, se marca como Nota tecnica leida
+        if qs[0].leido is False:
+            NotasTecnicas.marcar_leido(qs[0].id)
+
         return qs
 
 
@@ -213,7 +218,7 @@ def enviar_cambio_estado(request):
             ctx = {
                 'administracion': nota_tecnica.edificio.user.perfil.nombre_comercial,
                 'edificio': nota_tecnica.edificio,
-                'estado': NotasTecnicas.ESTADOS[1][1],
+                'estado': NotasTecnicas.ESTADOS[ int(request.POST.get("estado"))-1 ][1],
                 'descripcion': nota_tecnica.descripcion,
                 'fecha': nota_tecnica.creado,
                 'comentario': request.POST.get("comentario")
