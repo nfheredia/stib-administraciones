@@ -24,7 +24,7 @@ class DashboardIndexView(LoginRequiredMixin, TemplateView):
         ctx = super(DashboardIndexView, self).get_context_data(**kwargs)
         #-- obtengo notas tecnicas de los edificios que pertenecen a la
         #-- administracion logueada
-        ctx['notas_tecnicas'] = NotasTecnicas.objects.filter(edificio__user=self.request.user.id)[:3]
+        ctx['notas_tecnicas'] = NotasTecnicas.objects.filter(edificio__user=self.request.user.id)[:6]
 
         # -- obtengo las notificaciones de los edificios que pertenecen
         # -- a la administracion logueada

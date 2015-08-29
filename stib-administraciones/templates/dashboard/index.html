@@ -8,9 +8,9 @@
     <br>
     <div class="row">
         <div class="col-lg-6">
-            <div class="panel panel-primary">
+            <div class="panel panel-primary"><!-- notas tecnicas -->
                 <div class="panel-heading">
-                    <i class="fa fa-file-text-o fa-fw"></i> Últimas 3 notas técnicas
+                    <i class="fa fa-file-text-o fa-fw"></i> Últimas Notas Técnicas
                 </div>
                 <div class="panel-body dashboard_block_panel">
                     {% for nt in notas_tecnicas %}
@@ -40,16 +40,16 @@
                         </div>
                     {% endfor %}
                 </div>
-            </div>
+            </div><!-- / notas tecnicas -->
         </div>
         <div class="col-lg-6">
-            <div class="panel panel-primary">
+            <div class="panel panel-primary"><!-- notificaciones de clientes -->
                 <div class="panel-heading">
-                    <i class="fa fa-bullhorn fa-fw"></i> Últimas 3 notificaciones de mis clientes
+                    <i class="fa fa-bullhorn fa-fw"></i> Últimas Notificaciones de mis Clientes
                 </div>
                 <div class="panel-body dashboard_block_panel">
                     {% for ne in notificaciones_edificios %}
-                        <div class="row row_box {% if forloop.counter|divisibleby:2 == False %}alt0{% else %}alt1{% endif %}"">
+                        <div class="row row_box {% if forloop.counter|divisibleby:2 == False %}alt0{% else %}alt1{% endif %}">
                             <div class="col-sm-4">
                                 {% if ne.producto %}
                                     <a href="{% url 'productos:detail' ne.producto.id %}">
@@ -86,19 +86,14 @@
                         </div>
                     {% endfor %}
                 </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="row">
-        <div class="col-lg-6">
-            <div class="panel panel-primary">
+            </div><!-- / notificaciones de clientes -->
+            <div class="panel panel-primary"><!-- mis ultimas notificaciones -->
                 <div class="panel-heading">
-                    <i class="fa fa-bullhorn fa-fw"></i> Mis últimas 3 notificaciones
+                    <i class="fa fa-bullhorn fa-fw"></i> Mis Últimas notificaciones
                 </div>
                 <div class="panel-body dashboard_block_panel">
                     {% for nu in notificaciones_usuarios %}
-                        <div class="row row_box {% if forloop.counter|divisibleby:2 == False %}alt0{% else %}alt1{% endif %}"">
+                        <div class="row row_box {% if forloop.counter|divisibleby:2 == False %}alt0{% else %}alt1{% endif %}">
                             <div class="col-sm-4">
                                 {% if nu.producto %}
                                     <a href="{% url 'productos:detail' nu.producto.id %}">
@@ -135,7 +130,7 @@
                         </div>
                     {% endfor %}
                 </div>
-            </div>
+            </div><!-- / mis ultimas notificaciones -->
         </div>
     </div>
     {% endautoescape %}
