@@ -16,7 +16,9 @@ from .views import (EstablecerTipoComunicacion,
                     reenviar_email_edificios_productos,
                     reenviar_email_edificios_servicios,
                     reenviar_email_administraciones_productos,
-                    reenviar_email_administraciones_servicios)
+                    reenviar_email_administraciones_servicios,
+                    NotificacionesEdificiosServiciosDetailView,
+                    NotificacionesEdificiosProductosDetailView)
 
 urlpatterns = patterns('',
                        url(
@@ -104,6 +106,17 @@ urlpatterns = patterns('',
                            view=reenviar_email_administraciones_servicios,
                            name='reenviar-mail-administraciones-servicios'
                        ),
+                       url(
+                           regex=r'^edificios/servicios/detail/(?P<pk>\d+)$',
+                           view=NotificacionesEdificiosServiciosDetailView.as_view(),
+                           name='edificios-servicios-detail'
+                       ),
+                       url(
+                           regex=r'^edificios/productos/detail/(?P<pk>\d+)$',
+                           view=NotificacionesEdificiosProductosDetailView.as_view(),
+                           name='edificios-productos-detail'
+                       )
+
 )
 
 

@@ -6,7 +6,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib import messages
 from django.shortcuts import render
 from django.core.urlresolvers import reverse, reverse_lazy
-from django.views.generic import FormView, CreateView, DeleteView, RedirectView, View
+from django.views.generic import FormView, CreateView, DeleteView, DetailView
 from django.db.models import Q
 from django.core.mail import EmailMessage
 from django.template.loader import render_to_string
@@ -545,3 +545,21 @@ def _send_email(email_to, subject, context, *args):
         return True
     except:
         return False
+
+
+class NotificacionesEdificiosServiciosDetailView(LoginRequiredMixin, DetailView):
+    """
+    Mostrar el detalle de una notificacion de servicio
+    para un Edificio
+    """
+    model = RelacionesEdificiosServicios
+    template_name = 'relaciones/notificaciones_edificios_detail.html'
+
+
+class NotificacionesEdificiosProductosDetailView(LoginRequiredMixin, DetailView):
+    """
+    Mostrar el detalle de una notificacion de producto
+    para un Edificio
+    """
+    model = RelacionesEdificiosProductos
+    template_name = 'relaciones/notificaciones_edificios_detail.html'

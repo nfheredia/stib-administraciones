@@ -80,7 +80,11 @@
                             </div>
                             <div class="col-sm-2">
                                 <div class="ver_col">
-                                    <a class="btn btn-success">Ver</a>
+                                    {% if ne.servicio %}
+                                        <a class="btn btn-success" href="{% url 'notificaciones:edificios-servicios-detail' ne.id %}">Ver</a>
+                                    {% else %}
+                                        <a class="btn btn-success" href="{% url 'notificaciones:edificios-productos-detail' ne.id %}">Ver</a>
+                                    {% endif %}
                                 </div>
                             </div>
                         </div>
