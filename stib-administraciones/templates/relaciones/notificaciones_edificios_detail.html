@@ -1,0 +1,157 @@
+{% extends "base.html" %}
+{% load relaciones_tags %}
+{% load thumbnail %}
+{% load staticfiles %}
+
+{% block title %} Notificación {% endblock %}
+
+{% block content %}
+    {% autoescape off %}
+        <div class="row">
+            <div class="col-lg-12">
+                <h1 class="page-header">
+                    <a href="#">{{ object.titulo }}</a>
+                </h1>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-12">
+                <b>Fecha:</b> {{ object.modificado|date:"SHORT_DATE_FORMAT" }} |
+                <b>Estado:</b> {{ object.estado|mostrar_estados }}
+            </div>
+        </div>
+        <br>
+
+        <div class="row">
+            <!-- detalles del edificio -->
+            <div class="col-lg-3">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                      <i class="fa fa-building fa-fw"></i> Edificio
+                      <div class="pull-right">
+                          <a title="Editar" href="{% url 'edificios:administraciones_detalles_update' object.edificio.id %}">
+                              <i class="fa fa-pencil text-white"></i>
+                          </a>
+                      </div>
+                    </div>
+                    <div class="panel-body">
+                        <div class="well">
+                            {% if object.edificio.foto_fachada %}
+                                <img src="{% thumbnail object.edificio.foto_fachada 100x100 crop %}" alt="No imagen">
+                            {% else %}
+                                <img src="{% static 'images/sin-imagen-100x100.jpg' %}">
+                            {% endif %}
+                            <br><br>
+                            <small>
+                                <label><strong>Dirección: </strong></label>
+                                {{ object.edificio.direccion }}
+                                <br>
+                                <label><strong>Nombre: </strong></label>
+                                {{ object.edificio.nombre }}
+                            </small>
+                            <a class="btn btn-primary" href="{% url 'edificios:administraciones' object.edificio.id %}">
+                                <i class="fa fa-external-link"></i> Visitar
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div><!-- / detalles del edificio -->
+            <div class="col-lg-6">
+                <div class="well">
+                    {{ object.descripcion }}
+                </div>
+                <h3>¿Que deseas hacer con esta Notificación?</h3>
+                <a class="btn btn-success" id="aceptar_nota_tecnica">
+                    <i class="fa fa-thumbs-o-up"></i> Aceptarla
+                </a>
+                <a class="btn btn-warning" id="pendiente_nota_tecnica">
+                    <i class="fa fa-hand-paper-o"></i> Mantener Pendiente
+                </a>
+                <a class="btn btn-danger" id="cancelar_nota_tecnica">
+                    <i class="fa fa-thumbs-o-down"></i> Cancelarla
+                </a>
+            </div>
+            <div class="col-lg-3">
+                <!-- detalles de la nota tecnica -->
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                      <i class="fa fa-bars text-white"></i> Detalles
+                    </div>
+                    <div class="panel-body">
+                        <div class="well">
+                            <small>
+                                <label><strong>Forma de pago: </strong></label>
+                                {{ object.forma_pago }}
+                                <br>
+                                <label><strong>Validez Oferta: </strong></label>
+                                {{ object.validez_oferta }}
+                                <br>
+                                <label><strong>Iva: </strong></label>
+                                {% if object.iva == 1 %} Incluido {% else %} No Incluido {% endif %}
+                                <br>
+                                <label><strong>Precio: </strong></label>
+                                {{ object.precio }}
+                            </small>
+                        </div>
+                    </div>
+                </div><!-- / detalles de la nota tecnica -->
+            </div>
+        </div>
+    {% endautoescape %}
+
+    <div class="modal fade" id="modal_nota_tecnica_estado">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">
+                    ¿Está seguro de <span id="estado_name"></span> la nota técnica?
+                </h4>
+                </div>
+                <form role="form" method="POST" action="{% url 'notas-tecnicas:cambio-estado' %}">
+                    {% csrf_token %}
+                    <div class="modal-body">
+                        Tu comentario nos interesa!!! Si tenés algo que decirnos antes enviar tu respuesta, utiliza el siguiente formulario.
+                        <br><br>
+                        <div class="form-group">
+                            <input type="hidden" name="nota_tecnica" id="nota_tecnica" value="{{object.id}}">
+                            <input type="hidden" name="estado" id="estado" value="">
+                            <textarea class="form-control" rows="3" name="comentario"></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <input type="submit" class="btn btn-primary" value="Si">
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">No</button>
+                    </div>
+                </form>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div>
+
+{% endblock %}
+
+{% block javascript %}
+    {{ block.super }}
+    <script>
+        $(function() {
+             $('#aceptar_nota_tecnica').click(function(){
+                $("#estado").val("2");
+                $("#estado_name").html("Aceptar");
+                $("#modal_nota_tecnica_estado").modal("show");
+            });
+
+            $('#cancelar_nota_tecnica').click(function(){
+                $("#estado").val("4");
+                $("#estado_name").html("Cancelar");
+                $("#modal_nota_tecnica_estado").modal("show");
+            });
+
+            $('#pendiente_nota_tecnica').click(function(){
+                $("#estado").val("3");
+                $("#estado_name").html("Mantener Pendiente");
+                $("#modal_nota_tecnica_estado").modal("show");
+            });
+        });
+    </script>
+{% endblock javascript %}
