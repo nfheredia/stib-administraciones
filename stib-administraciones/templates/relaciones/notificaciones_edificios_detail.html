@@ -62,37 +62,47 @@
                     {{ object.descripcion }}
                 </div>
                 <h3>¿Que deseas hacer con esta Notificación?</h3>
-                <a class="btn btn-success" id="aceptar_nota_tecnica">
+                <a class="btn btn-success" id="aceptar_notificacion">
                     <i class="fa fa-thumbs-o-up"></i> Aceptarla
                 </a>
-                <a class="btn btn-warning" id="pendiente_nota_tecnica">
-                    <i class="fa fa-hand-paper-o"></i> Mantener Pendiente
-                </a>
-                <a class="btn btn-danger" id="cancelar_nota_tecnica">
+                <a class="btn btn-danger" id="cancelar_notificacion">
                     <i class="fa fa-thumbs-o-down"></i> Cancelarla
                 </a>
             </div>
             <div class="col-lg-3">
-                <!-- detalles de la nota tecnica -->
+                <!-- detalles del producto o servicio -->
                 <div class="panel panel-primary">
                     <div class="panel-heading">
-                      <i class="fa fa-bars text-white"></i> Detalles
+                      <i class="fa fa-bars text-white"></i> Detalles del
+                        {% if object.producto %}
+                            Producto
+                        {% else %}
+                            Servicio
+                        {% endif %}
                     </div>
                     <div class="panel-body">
                         <div class="well">
-                            <small>
-                                <label><strong>Forma de pago: </strong></label>
-                                {{ object.forma_pago }}
+                            {% if object.producto %}
+                                <img src="{% thumbnail object.producto.image 100x100 crop %}" alt="No imagen">
+                                <br><br>
+                                <small>
+                                    <label><strong>Nombre: </strong></label> {{object.producto.nombre}}
+                                </small>
                                 <br>
-                                <label><strong>Validez Oferta: </strong></label>
-                                {{ object.validez_oferta }}
+                                <a class="btn btn-primary" href="{% url 'productos:detail' object.producto.id %}">
+                                    <i class="fa fa-external-link"></i> Visitar
+                                </a>
+                            {% else %}
+                                <img src="{% thumbnail object.servicio.image 100x100 crop %}" alt="No imagen">
+                                <br><br>
+                                <small>
+                                    <label><strong>Nombre: </strong></label> {{object.servicio.nombre}}
+                                </small>
                                 <br>
-                                <label><strong>Iva: </strong></label>
-                                {% if object.iva == 1 %} Incluido {% else %} No Incluido {% endif %}
-                                <br>
-                                <label><strong>Precio: </strong></label>
-                                {{ object.precio }}
-                            </small>
+                                <a class="btn btn-primary" href="{% url 'servicios:detail' object.servicio.id %}">
+                                    <i class="fa fa-external-link"></i> Visitar
+                                </a>
+                            {% endif %}
                         </div>
                     </div>
                 </div><!-- / detalles de la nota tecnica -->
@@ -100,14 +110,14 @@
         </div>
     {% endautoescape %}
 
-    <div class="modal fade" id="modal_nota_tecnica_estado">
+    <div class="modal fade" id="modal_envio_cambio_estado">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title">
-                    ¿Está seguro de <span id="estado_name"></span> la nota técnica?
-                </h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">
+                        ¿Está seguro de <span id="estado_name"></span> la notificación?
+                    </h4>
                 </div>
                 <form role="form" method="POST" action="{% url 'notas-tecnicas:cambio-estado' %}">
                     {% csrf_token %}
@@ -135,22 +145,16 @@
     {{ block.super }}
     <script>
         $(function() {
-             $('#aceptar_nota_tecnica').click(function(){
+             $('#aceptar_notificacion').click(function(){
                 $("#estado").val("2");
                 $("#estado_name").html("Aceptar");
-                $("#modal_nota_tecnica_estado").modal("show");
+                $("#modal_envio_cambio_estado").modal("show");
             });
 
-            $('#cancelar_nota_tecnica').click(function(){
+            $('#cancelar_notificacion').click(function(){
                 $("#estado").val("4");
                 $("#estado_name").html("Cancelar");
-                $("#modal_nota_tecnica_estado").modal("show");
-            });
-
-            $('#pendiente_nota_tecnica').click(function(){
-                $("#estado").val("3");
-                $("#estado_name").html("Mantener Pendiente");
-                $("#modal_nota_tecnica_estado").modal("show");
+                $("#modal_envio_cambio_estado").modal("show");
             });
         });
     </script>
