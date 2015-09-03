@@ -575,9 +575,11 @@ def edificios_cambio_estado_productos(request):
                                                         request.POST.get("estado"))
 
             messages.success(request, "Se ha cambiado el estado de la Notificación")
-            return HttpResponseRedirect("/")
         except:
-            pass
+            messages.error(request, "Error al cambiar el estado de la Notificación")
+
+        return HttpResponseRedirect(reverse('notificaciones:edificios-productos-detail',
+                                    args=[request.POST.get("id")]))
     else:
         messages.success(request, "Error.")
         return HttpResponseRedirect("/")
@@ -591,9 +593,11 @@ def edificios_cambio_estado_servicios(request):
                                                         request.POST.get("estado"))
 
             messages.success(request, "Se ha cambiado el estado de la Notificación")
-            return HttpResponseRedirect("/")
         except:
-            pass
+            messages.error(request, "Error al cambiar el estado de la Notificación")
+
+        return HttpResponseRedirect(reverse('notificaciones:edificios-servicios-detail',
+                                            args=[request.POST.get("id")]))
     else:
         messages.success(request, "Error.")
         return HttpResponseRedirect("/")
