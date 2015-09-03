@@ -35,6 +35,13 @@ class Relaciones(TimeStampedModel):
     class Meta:
         abstract = True
 
+    @classmethod
+    def cambiar_estado(cls, pk, estado):
+        """ Marcar la nota tecnica como leida """
+        obj = cls.objects.get(pk=pk)
+        obj.estado = estado
+        obj.save()
+
 
 class TipoRelaciones(TimeStampedModel):
     """

@@ -235,4 +235,4 @@ def enviar_cambio_estado(request):
         return HttpResponseRedirect(reverse('notas-tecnicas:detail', args=[request.POST.get("nota_tecnica")]))
     else:
         messages.success(request, "Error.")
-        return HttpResponseRedirect("/");
+        return HttpResponseRedirect("/")

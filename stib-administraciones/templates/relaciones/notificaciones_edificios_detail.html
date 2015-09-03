@@ -119,13 +119,13 @@
                         ¿Está seguro de <span id="estado_name"></span> la notificación?
                     </h4>
                 </div>
-                <form role="form" method="POST" action="{% url 'notas-tecnicas:cambio-estado' %}">
+                <form role="form" method="POST" action="{% if object.producto %}{% url 'notificaciones:cambio-estado-productos' %}{% else %}{% url 'notificaciones:cambio-estado-servicios' %}{% endif %}">
                     {% csrf_token %}
                     <div class="modal-body">
                         Tu comentario nos interesa!!! Si tenés algo que decirnos antes enviar tu respuesta, utiliza el siguiente formulario.
                         <br><br>
                         <div class="form-group">
-                            <input type="hidden" name="nota_tecnica" id="nota_tecnica" value="{{object.id}}">
+                            <input type="hidden" name="id" id="id" value="{{object.id}}">
                             <input type="hidden" name="estado" id="estado" value="">
                             <textarea class="form-control" rows="3" name="comentario"></textarea>
                         </div>

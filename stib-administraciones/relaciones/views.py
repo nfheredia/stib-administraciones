@@ -11,6 +11,8 @@ from django.db.models import Q
 from django.core.mail import EmailMessage
 from django.template.loader import render_to_string
 from django.contrib.admin.views.decorators import staff_member_required
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import get_object_or_404
 from braces.views import LoginRequiredMixin, StaffuserRequiredMixin
 
 from .forms import (FormDefinirTipoComunicacion,
@@ -563,3 +565,35 @@ class NotificacionesEdificiosProductosDetailView(LoginRequiredMixin, DetailView)
     """
     model = RelacionesEdificiosProductos
     template_name = 'relaciones/notificaciones_edificios_detail.html'
+
+
+@login_required(redirect_field_name='accounts/login/')
+def edificios_cambio_estado_productos(request):
+    if request.method == "POST" and request.POST.get("id"):
+        try:
+            RelacionesEdificiosProductos.cambiar_estado(request.POST.get("id"),
+                                                        request.POST.get("estado"))
+
+            messages.success(request, "Se ha cambiado el estado de la Notificación")
+            return HttpResponseRedirect("/")
+        except:
+            pass
+    else:
+        messages.success(request, "Error.")
+        return HttpResponseRedirect("/")
+
+
+@login_required(redirect_field_name='accounts/login/')
+def edificios_cambio_estado_servicios(request):
+    if request.method == "POST" and request.POST.get("id"):
+        try:
+            RelacionesEdificiosServicios.cambiar_estado(request.POST.get("id"),
+                                                        request.POST.get("estado"))
+
+            messages.success(request, "Se ha cambiado el estado de la Notificación")
+            return HttpResponseRedirect("/")
+        except:
+            pass
+    else:
+        messages.success(request, "Error.")
+        return HttpResponseRedirect("/")
