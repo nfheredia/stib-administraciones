@@ -42,6 +42,13 @@ class Relaciones(TimeStampedModel):
         obj.estado = estado
         obj.save()
 
+    @classmethod
+    def marcar_leido(cls, pk):
+        """ Marcar como leida """
+        obj = cls.objects.get(pk=pk)
+        obj.leido = 1
+        obj.save()
+
 
 class TipoRelaciones(TimeStampedModel):
     """

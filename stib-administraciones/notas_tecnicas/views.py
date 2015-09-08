@@ -224,7 +224,7 @@ def enviar_cambio_estado(request):
                 'comentario': request.POST.get("comentario")
             }
 
-            body = render_to_string('emails/email_cambio_estado_nota_tecnica.html', ctx)
+            body = render_to_string('emails/email_cambio_estado_nota_tecnica_notificaciones.html', ctx)
             _send_email(STIB_TO_EMAIL, subject, body)
             # -- / envio de email notificando el cambio de estado
 

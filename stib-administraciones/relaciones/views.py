@@ -30,6 +30,7 @@ from ..productos.models import Productos
 from ..servicios.models import Servicios
 from ..edificios.models import Edificios
 from ..perfiles.models import Perfiles
+from ..settings_local import STIB_TO_EMAIL
 
 
 reenvio_email_massages = {'success': 'Se ha reenviado el mail de notificación.',
@@ -96,8 +97,8 @@ class NotificarCreateViewMixin(LoginRequiredMixin, StaffuserRequiredMixin, Creat
                     subject += "Aviso importante"
 
                 ctx = {'link_vista': 'http://google.com'}
-
-                return _send_email(email, subject, ctx)
+                body = render_to_string("emails/email_notificaciones.html", ctx)
+                return _send_email(email, subject, body)
             else:
                 return False
         except:
@@ -521,8 +522,9 @@ def _reenviar_email_notificaciones(obj_notificacion):
     email_to = Perfiles.obtener_mail_por_usuario(user)
 
     ctx = {'link_vista': 'http://google.com'}
+    body = render_to_string("emails/email_notificaciones.html", ctx)
     # -- mail enviado??
-    if _send_email(email_to, subject, ctx):
+    if _send_email(email_to, subject, body):
         # -- marcamos como email recibido
         obj_notificacion.mail_recibido = True
         obj_notificacion.enviado = True
@@ -532,16 +534,18 @@ def _reenviar_email_notificaciones(obj_notificacion):
         return False
 
 
-def _send_email(email_to, subject, context, *args):
+def _send_email(email_to, subject, body, *args):
     """
     Envío de email
     """
     try:
-        body = render_to_string("emails/email_notificaciones.html", context)
+        if isinstance(email_to, tuple) is False:
+            email_to = (email_to, )
+
         msg = EmailMessage(subject=subject,
                            body=body,
                            from_email='no-reply@stibadministraciones.com',
-                           to=(email_to, ))
+                           to=email_to)
         msg.content_subtype = 'html'
         msg.send()
         return True
@@ -557,6 +561,18 @@ class NotificacionesEdificiosServiciosDetailView(LoginRequiredMixin, DetailView)
     model = RelacionesEdificiosServicios
     template_name = 'relaciones/notificaciones_edificios_detail.html'
 
+    def get_queryset(self):
+        qs = RelacionesEdificiosServicios.objects.filter(pk=self.kwargs['pk'])
+        # -- debemos ademas estar seguros que la notificacion
+        # -- sea de la administracion logueada
+        qs.filter(edificio__user=self.request.user.id)
+
+        # -- si no esta leido, se marca como leida
+        if qs[0].leido is False:
+            RelacionesEdificiosServicios.marcar_leido(qs[0].id)
+
+        return qs
+
 
 class NotificacionesEdificiosProductosDetailView(LoginRequiredMixin, DetailView):
     """
@@ -566,6 +582,18 @@ class NotificacionesEdificiosProductosDetailView(LoginRequiredMixin, DetailView)
     model = RelacionesEdificiosProductos
     template_name = 'relaciones/notificaciones_edificios_detail.html'
 
+    def get_queryset(self):
+        qs = RelacionesEdificiosProductos.objects.filter(pk=self.kwargs['pk'])
+        # -- debemos ademas estar seguros que la notificacion
+        # -- sea de la administracion logueada
+        qs.filter(edificio__user=self.request.user.id)
+
+        # -- si no esta leido, se marca como leida
+        if qs[0].leido is False:
+            RelacionesEdificiosProductos.marcar_leido(qs[0].id)
+
+        return qs
+
 
 @login_required(redirect_field_name='accounts/login/')
 def edificios_cambio_estado_productos(request):
@@ -573,6 +601,24 @@ def edificios_cambio_estado_productos(request):
         try:
             RelacionesEdificiosProductos.cambiar_estado(request.POST.get("id"),
                                                         request.POST.get("estado"))
+
+            notificacion = get_object_or_404(RelacionesEdificiosProductos,
+                                             pk=request.POST.get("id"))
+            ctx = {
+                'administracion': notificacion.edificio.user.perfil.nombre_comercial,
+                'edificio': notificacion.edificio,
+                'estado': RelacionesEdificiosProductos.ESTADOS[ int(request.POST.get("estado"))-1 ][1],
+                'descripcion': notificacion.descripcion,
+                'fecha': notificacion.creado,
+                'comentario': request.POST.get("comentario"),
+                'producto': notificacion.producto
+            }
+
+            body = render_to_string('emails/email_cambio_estado_nota_tecnica_notificaciones.html', ctx)
+
+            subject = "Edificio: %s - Notificación de Producto - Cambio de estado" % notificacion.edificio
+
+            _send_email(STIB_TO_EMAIL, subject, body)
 
             messages.success(request, "Se ha cambiado el estado de la Notificación")
         except:
@@ -591,6 +637,24 @@ def edificios_cambio_estado_servicios(request):
         try:
             RelacionesEdificiosServicios.cambiar_estado(request.POST.get("id"),
                                                         request.POST.get("estado"))
+
+            notificacion = get_object_or_404(RelacionesEdificiosServicios,
+                                             pk=request.POST.get("id"))
+            ctx = {
+                'administracion': notificacion.edificio.user.perfil.nombre_comercial,
+                'edificio': notificacion.edificio,
+                'estado': RelacionesEdificiosProductos.ESTADOS[ int(request.POST.get("estado"))-1 ][1],
+                'descripcion': notificacion.descripcion,
+                'fecha': notificacion.creado,
+                'comentario': request.POST.get("comentario"),
+                'servicio': notificacion.servicio
+            }
+
+            body = render_to_string('emails/email_cambio_estado_nota_tecnica_notificaciones.html', ctx)
+
+            subject = "Edificio: %s - Notificación de Servicio - Cambio de estado" % notificacion.edificio
+
+            _send_email(STIB_TO_EMAIL, subject, body)
 
             messages.success(request, "Se ha cambiado el estado de la Notificación")
         except:

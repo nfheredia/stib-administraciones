@@ -39,7 +39,7 @@ class ProductosDetailView(LoginRequiredMixin, DetailView):
     def get_context_data(self, **kwargs):
         ctx = super(ProductosDetailView, self).get_context_data(**kwargs)
         ctx['form_consulta'] = FormConsulta
-        ctx['otros_productos'] = Productos.objects.exclude(pk=self.kwargs['pk'])[:4]
+        ctx['otros_productos'] = Productos.objects.exclude(pk=self.kwargs['pk'])[:3]
         return ctx
 
 

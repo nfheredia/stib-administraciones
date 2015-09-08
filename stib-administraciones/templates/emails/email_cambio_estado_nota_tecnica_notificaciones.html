@@ -7,7 +7,14 @@ en una de sus notas técnicas:
 <br>
 <b>Enviada el día:</b> {{fecha|date:"SHORT_DATE_FORMAT"}}
 <br>
-<b>Descripción Nota Técnica:</b> {% autoescape off %}{{descripcion}}{% endautoescape %}
+{% if producto %}
+    <b>Producto:</b> {{producto}}
+    <br>
+{% elif servicio %}
+    <b>Servicio:</b> {{servicio}}
+    <br>
+{% endif%}
+<b>Descripción:</b> {% autoescape off %}{{descripcion}}{% endautoescape %}
 {% if comentario %}
     <br>
     <b>Comentario extra:</b> {{comentario}}
