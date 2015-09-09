@@ -20,8 +20,11 @@ from .views import (EstablecerTipoComunicacion,
                     NotificacionesEdificiosServiciosDetailView,
                     NotificacionesEdificiosProductosDetailView,
                     edificios_cambio_estado_productos,
-                    edificios_cambio_estado_servicios)
-
+                    edificios_cambio_estado_servicios,
+                    NotificacionesAdministracionesServiciosDetailView,
+                    NotificacionesAdministracionesProductosDetailView,
+                    administraciones_cambio_estado_productos,
+                    administraciones_cambio_estado_servicios)
 urlpatterns = patterns('',
                        url(
                            regex=r'^$',
@@ -127,8 +130,29 @@ urlpatterns = patterns('',
                            regex=r'^edificios/servicios/cambio/estado$',
                            view=edificios_cambio_estado_servicios,
                            name='cambio-estado-servicios'
+                       ),
+                       url(
+                           regex=r'^administraciones/productos/detail/(?P<pk>\d+)$',
+                           view=NotificacionesAdministracionesProductosDetailView.as_view(),
+                           name='administraciones-productos-detail'
+                       ),
+                        url(
+                           regex=r'^administraciones/servicios/detail/(?P<pk>\d+)$',
+                           view=NotificacionesAdministracionesServiciosDetailView.as_view(),
+                           name='administraciones-servicios-detail'
+                       ),
+                       url(
+                           regex=r'^administraciones/productos/cambio/estado$',
+                           view=administraciones_cambio_estado_productos,
+                           name='administraciones-cambio-estado-productos'
+                       ),
+                       url(
+                           regex=r'^administraciones/servicios/cambio/estado$',
+                           view=administraciones_cambio_estado_servicios,
+                           name='administraciones-cambio-estado-servicios'
                        )
 
 )
+
 
 

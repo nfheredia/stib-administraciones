@@ -602,23 +602,7 @@ def edificios_cambio_estado_productos(request):
             RelacionesEdificiosProductos.cambiar_estado(request.POST.get("id"),
                                                         request.POST.get("estado"))
 
-            notificacion = get_object_or_404(RelacionesEdificiosProductos,
-                                             pk=request.POST.get("id"))
-            ctx = {
-                'administracion': notificacion.edificio.user.perfil.nombre_comercial,
-                'edificio': notificacion.edificio,
-                'estado': RelacionesEdificiosProductos.ESTADOS[ int(request.POST.get("estado"))-1 ][1],
-                'descripcion': notificacion.descripcion,
-                'fecha': notificacion.creado,
-                'comentario': request.POST.get("comentario"),
-                'producto': notificacion.producto
-            }
-
-            body = render_to_string('emails/email_cambio_estado_nota_tecnica_notificaciones.html', ctx)
-
-            subject = "Edificio: %s - Notificación de Producto - Cambio de estado" % notificacion.edificio
-
-            _send_email(STIB_TO_EMAIL, subject, body)
+            _send_email_cambio_estado(request, RelacionesEdificiosProductos)
 
             messages.success(request, "Se ha cambiado el estado de la Notificación")
         except:
@@ -638,23 +622,7 @@ def edificios_cambio_estado_servicios(request):
             RelacionesEdificiosServicios.cambiar_estado(request.POST.get("id"),
                                                         request.POST.get("estado"))
 
-            notificacion = get_object_or_404(RelacionesEdificiosServicios,
-                                             pk=request.POST.get("id"))
-            ctx = {
-                'administracion': notificacion.edificio.user.perfil.nombre_comercial,
-                'edificio': notificacion.edificio,
-                'estado': RelacionesEdificiosProductos.ESTADOS[ int(request.POST.get("estado"))-1 ][1],
-                'descripcion': notificacion.descripcion,
-                'fecha': notificacion.creado,
-                'comentario': request.POST.get("comentario"),
-                'servicio': notificacion.servicio
-            }
-
-            body = render_to_string('emails/email_cambio_estado_nota_tecnica_notificaciones.html', ctx)
-
-            subject = "Edificio: %s - Notificación de Servicio - Cambio de estado" % notificacion.edificio
-
-            _send_email(STIB_TO_EMAIL, subject, body)
+            _send_email_cambio_estado(request, RelacionesEdificiosServicios)
 
             messages.success(request, "Se ha cambiado el estado de la Notificación")
         except:
@@ -665,3 +633,121 @@ def edificios_cambio_estado_servicios(request):
     else:
         messages.success(request, "Error.")
         return HttpResponseRedirect("/")
+
+
+class NotificacionesAdministracionesProductosDetailView(LoginRequiredMixin, DetailView):
+    """
+    Detalle de notificacion de Productos de
+    una administracion determinada
+    """
+    model = RelacionesUsuariosProductos
+    template_name = 'relaciones/notificaciones_administraciones_detail.html'
+
+    def get_queryset(self):
+        qs = RelacionesUsuariosProductos.objects.filter(pk=self.kwargs['pk'])
+        # -- debemos ademas estar seguros que la notificacion
+        # -- sea de la administracion logueada
+        qs.filter(usuario=self.request.user.id)
+
+        # -- si no esta leido, se marca como leida
+        if qs[0].leido is False:
+            RelacionesUsuariosProductos.marcar_leido(qs[0].id)
+
+        return qs
+
+
+class NotificacionesAdministracionesServiciosDetailView(LoginRequiredMixin, DetailView):
+    """
+    Detalle de notificacion de Servicio de
+    una administracion determinada
+    """
+    model = RelacionesUsuariosServicios
+    template_name = 'relaciones/notificaciones_administraciones_detail.html'
+
+    def get_queryset(self):
+        qs = RelacionesUsuariosServicios.objects.filter(pk=self.kwargs['pk'])
+        # -- debemos ademas estar seguros que la notificacion
+        # -- sea de la administracion logueada
+        qs.filter(usuario=self.request.user.id)
+
+        # -- si no esta leido, se marca como leida
+        if qs[0].leido is False:
+            RelacionesUsuariosServicios.marcar_leido(qs[0].id)
+
+        return qs
+
+
+@login_required(redirect_field_name='accounts/login/')
+def administraciones_cambio_estado_productos(request):
+    if request.method == "POST" and request.POST.get("id"):
+        try:
+            RelacionesUsuariosProductos.cambiar_estado(request.POST.get("id"),
+                                                        request.POST.get("estado"))
+
+            _send_email_cambio_estado(request, RelacionesUsuariosProductos)
+
+            messages.success(request, "Se ha cambiado el estado de la Notificación")
+        except:
+            messages.error(request, "Error al cambiar el estado de la Notificación")
+
+        return HttpResponseRedirect(reverse('notificaciones:administraciones-productos-detail',
+                                            args=[request.POST.get("id")]))
+    else:
+        messages.success(request, "Error.")
+        return HttpResponseRedirect("/")
+
+
+@login_required(redirect_field_name='accounts/login/')
+def administraciones_cambio_estado_servicios(request):
+    if request.method == "POST" and request.POST.get("id"):
+        try:
+            RelacionesUsuariosServicios.cambiar_estado(request.POST.get("id"),
+                                                        request.POST.get("estado"))
+
+            _send_email_cambio_estado(request, RelacionesUsuariosServicios)
+
+            messages.success(request, "Se ha cambiado el estado de la Notificación")
+        except:
+            messages.error(request, "Error al cambiar el estado de la Notificación")
+
+        return HttpResponseRedirect(reverse('notificaciones:administraciones-productos-detail',
+                                            args=[request.POST.get("id")]))
+    else:
+        messages.success(request, "Error.")
+        return HttpResponseRedirect("/")
+
+
+def _send_email_cambio_estado(request, model_obj):
+    """
+    Se arma el contenido y subjecto del email anunciando
+    el cambio de estado de una determinada notificacion.
+    Una vez lista la información se envía el mail.
+    """
+    notificacion = get_object_or_404(model_obj, pk=request.POST.get("id"))
+
+    ctx = {
+        'estado': model_obj.ESTADOS[ int(request.POST.get("estado"))-1 ][1],
+        'descripcion': notificacion.descripcion,
+        'fecha': notificacion.creado,
+        'comentario': request.POST.get("comentario")
+    }
+
+    # -- si se trata de un servicio
+    if hasattr(notificacion, 'servicio'):
+        ctx['servicio'] = notificacion.servicio
+    else:
+        ctx['producto'] = notificacion.producto
+
+    # -- si se trata de una notificacion de un edificio
+    # -- o de una adminsitracion
+    if hasattr(notificacion, 'edificio'):
+        ctx['edificio'] = notificacion.edificio
+        ctx['administracion'] = notificacion.edificio.user.perfil.nombre_comercial
+        subject = "Edificio: %s - Notificación de Producto - Cambio de estado" % notificacion.edificio
+    else:
+        ctx['administracion'] = notificacion.usuario.perfil.nombre_comercial
+        subject = u"Administración: %s - Notificación de Producto - Cambio de estado" % notificacion.usuario.perfil.nombre_comercial
+
+    body = render_to_string('emails/email_cambio_estado_nota_tecnica_notificaciones.html', ctx)
+
+    _send_email(STIB_TO_EMAIL, subject, body)

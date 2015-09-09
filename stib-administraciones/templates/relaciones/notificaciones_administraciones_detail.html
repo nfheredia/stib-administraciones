@@ -24,40 +24,7 @@
         <br>
 
         <div class="row">
-            <!-- detalles del edificio -->
-            <div class="col-lg-3">
-                <div class="panel panel-primary">
-                    <div class="panel-heading">
-                      <i class="fa fa-building fa-fw"></i> Edificio
-                      <div class="pull-right">
-                          <a title="Editar" href="{% url 'edificios:administraciones_detalles_update' object.edificio.id %}">
-                              <i class="fa fa-pencil text-white"></i>
-                          </a>
-                      </div>
-                    </div>
-                    <div class="panel-body">
-                        <div class="well">
-                            {% if object.edificio.foto_fachada %}
-                                <img src="{% thumbnail object.edificio.foto_fachada 100x100 crop %}" alt="No imagen">
-                            {% else %}
-                                <img src="{% static 'images/sin-imagen-100x100.jpg' %}">
-                            {% endif %}
-                            <br><br>
-                            <small>
-                                <label><strong>Dirección: </strong></label>
-                                {{ object.edificio.direccion }}
-                                <br>
-                                <label><strong>Nombre: </strong></label>
-                                {{ object.edificio.nombre }}
-                            </small>
-                            <a class="btn btn-primary" href="{% url 'edificios:administraciones' object.edificio.id %}">
-                                <i class="fa fa-external-link"></i> Visitar
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div><!-- / detalles del edificio -->
-            <div class="col-lg-6">
+            <div class="col-lg-9">
                 <div class="well">
                     {{ object.descripcion }}
                 </div>
@@ -119,7 +86,7 @@
                         ¿Está seguro de <span id="estado_name"></span> la notificación?
                     </h4>
                 </div>
-                <form role="form" method="POST" action="{% if object.producto %}{% url 'notificaciones:cambio-estado-productos' %}{% else %}{% url 'notificaciones:cambio-estado-servicios' %}{% endif %}">
+                <form role="form" method="POST" action="{% if object.producto %}{% url 'notificaciones:administraciones-cambio-estado-productos' %}{% else %}{% url 'notificaciones:administraciones-cambio-estado-servicios' %}{% endif %}">
                     {% csrf_token %}
                     <div class="modal-body">
                         Tu comentario nos interesa!!! Si tenés algo que decirnos antes enviar tu respuesta, utiliza el siguiente formulario.

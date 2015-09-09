@@ -110,7 +110,7 @@
                                     </a>
                                 {% else %}
                                     <a href="{% url 'servicios:detail' nu.servicio.id %}">
-                                        {% if ne.servicio.image %}
+                                        {% if nu.servicio.image %}
                                             <img data-toggle="tooltip" data-placement="right" title="{{nu.servicio}}" src="{% thumbnail nu.servicio.image 100x100 crop %}" alt="No imagen">
                                         {% else %}
                                             <img data-toggle="tooltip" data-placement="right" title="{{nu.servicio}}" src="{% static 'images/sin-imagen-100x100.jpg' %}">
@@ -128,7 +128,11 @@
                             </div>
                             <div class="col-sm-2">
                                 <div class="ver_col">
-                                    <a class="btn btn-success">Ver</a>
+                                    {% if nu.servicio %}
+                                        <a class="btn btn-success" href="{% url 'notificaciones:administraciones-servicios-detail' nu.id %}">Ver</a>
+                                    {% else %}
+                                        <a class="btn btn-success" href="{% url 'notificaciones:administraciones-productos-detail' nu.id %}">Ver</a>
+                                    {% endif %}
                                 </div>
                             </div>
                         </div>
