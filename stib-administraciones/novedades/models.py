@@ -20,4 +20,4 @@ class Novedades(TimeStampedModel):
     class Meta:
         verbose_name = 'Novedades'
         verbose_name_plural = 'Novedades'
-        ordering = ['creado']
+        ordering = ['-creado']
