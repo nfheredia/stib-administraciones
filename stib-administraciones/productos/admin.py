@@ -1,6 +1,14 @@
 from django.contrib import admin
+from imperavi.admin import ImperaviAdmin
 
 from .models import Productos, ProductosFotos
 
-admin.site.register(Productos)
+
+class ProductosAdmin(ImperaviAdmin):
+    """
+    Se le agregar el editor de texto imperavi
+    """
+    pass
+
+admin.site.register(Productos, ProductosAdmin)
 admin.site.register(ProductosFotos)
