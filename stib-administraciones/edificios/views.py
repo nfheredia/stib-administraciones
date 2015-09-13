@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 import json
+from itertools import chain
+from operator import attrgetter
 from django.views.generic import (
     ListView,
     CreateView,
@@ -20,6 +22,7 @@ from braces.views import (
 
 from .models import Edificios
 from .forms import FormSearch
+from ..relaciones.models import RelacionesEdificiosProductos, RelacionesEdificiosServicios
 
 
 class EdificiosMixin(object):
@@ -148,6 +151,15 @@ class EdificiosAdministracionesView(LoginRequiredMixin, EdificiosAdministracione
     def get_context_data(self, **kwargs):
         ctx = super(EdificiosAdministracionesView, self).get_context_data(**kwargs)
         ctx['otros_edificios'] = Edificios.objects.exclude(pk=self.kwargs['pk'])[:4]
+        # -- obtengo las notificaciones de los edificios que pertenecen
+        # -- a la administracion logueada
+        notificaciones_productos_edificios = RelacionesEdificiosProductos.objects.filter(edificio__user=self.request.user.id, leido=False, estado=1)[:5]
+        notificaciones_servicios_edificios = RelacionesEdificiosServicios.objects.filter(edificio__user=self.request.user.id, leido=False, estado=1)[:5]
+        ctx['notificaciones'] = sorted(
+            chain.from_iterable([notificaciones_productos_edificios, notificaciones_servicios_edificios]),
+            key=attrgetter('creado'),
+            reverse=True
+        )[:3]
         return ctx
 
 

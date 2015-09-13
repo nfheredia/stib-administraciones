@@ -1,10 +1,12 @@
 {% extends 'base.html' %}
 {% load staticfiles %}
 {% load thumbnail %}
+{% load relaciones_tags %}
 
 {% block title %} {{object.nombre}} {% endblock %}
 
 {% block content %}
+    {% autoescape off %}
     <div class="row">
         <div class="col-lg-12">
             <h1 class="page-header">
@@ -39,7 +41,59 @@
             <!-- / fotos miniaturas -->
         </div>
         <div class="col-lg-6">
-            <div class="panel panel-primary">
+            <div class="panel panel-primary"><!-- notificaciones de clientes -->
+                <div class="panel-heading">
+                    <i class="fa fa-bullhorn fa-fw"></i> Sugerencias para mis edificios
+                </div>
+                <div class="panel-body dashboard_block_panel">
+                    {% for ne in notificaciones %}
+                        <div class="row row_box {% if forloop.counter|divisibleby:2 == False %}alt0{% else %}alt1{% endif %}">
+                            <div class="col-sm-4">
+                                {% if ne.producto %}
+                                    <a href="{% url 'productos:detail' ne.producto.id %}">
+                                        {% if ne.producto.image %}
+                                            <img data-toggle="tooltip" data-placement="right" title="{{ne.producto}}" src="{% thumbnail ne.producto.image 50x50 crop %}" alt="No imagen">
+                                        {% else %}
+                                            <img data-toggle="tooltip" data-placement="right" title="{{ne.producto}}" src="{% static 'images/sin-imagen-100x100.jpg' %}">
+                                        {% endif %}
+
+                                    </a>
+                                {% else %}
+                                    <a href="{% url 'servicios:detail' ne.servicio.id %}">
+                                        {% if ne.servicio.image %}
+                                            <img data-toggle="tooltip" data-placement="right" title="{{ne.servicio}}" src="{% thumbnail ne.servicio.image 50x50 crop %}" alt="No imagen">
+                                        {% else %}
+                                            <img data-toggle="tooltip" data-placement="right" title="{{ne.servicio}}" src="{% static 'images/sin-imagen-100x100.jpg' %}">
+                                        {% endif %}
+                                    </a>
+                                {% endif %}
+                                </a>
+                            </div>
+                            <div class="col-sm-6" >
+                                <div>
+                                    {{ne.estado|mostrar_estados}} <strong>{{ne.titulo}}</strong>
+                                    <br>
+                                    <i class="fa fa-clock-o"></i> {{ne.creado|date:"SHORT_DATE_FORMAT"}}
+                                </div>
+                            </div>
+                            <div class="col-sm-2">
+                                <div>
+                                    {% if ne.servicio %}
+                                        <a class="btn btn-success" href="{% url 'notificaciones:edificios-servicios-detail' ne.id %}">Ver</a>
+                                    {% else %}
+                                        <a class="btn btn-success" href="{% url 'notificaciones:edificios-productos-detail' ne.id %}">Ver</a>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div><!-- / notificaciones de clientes -->
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="panel panel-primary"><!-- Detalles -->
                 <div class="panel-heading">
                   <i class="fa fa-bars text-white"></i> Detalles
                   <div class="pull-right">
@@ -60,9 +114,10 @@
                       {% if object.cantidad_unidades %}{{ object.cantidad_unidades}}{% else %}-{% endif %}
                     </div>
                 </div>
-            </div>
-
-            <div class="panel panel-primary">
+            </div><!-- / Detalles -->
+        </div>
+        <div class="col-lg-6">
+            <div class="panel panel-primary"><!-- Localización -->
                 <div class="panel-heading">
                   <i class="fa fa-map-marker text-white"></i> Localización
                 </div>
@@ -75,10 +130,10 @@
                         &q={{object.direccion}}, Rosario, Santa Fe">
                     </iframe>
                 </div>
-            </div>
-
+            </div><!-- / Localización -->
         </div>
     </div>
+
     <div class="row">
         <div class="col-lg-12">
             <div class="well">
@@ -124,49 +179,54 @@
         {% endfor %}
     </div>
 
-<!-- modal 'recursos' -->
-<div class="modal fade" id="recursos_modal">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <h4 class="modal-title">
-                Recursos
-            </h4>
-            </div>
-            <div class="modal-body">
-                <div class="row">
-                    <div class="col-sm-3">
-                        <a href="{% url 'contactos:edificio_contactos_list' object.id %}">
-                            <i class="fa fa-user-plus fa-5x"></i><br>
-                            Contactos
-                        </a>
-                    </div>
-                    <div class="col-sm-3">
-                        <a href="{% url 'fotos:administracion_list' object.id %}">
-                            <i class="fa fa-picture-o fa-5x"></i><br>
-                            Fotos
-                        </a>
-                    </div>
-                    <div class="col-sm-3">
-                        <a href="{% url 'horarios:edificio_horario_list' object.id %}">
-                            <i class="fa fa-clock-o fa-5x"></i><br>
-                            Horarios
-                        </a>
-                    </div>
-                    <div class="col-sm-3">
-                        <a href="{% url 'llaves:set_llaves' object.id %}">
-                            <i class="fa fa-key fa-5x"></i><br>
-                            Llaves
-                        </a>
+    <!-- modal 'recursos' -->
+    <div class="modal fade" id="recursos_modal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">
+                    Recursos
+                </h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <a href="{% url 'contactos:edificio_contactos_list' object.id %}">
+                                <i class="fa fa-user-plus fa-5x"></i><br>
+                                Contactos
+                            </a>
+                        </div>
+                        <div class="col-sm-3">
+                            <a href="{% url 'fotos:administracion_list' object.id %}">
+                                <i class="fa fa-picture-o fa-5x"></i><br>
+                                Fotos
+                            </a>
+                        </div>
+                        <div class="col-sm-3">
+                            <a href="{% url 'horarios:edificio_horario_list' object.id %}">
+                                <i class="fa fa-clock-o fa-5x"></i><br>
+                                Horarios
+                            </a>
+                        </div>
+                        <div class="col-sm-3">
+                            <a href="{% url 'llaves:set_llaves' object.id %}">
+                                <i class="fa fa-key fa-5x"></i><br>
+                                Llaves
+                            </a>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
-            </div>
-        </div><!-- /.modal-content -->
-    </div><!-- /.modal-dialog -->
-</div><!-- / modal 'recursos' -->
-
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- / modal 'recursos' -->
+{% endautoescape %}
 {% endblock %}
+
+{% block css %}
+    {{ block.super }}
+    <link href="{% static 'css/notificaciones.css' %}" rel="stylesheet">
+{% endblock css %}
