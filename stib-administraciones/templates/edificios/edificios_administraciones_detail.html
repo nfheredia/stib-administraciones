@@ -41,52 +41,105 @@
             <!-- / fotos miniaturas -->
         </div>
         <div class="col-lg-6">
-            <div class="panel panel-primary"><!-- notificaciones de clientes -->
+            <div class="panel panel-primary"><!-- notas tecnicas -->
                 <div class="panel-heading">
-                    <i class="fa fa-bullhorn fa-fw"></i> Sugerencias para mis edificios
+                    <i class="fa fa-file-text-o fa-fw"></i> Nuevas notas técnicas
                 </div>
                 <div class="panel-body dashboard_block_panel">
-                    {% for ne in notificaciones %}
-                        <div class="row row_box {% if forloop.counter|divisibleby:2 == False %}alt0{% else %}alt1{% endif %}">
-                            <div class="col-sm-4">
-                                {% if ne.producto %}
-                                    <a href="{% url 'productos:detail' ne.producto.id %}">
-                                        {% if ne.producto.image %}
-                                            <img data-toggle="tooltip" data-placement="right" title="{{ne.producto}}" src="{% thumbnail ne.producto.image 50x50 crop %}" alt="No imagen">
-                                        {% else %}
-                                            <img data-toggle="tooltip" data-placement="right" title="{{ne.producto}}" src="{% static 'images/sin-imagen-100x100.jpg' %}">
-                                        {% endif %}
-
-                                    </a>
-                                {% else %}
-                                    <a href="{% url 'servicios:detail' ne.servicio.id %}">
-                                        {% if ne.servicio.image %}
-                                            <img data-toggle="tooltip" data-placement="right" title="{{ne.servicio}}" src="{% thumbnail ne.servicio.image 50x50 crop %}" alt="No imagen">
-                                        {% else %}
-                                            <img data-toggle="tooltip" data-placement="right" title="{{ne.servicio}}" src="{% static 'images/sin-imagen-100x100.jpg' %}">
-                                        {% endif %}
-                                    </a>
-                                {% endif %}
-                                </a>
-                            </div>
-                            <div class="col-sm-6" >
-                                <div>
-                                    {{ne.estado|mostrar_estados}} <strong>{{ne.titulo}}</strong>
-                                    <br>
-                                    <i class="fa fa-clock-o"></i> {{ne.creado|date:"SHORT_DATE_FORMAT"}}
-                                </div>
-                            </div>
-                            <div class="col-sm-2">
-                                <div>
-                                    {% if ne.servicio %}
-                                        <a class="btn btn-success" href="{% url 'notificaciones:edificios-servicios-detail' ne.id %}">Ver</a>
+                    {% if notas_tecnicas %}
+                        {% for nt in notas_tecnicas %}
+                            <div class="row row_box
+                                {% if forloop.counter|divisibleby:2 == False %}alt0{% else %}alt1{% endif %}">
+                                <div class="col-sm-4">
+                                    <a href="{% url 'edificios:administraciones' nt.edificio.id %}">
+                                    {% if nt.edificio.foto_fachada %}
+                                        <img data-toggle="tooltip" data-placement="right" title="{{nt.edificio.direccion}} - {{nt.edificio.nombre}}" src="{% thumbnail nt.edificio.foto_fachada 50x50 crop %}" alt="No imagen">
                                     {% else %}
-                                        <a class="btn btn-success" href="{% url 'notificaciones:edificios-productos-detail' ne.id %}">Ver</a>
+                                        <img data-toggle="tooltip" data-placement="right" title="{{nt.edificio.direccion}} - {{nt.edificio.nombre}}" src="{% static 'images/edificio-sin-foto50x50.png' %}">
                                     {% endif %}
+                                    </a>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div>
+                                        {{nt.estado|mostrar_estados}} <strong>{{nt.titulo}}</strong>
+                                        <br>
+                                        <i class="fa fa-clock-o"></i> {{nt.creado|date:"SHORT_DATE_FORMAT"}}
+                                    </div>
+                                </div>
+                                <div class="col-sm-2">
+                                     <div>
+                                         <a class="btn btn-success" href="{% url 'notas-tecnicas:detail' nt.id %}">Ver</a>
+                                     </div>
                                 </div>
                             </div>
+                        {% endfor %}
+                        <div class="pull-right"><a href="#">Ver historial completo</a></div>
+                    {% else %}
+                        <div class="alert alert-dismissable alert-success">
+                            <small>
+                                No tienes nuevas sugerencias,
+                                <a href="#">consulta el historial completo</a>.
+                            </small>
                         </div>
-                    {% endfor %}
+                    {% endif %}
+                </div>
+            </div><!-- / notas tecnicas -->
+            <div class="panel panel-primary"><!-- notificaciones de clientes -->
+                <div class="panel-heading">
+                    <i class="fa fa-bullhorn fa-fw"></i> Nuevas sugerencias
+                </div>
+                <div class="panel-body dashboard_block_panel">
+                    {% if notificaciones %}
+                        {% for ne in notificaciones %}
+                            <div class="row row_box {% if forloop.counter|divisibleby:2 == False %}alt0{% else %}alt1{% endif %}">
+                                <div class="col-sm-4">
+                                    {% if ne.producto %}
+                                        <a href="{% url 'productos:detail' ne.producto.id %}">
+                                            {% if ne.producto.image %}
+                                                <img data-toggle="tooltip" data-placement="right" title="{{ne.producto}}" src="{% thumbnail ne.producto.image 50x50 crop %}" alt="No imagen">
+                                            {% else %}
+                                                <img data-toggle="tooltip" data-placement="right" title="{{ne.producto}}" src="{% static 'images/sin-imagen-100x100.jpg' %}">
+                                            {% endif %}
+
+                                        </a>
+                                    {% else %}
+                                        <a href="{% url 'servicios:detail' ne.servicio.id %}">
+                                            {% if ne.servicio.image %}
+                                                <img data-toggle="tooltip" data-placement="right" title="{{ne.servicio}}" src="{% thumbnail ne.servicio.image 50x50 crop %}" alt="No imagen">
+                                            {% else %}
+                                                <img data-toggle="tooltip" data-placement="right" title="{{ne.servicio}}" src="{% static 'images/sin-imagen-100x100.jpg' %}">
+                                            {% endif %}
+                                        </a>
+                                    {% endif %}
+                                    </a>
+                                </div>
+                                <div class="col-sm-6" >
+                                    <div>
+                                        {{ne.estado|mostrar_estados}} <strong>{{ne.titulo}}</strong>
+                                        <br>
+                                        <i class="fa fa-clock-o"></i> {{ne.creado|date:"SHORT_DATE_FORMAT"}}
+                                    </div>
+                                </div>
+                                <div class="col-sm-2">
+                                    <div>
+                                        {% if ne.servicio %}
+                                            <a class="btn btn-success" href="{% url 'notificaciones:edificios-servicios-detail' ne.id %}">Ver</a>
+                                        {% else %}
+                                            <a class="btn btn-success" href="{% url 'notificaciones:edificios-productos-detail' ne.id %}">Ver</a>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                        <div class="pull-right"><a href="#">Ver historial completo</a></div>
+                    {% else %}
+                        <div class="alert alert-dismissable alert-success">
+                            <small>
+                                No tienes nuevas sugerencias,
+                                <a href="#">consulta el historial completo</a>.
+                            </small>
+                        </div>
+                    {% endif %}
                 </div>
             </div><!-- / notificaciones de clientes -->
         </div>

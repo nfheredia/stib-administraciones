@@ -15,6 +15,7 @@ class Productos(ProductosSerivicios):
     class Meta:
         verbose_name = 'Productos'
         verbose_name_plural = 'Productos'
+        ordering = ['-creado']
 
 
 class ProductosFotos(TimeStampedModel):
