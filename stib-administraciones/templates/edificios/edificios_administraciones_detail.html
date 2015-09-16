@@ -10,7 +10,7 @@
     <div class="row">
         <div class="col-lg-12">
             <h1 class="page-header">
-                {{ object.nombre }}
+                <i class="fa fa-building fa-fw"></i> {{ object.nombre }}
                 <div class="pull-right">
                     <a id="open_recursos_modal"><i class="fa fa-cog"></i></a>
                 </div>
@@ -73,12 +73,12 @@
                                 </div>
                             </div>
                         {% endfor %}
-                        <div class="pull-right"><a href="#">Ver historial completo</a></div>
+                        <div class="pull-right"><a href="{% url 'notas-tecnicas:notas-tecnicas-edificio' object.id %}">Ver historial completo</a></div>
                     {% else %}
                         <div class="alert alert-dismissable alert-success">
                             <small>
-                                No tienes nuevas sugerencias,
-                                <a href="#">consulta el historial completo</a>.
+                                No tienes nuevas notas técnicas,
+                                <a href="{% url 'notas-tecnicas:notas-tecnicas-edificio' object.id %}">consulta el historial completo</a>.
                             </small>
                         </div>
                     {% endif %}

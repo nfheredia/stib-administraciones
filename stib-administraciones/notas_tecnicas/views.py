@@ -236,3 +236,21 @@ def enviar_cambio_estado(request):
     else:
         messages.success(request, "Error.")
         return HttpResponseRedirect("/")
+
+
+class NotasTecnicasEdificioListView(LoginRequiredMixin, ListView):
+    """
+    Listado de todas las notas de un edificio en particular
+    """
+    model = NotasTecnicas
+    template_name = "notas_tecnicas/notastecnicas_edificio_list.html"
+    context_object_name = "notas_tecnicas"
+
+    def get_queryset(self):
+        return NotasTecnicas.objects.filter(edificio=self.kwargs['edificio'])
+
+    def get_context_data(self, **kwargs):
+        ctx = super(NotasTecnicasEdificioListView, self).get_context_data(**kwargs)
+        ctx['edificio'] = Edificios.objects.values("id", "nombre").get(pk=self.kwargs['edificio'])
+
+        return ctx

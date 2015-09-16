@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+{% load i18n pagination_tags %}
+{% load relaciones_tags %}
+{% load staticfiles %}
+{% load crispy_forms_tags %}
+
+{% block title %}
+    Notas Técnicas
+{% endblock %}
+
+{% block content %}
+    {% autopaginate notas_tecnicas 20 %}
+
+    <div class="row">
+        <div class="col-lg-12">
+            <br>
+            <a class="btn btn-success" href="{% url 'edificios:administraciones' edificio.id %}">
+                <i class="fa fa-reply"> Volver</i>
+            </a>
+            <br>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="page-header">
+                <i class="fa fa-file-text-o fa-fw"></i> Notas Técnicas - {{edificio.nombre}}
+            </h1>
+
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-12">
+            {% autoescape off %}
+                {% if notas_tecnicas %}
+                    <table cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered">
+                        <thead>
+                            <tr>
+                                <td></td>
+                                <th>Título</th>
+                                <th>Descripción</th>
+                                <th>Fecha</th>
+                                <th>Forma de Pago</th>
+                                <th>Validez Oferta</th>
+                                <th>Cond. Iva</th>
+                                <th>Precio</th>
+                                <th>Estado</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for nota_tecnica in notas_tecnicas %}
+                                <tr {% if nota_tecnica.leido == False %} style="font-weight:bold" {% endif %}>
+                                    <td>
+                                        {% if nota_tecnica.leido == False %}
+                                            <i class="fa fa-envelope"></i>
+                                        {% else %}
+                                            <i class="fa fa-inbox"></i>
+                                        {% endif %}
+                                    </td>
+                                    <td>{{nota_tecnica.titulo}}</td>
+                                    <td>
+                                        {{nota_tecnica.descripcion|truncatechars:15}}
+                                        {% if nota_tecnica.descripcion|length > 15 %}
+                                            {% show_popover_descripcion nota_tecnica.descripcion %}
+                                        {% endif %}
+                                    </td>
+                                    <td>{{nota_tecnica.creado|date:"SHORT_DATE_FORMAT"}}</td>
+                                    <td>{{nota_tecnica.forma_pago}}</td>
+                                    <td>{{nota_tecnica.validez_oferta}}</td>
+                                    <td>{% if nota_tecnica.condicion_iva == 1 %} Incluido {% else %} No Incluido {% endif %}</td>
+                                    <td>${{nota_tecnica.precio}}</td>
+                                    <td>{{nota_tecnica.estado|mostrar_estados}}</td>
+                                    <td>
+                                        <a class="btn btn-success" href="{% url 'notas-tecnicas:detail' nota_tecnica.id %}">Ver</a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    {% paginate %}
+                {% else %}
+                    <div class="alert alert-dismissable alert-error">
+                        <i class="fa fa-exclamation-triangle"></i>
+                        Aún no tienes ninguna nota técnica.
+                    </div>
+                {% endif %}
+
+                {% endautoescape %}
+        </div>
+    </div>
+{% endblock %}
