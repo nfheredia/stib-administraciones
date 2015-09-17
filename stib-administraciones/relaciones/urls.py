@@ -24,7 +24,8 @@ from .views import (EstablecerTipoComunicacion,
                     NotificacionesAdministracionesServiciosDetailView,
                     NotificacionesAdministracionesProductosDetailView,
                     administraciones_cambio_estado_productos,
-                    administraciones_cambio_estado_servicios)
+                    administraciones_cambio_estado_servicios,
+                    notificiones_edificio)
 urlpatterns = patterns('',
                        url(
                            regex=r'^$',
@@ -61,15 +62,26 @@ urlpatterns = patterns('',
                            view=get_autocomplete_edificios_result,
                            name='search-autocomplete-edificios'
                        ),
+                       # -- lista todas las notificaciones de edificios
+                       # -- para ser consultadas desde el Backend
                        url(
                            regex=r'^edificios/list$',
                            view=listar_notificaciones_edificios,
                            name='edificios-list'
                        ),
+                       # -- lista todas las notificaciones de las adminsitraciones
+                       # -- para ser consultadas desde el Backend
                        url(
                            regex=r'^administraciones/list$',
                            view=listar_notificaciones_admnistraciones,
                            name='administraciones-list'
+                       ),
+                       # -- lista todas las notificaciones de UN EDIFICIO
+                       # -- para ser consultadas por las administraciones
+                       url(
+                           regex=r'^edificios/list/(?P<edificio>\d+)$',
+                           view=notificiones_edificio,
+                           name='edificio-list'
                        ),
                        url(
                            regex=r'^edificios/productos/delete/(?P<pk>\d+)$',

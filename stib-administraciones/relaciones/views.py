@@ -751,3 +751,20 @@ def _send_email_cambio_estado(request, model_obj):
     body = render_to_string('emails/email_cambio_estado_nota_tecnica_notificaciones.html', ctx)
 
     _send_email(STIB_TO_EMAIL, subject, body)
+
+
+@login_required
+def notificiones_edificio(request, edificio):
+    """
+    Listado de las notificaciones de productos o servicios
+    de un edificio en particular...
+    """
+    if request.method == 'GET':
+        ctx = {
+            'notificaciones_productos': RelacionesEdificiosProductos.objects.filter(edificio=edificio),
+            'notificaciones_servicios': RelacionesEdificiosServicios.objects.filter(edificio=edificio),
+            'edificio': Edificios.objects.values("id", "nombre").get(pk=edificio)
+        }
+        return render(request, 'relaciones/notificaciones_edificio.html', ctx)
+    else:
+        return HttpResponseRedirect(reverse("edificios:administraciones"), args=[edificio])

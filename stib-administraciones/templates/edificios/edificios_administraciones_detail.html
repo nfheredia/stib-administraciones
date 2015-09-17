@@ -131,12 +131,12 @@
                                 </div>
                             </div>
                         {% endfor %}
-                        <div class="pull-right"><a href="#">Ver historial completo</a></div>
+                        <div class="pull-right"><a href="{% url 'notificaciones:edificio-list' object.id %}">Ver historial completo</a></div>
                     {% else %}
                         <div class="alert alert-dismissable alert-success">
                             <small>
                                 No tienes nuevas sugerencias,
-                                <a href="#">consulta el historial completo</a>.
+                                <a href="{% url 'notificaciones:edificio-list' object.id %}">consulta el historial completo</a>.
                             </small>
                         </div>
                     {% endif %}
