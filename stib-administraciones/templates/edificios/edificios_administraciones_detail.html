@@ -39,6 +39,28 @@
             <!-- fotos miniaturas -->
             {% include 'fotos/edificios_fotos.html' %}
             <!-- / fotos miniaturas -->
+            <div class="panel panel-primary"><!-- Detalles -->
+                <div class="panel-heading">
+                  <i class="fa fa-bars text-white"></i> Detalles
+                  <div class="pull-right">
+                      <a title="Editar" href="{% url 'edificios:administraciones_detalles_update' object.id %}">
+                          <i class="fa fa-pencil text-white"></i>
+                      </a>
+                  </div>
+                </div>
+                <div class="panel-body">
+                    <div class="well well-lg">
+                      <label><strong>Dirección: </strong></label>
+                      {{ object.direccion }}
+                      <br>
+                      <label><strong>Cantidad de pisos: </strong></label>
+                      {% if object.cantidad_pisos %}{{ object.cantidad_pisos }}{% else %}-{% endif %}
+                      <br>
+                      <label><strong>Cantidad de unidades: </strong></label>
+                      {% if object.cantidad_unidades %}{{ object.cantidad_unidades}}{% else %}-{% endif %}
+                    </div>
+                </div>
+            </div><!-- / Detalles -->
         </div>
         <div class="col-lg-6">
             <div class="panel panel-primary"><!-- notas tecnicas -->
@@ -142,34 +164,7 @@
                     {% endif %}
                 </div>
             </div><!-- / notificaciones de clientes -->
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-lg-6">
-            <div class="panel panel-primary"><!-- Detalles -->
-                <div class="panel-heading">
-                  <i class="fa fa-bars text-white"></i> Detalles
-                  <div class="pull-right">
-                      <a title="Editar" href="{% url 'edificios:administraciones_detalles_update' object.id %}">
-                          <i class="fa fa-pencil text-white"></i>
-                      </a>
-                  </div>
-                </div>
-                <div class="panel-body">
-                    <div class="well well-lg">
-                      <label><strong>Dirección: </strong></label>
-                      {{ object.direccion }}
-                      <br>
-                      <label><strong>Cantidad de pisos: </strong></label>
-                      {% if object.cantidad_pisos %}{{ object.cantidad_pisos }}{% else %}-{% endif %}
-                      <br>
-                      <label><strong>Cantidad de unidades: </strong></label>
-                      {% if object.cantidad_unidades %}{{ object.cantidad_unidades}}{% else %}-{% endif %}
-                    </div>
-                </div>
-            </div><!-- / Detalles -->
-        </div>
-        <div class="col-lg-6">
+
             <div class="panel panel-primary"><!-- Localización -->
                 <div class="panel-heading">
                   <i class="fa fa-map-marker text-white"></i> Localización
@@ -186,7 +181,6 @@
             </div><!-- / Localización -->
         </div>
     </div>
-
     <div class="row">
         <div class="col-lg-12">
             <div class="well">
