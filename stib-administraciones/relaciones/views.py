@@ -6,7 +6,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib import messages
 from django.shortcuts import render
 from django.core.urlresolvers import reverse, reverse_lazy
-from django.views.generic import FormView, CreateView, DeleteView, DetailView
+from django.views.generic import FormView, CreateView, DeleteView, DetailView, TemplateView
 from django.db.models import Q
 from django.core.mail import EmailMessage
 from django.template.loader import render_to_string
@@ -768,3 +768,19 @@ def notificiones_edificio(request, edificio):
         return render(request, 'relaciones/notificaciones_edificio.html', ctx)
     else:
         return HttpResponseRedirect(reverse("edificios:administraciones"), args=[edificio])
+
+
+class NotificacionesAdministracionListView(LoginRequiredMixin, TemplateView):
+    """
+    Listado de notificaciones de productos y/o servicios
+    para una administracion determinada.
+    """
+    template_name = 'relaciones/notificaciones_administracion.html'
+
+    def get_context_data(self, **kwargs):
+        ctx = super(NotificacionesAdministracionListView, self).get_context_data(**kwargs)
+        ctx['notificaciones_productos'] = RelacionesUsuariosProductos.objects.filter(usuario=self.request.user.id)
+        ctx['notificaciones_servicios'] = RelacionesUsuariosServicios.objects.filter(usuario=self.request.user.id)
+
+        return ctx
+

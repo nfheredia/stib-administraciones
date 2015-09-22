@@ -1,3 +1,6 @@
+{% load relaciones_tags %}
+{% load cache %}
+
 <nav class="navbar-default navbar-static-side" role="navigation">
     <div class="sidebar-collapse">
         <ul class="nav" id="side-menu">
@@ -59,7 +62,9 @@
                             <ul class="{% if '/edificios/' in request.get_full_path or '/contactos/' in request.get_full_path or '/llaves/' in request.get_full_path or '/fotos/' in request.get_full_path or '/horarios/' in request.get_full_path %}nav nav-second-level collapse in{% else %}nav nav-second-level{% endif %}">
                                 {% for edificio in edificios_usuarios %}
                                     <li class="edificio ">
-                                        <a href="{% url 'edificios:administraciones' edificio.id %}"> {{edificio.direccion}} </a>
+                                        <a href="{% url 'edificios:administraciones' edificio.id %}"> {{edificio.direccion}}
+                                            {% show_alertas_edificios edificio.id %}
+                                        </a>
                                     </li>
                                 {% endfor %}
                             </ul>
@@ -70,6 +75,9 @@
                     </li>
                     <li>
                         <a href="{% url 'servicios:list' %}"><i class="fa fa-cog"></i> Servicios</a>
+                    </li>
+                    <li>
+                        <a href="{% url 'notificaciones:administracion' %}"><i class="fa fa-bullhorn fa-fw"></i> Novedades de Stib</a>
                     </li>
                 {% endif %}
             {% endif %}

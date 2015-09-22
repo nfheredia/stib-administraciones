@@ -1,5 +1,11 @@
 # -*- coding: utf-8 -*-
 from django import template
+from ..models import RelacionesEdificiosServicios, RelacionesEdificiosProductos
+
+# -- import notas tecnicas module
+nt = __import__("stib-administraciones").notas_tecnicas.models
+
+
 
 register = template.Library()
 
@@ -59,3 +65,27 @@ def show_search_form(request, form, collapse_filters):
     return {'search_form': form,
             'current_path': request.get_full_path(),
             'collapse_filters': collapse_filters}
+
+
+@register.simple_tag
+def show_alertas_edificios(edificio):
+    bell_icon = '<span class="fa fa-bell pull-right" style="color: #C9302C"></span>'
+    # -- tiene nuevas notas tecnicas?
+    notas_tecnicas = nt.NotasTecnicas.objects.\
+        filter(edificio=edificio, leido=False, estado=1).count()
+    if notas_tecnicas > 0:
+        return bell_icon
+
+    # -- tiene nuevas notificaciones de productos?
+    notificaciones_productos = RelacionesEdificiosProductos.objects.\
+        filter(edificio=edificio, leido=False, estado=1).count()
+    if notificaciones_productos > 0:
+        return bell_icon
+
+    # -- tiene nuevas notificaciones de servicios?
+    notificaciones_servicios = RelacionesEdificiosServicios.objects.\
+        filter(edificio=edificio, leido=False, estado=1).count()
+    if notificaciones_servicios > 0:
+        return bell_icon
+
+    return ""

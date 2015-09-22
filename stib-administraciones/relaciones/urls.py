@@ -25,7 +25,8 @@ from .views import (EstablecerTipoComunicacion,
                     NotificacionesAdministracionesProductosDetailView,
                     administraciones_cambio_estado_productos,
                     administraciones_cambio_estado_servicios,
-                    notificiones_edificio)
+                    notificiones_edificio,
+                    NotificacionesAdministracionListView)
 urlpatterns = patterns('',
                        url(
                            regex=r'^$',
@@ -162,6 +163,13 @@ urlpatterns = patterns('',
                            regex=r'^administraciones/servicios/cambio/estado$',
                            view=administraciones_cambio_estado_servicios,
                            name='administraciones-cambio-estado-servicios'
+                       ),
+                       # -- listado de notificaciones de prod. y ser.
+                       # -- de la administracion logueada
+                       url(
+                           regex=r'^administracion$',
+                           view=NotificacionesAdministracionListView.as_view(),
+                           name='administracion'
                        )
 
 )
