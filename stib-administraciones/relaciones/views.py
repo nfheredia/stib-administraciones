@@ -70,12 +70,6 @@ class NotificarCreateViewMixin(LoginRequiredMixin, StaffuserRequiredMixin, Creat
         messages.success(self.request, 'La notificación se envió con éxito.')
         return reverse('notificaciones:definir')
 
-    def form_valid(self, form):
-        return super(NotificarCreateViewMixin, self).form_valid(form)
-
-    def form_invalid(self, form):
-        return super(NotificarCreateViewMixin, self).form_invalid(form)
-
     def _enviar_aviso_por_email(self, obj):
         try:
             # -- obtengo Id de usuario
