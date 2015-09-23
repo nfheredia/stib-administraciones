@@ -49,6 +49,13 @@ class Relaciones(TimeStampedModel):
         obj.leido = 1
         obj.save()
 
+    @classmethod
+    def marcar_email_recibido(cls, pk):
+        """ Marcar la notificacion con 'email recibido' """
+        obj = cls.objects.get(pk=pk)
+        obj.mail_recibido = 1
+        obj.save()
+
 
 class TipoRelaciones(TimeStampedModel):
     """

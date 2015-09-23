@@ -62,47 +62,60 @@ class NotificarCreateViewMixin(LoginRequiredMixin, StaffuserRequiredMixin, Creat
     raise_exception = True
 
     def get_success_url(self):
+        # -- enviar por mail, solo si desde
+        # -- el formulario se indica que se quieren enviar por email...
+        if self.object.enviado:
+            if self._enviar_aviso_por_email(self.object):
+                self.model.marcar_email_recibido(self.object.pk)
         messages.success(self.request, 'La notificación se envió con éxito.')
         return reverse('notificaciones:definir')
 
     def form_valid(self, form):
-        # -- enviar por mail, solo si desde
-        # -- el form se indicar True
-        if form.cleaned_data['enviado']:
-            if self._enviar_aviso_por_email(form):
-                form.instance.mail_recibido = True
-
         return super(NotificarCreateViewMixin, self).form_valid(form)
 
     def form_invalid(self, form):
         return super(NotificarCreateViewMixin, self).form_invalid(form)
 
-    def _enviar_aviso_por_email(self, form):
+    def _enviar_aviso_por_email(self, obj):
         try:
             # -- obtengo Id de usuario
-            if self.request.POST.get('edificio') is None:
-                user = self.request.POST.get('usuario')
+            if hasattr(obj, 'edificio') is False:
+                user = obj.usuario.id
+                tmp_subject = 'Aviso importante'
             else:
-                user = Edificios.usuario_por_edificio(self.request.POST.get('edificio'))
+                user = Edificios.usuario_por_edificio(obj.edificio.id)
+                tmp_subject = str(obj.edificio)
 
             # -- obtengo direccion de mail
             email = Perfiles.obtener_mail_por_usuario(user)
 
             # -- tiene email cargado?
             if len(email) > 0:
-                subject = "[STIB] [%s] " % form.cleaned_data['tipo_relacion']
-                if self.request.POST.get('edificio') is not None:
-                    subject += str(form.cleaned_data['edificio'])
-                else:
-                    subject += "Aviso importante"
-
-                ctx = {'link_vista': 'http://google.com'}
+                subject = "[STIB] [%s] %s" % (obj.tipo_relacion, tmp_subject)
+                ctx = {'link_vista': self.request.build_absolute_uri(self._get_url_view(obj))}
                 body = render_to_string("emails/email_notificaciones.html", ctx)
                 return _send_email(email, subject, body)
             else:
                 return False
         except:
             return False
+
+    def _get_url_view(self, obj):
+        """
+        Dependiendo si es una notificacion de una administracion o de un edificio, si
+        se trata de un servicio o producto, armamos el link para que desde el mail
+        visiten la notificacion...
+        """
+        if hasattr(obj, 'edificio'):
+            if hasattr(obj, 'producto'):
+                return reverse('notificaciones:edificios-productos-detail', args=[obj.id])
+            else:
+                return reverse('notificaciones:edificios-servicios-detail', args=[obj.id])
+        else:
+            if hasattr(obj, 'producto'):
+                return reverse('notificaciones:administraciones-productos-detail', args=[obj.id])
+            else:
+                return reverse('notificaciones:administraciones-servicios-detail', args=[obj.id])
 
 
 class NotificarProductosUsuarios(NotificarCreateViewMixin):
