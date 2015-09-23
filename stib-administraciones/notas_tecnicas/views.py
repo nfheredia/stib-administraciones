@@ -26,39 +26,27 @@ class NotasTecnicasCreateView(LoginRequiredMixin, StaffuserRequiredMixin, Create
     raise_exception = True
 
     def get_success_url(self):
+        # -- se desea enviar la nota tecnica por email?
+        if self.object.enviado:
+            if self._enviar_aviso_por_email(self.object):
+                self.model.marcar_email_recibido(self.object.id)
+
         messages.success(self.request, "Se ha creado una nueva Nota Técnica.")
         return reverse('notas-tecnicas:create')
 
-    def form_valid(self, form):
-        # -- enviar por mail, solo si desde
-        # -- el form se indicar True
-        if form.cleaned_data['enviado']:
-            if self._enviar_aviso_por_email(form):
-                form.instance.mail_recibido = True
-
-        return super(NotasTecnicasCreateView, self).form_valid(form)
-
-    def form_invalid(self, form):
-        return super(NotasTecnicasCreateView, self).form_invalid(form)
-
-    def _enviar_aviso_por_email(self, form):
+    def _enviar_aviso_por_email(self, obj):
         try:
             # -- obtengo Id de usuario
-            if self.request.POST.get('edificio') is not None:
-                user = Edificios.usuario_por_edificio(self.request.POST.get('edificio'))
+            user = Edificios.usuario_por_edificio(obj.edificio.id)
 
             # -- obtengo direccion de mail
             email = Perfiles.obtener_mail_por_usuario(user)
 
             # -- tiene email cargado?
             if len(email) > 0:
-                subject = "[STIB] Nota Técnica - "
-                if self.request.POST.get('edificio') is not None:
-                    subject += str(form.cleaned_data['edificio'])
-
-                ctx = {'link_vista': 'http://google.com'}
+                subject = "[STIB] Nota Técnica - %s" % str(obj.edificio)
+                ctx = {'link_vista':  self.request.build_absolute_uri(reverse('notas-tecnicas:detail', args=[obj.id]))}
                 body = render_to_string("emails/email_notas_tecnicas.html", ctx)
-
                 return _send_email(email, subject, body)
             else:
                 return False

@@ -52,4 +52,11 @@ class NotasTecnicas(TimeStampedModel):
         obj.leido = 1
         obj.save()
 
+    @classmethod
+    def marcar_email_recibido(cls, pk):
+        """ Marcar la nota tecnica con 'email recibido' """
+        obj = cls.objects.get(pk=pk)
+        obj.mail_recibido = 1
+        obj.save()
+
 
