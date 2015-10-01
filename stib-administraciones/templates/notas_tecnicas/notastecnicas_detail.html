@@ -68,27 +68,36 @@
                     <a class="btn btn-danger" id="cancelar_nota_tecnica">
                         <i class="fa fa-thumbs-o-down"></i> Cancelarla
                     </a>
+                    <br><br>
                 </div>
                 <div class="col-lg-3">
                     <!-- detalles de la nota tecnica -->
                     <div class="panel panel-primary">
                         <div class="panel-heading">
-                          <i class="fa fa-bars text-white"></i> Detalles
+                          <i class="fa fa-bars text-white"></i> Detallessss
                         </div>
                         <div class="panel-body">
                             <div class="well">
                                 <small>
-                                    <label><strong>Forma de pago: </strong></label>
-                                    {{ object.forma_pago }}
+                                    <label><strong>Forma de Pago: </strong></label>
+                                    {% if object.forma_pago %}
+                                        {{ object.forma_pago }}
+                                    {% else %}
+                                        -
+                                    {% endif %}
                                     <br>
                                     <label><strong>Validez Oferta: </strong></label>
-                                    {{ object.validez_oferta }}
+                                    {% if object.validez_oferta != None %}
+                                        {{ object.validez_oferta }}
+                                    {% else %}
+                                        -
+                                    {% endif %}
                                     <br>
                                     <label><strong>Iva: </strong></label>
                                     {% if object.iva == 1 %} Incluido {% else %} No Incluido {% endif %}
                                     <br>
                                     <label><strong>Precio: </strong></label>
-                                    {{ object.precio }}
+                                    ${{ object.precio }}
                                 </small>
                             </div>
                         </div>
