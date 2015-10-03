@@ -11,6 +11,9 @@ admin.autodiscover()
 urlpatterns = patterns('',
     # -- sitio adminitracion
     url(r'^admin/', include(admin.site.urls)),
+
+    url(r'^comments/', include("django.contrib.comments.urls")),
+
     # -- usuarios
     url(r'^users/', include("stib-administraciones.users.urls", namespace="users")),
     # -- accounts apps

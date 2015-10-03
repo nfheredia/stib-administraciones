@@ -145,6 +145,7 @@ DJANGO_APPS = (
     'django.contrib.staticfiles',
     'django.contrib.sites',
     'django.contrib.flatpages',
+    'django.contrib.comments',
 
     # Useful template tags:
     # 'django.contrib.humanize',
@@ -164,6 +165,7 @@ THIRD_PARTY_APPS = (
     'pagination',
     'disqus',
     'djrill',
+    #'django_comments',
 )
 
 # Apps specific for this project go here.
@@ -184,6 +186,7 @@ LOCAL_APPS = (
     'stib-administraciones.novedades', # novedades
     'stib-administraciones.notas_tecnicas', # notas tecnicas
     'stib-administraciones.dashboard', # dashboard
+    'stib-administraciones.custom_comments', # my custom comments app
 )
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
@@ -240,6 +243,8 @@ THUMBNAIL_ALIASES = {
 DISQUS_API_KEY = 'uqHEQ4RlBF6Vb6Lq4pUXXV5zusjm4wc5pZwbIyV324cbJ5ZZbAnUZZadG8ShKFt3'
 DISQUS_WEBSITE_SHORTNAME = 'StibAdministraciones'
 # / Disqus
+
+COMMENTS_APP = 'stib-administraciones.custom_comments'
 
 # --------------------------
 #  IMPORT LOCAL SETTINGS

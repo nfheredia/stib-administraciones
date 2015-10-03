@@ -8,21 +8,15 @@ from django.db import models
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
-        # Adding model 'Novedades'
-        db.create_table(u'novedades_novedades', (
-            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('modificado', self.gf('django.db.models.fields.DateTimeField')(auto_now=True, blank=True)),
-            ('creado', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
-            ('titulo', self.gf('django.db.models.fields.CharField')(max_length=255)),
-            ('contenido', self.gf('django.db.models.fields.TextField')()),
-            ('user', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['users.User'])),
-        ))
-        db.send_create_signal(u'novedades', ['Novedades'])
+        # Adding field 'NotificationComments.user'
+        db.add_column(u'custom_comments_notificationcomments', 'user',
+                      self.gf('django.db.models.fields.related.ForeignKey')(blank=True, related_name='notificationcomments_comments', null=True, to=orm['users.User']),
+                      keep_default=False)
 
 
     def backwards(self, orm):
-        # Deleting model 'Novedades'
-        db.delete_table(u'novedades_novedades')
+        # Deleting field 'NotificationComments.user'
+        db.delete_column(u'custom_comments_notificationcomments', 'user_id')
 
 
     models = {
@@ -46,14 +40,22 @@ class Migration(SchemaMigration):
             'model': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '100'})
         },
-        u'novedades.novedades': {
-            'Meta': {'object_name': 'Novedades'},
-            'contenido': ('django.db.models.fields.TextField', [], {}),
-            'creado': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
+        u'custom_comments.notificationcomments': {
+            'Meta': {'object_name': 'NotificationComments'},
+            'body': ('django.db.models.fields.TextField', [], {'max_length': '3000'}),
+            'content_type': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'content_type_set_for_notificationcomments'", 'to': u"orm['contenttypes.ContentType']"}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'modificado': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'}),
-            'titulo': ('django.db.models.fields.CharField', [], {'max_length': '255'}),
-            'user': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['users.User']"})
+            'name': ('django.db.models.fields.CharField', [], {'max_length': '150'}),
+            'object_pk': ('django.db.models.fields.TextField', [], {}),
+            'site': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['sites.Site']"}),
+            'submit_date': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
+            'user': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'notificationcomments_comments'", 'null': 'True', 'to': u"orm['users.User']"})
+        },
+        u'sites.site': {
+            'Meta': {'ordering': "(u'domain',)", 'object_name': 'Site', 'db_table': "u'django_site'"},
+            'domain': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
+            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'name': ('django.db.models.fields.CharField', [], {'max_length': '50'})
         },
         u'users.user': {
             'Meta': {'object_name': 'User'},
@@ -73,4 +75,4 @@ class Migration(SchemaMigration):
         }
     }
 
-    complete_apps = ['novedades']
+    complete_apps = ['custom_comments']
