@@ -1,10 +1,16 @@
-<dl id="comments">
-  {% for comment in comment_list %}
-    <dt id="c{{ comment.id }}">
-      {{ comment.submit_date }} - {{ comment.name }}
-    </dt>
-    <dd>
-      <p>{{ comment.body }}</p>
-    </dd>
-  {% endfor %}
-</dl>
+<div class="list-group">
+
+    {% for comment in comment_list %}
+        <li class="list-group-item ">
+            <h4 class="list-group-item-heading">
+                <i class="fa fa-commenting-o"></i>
+                <strong>{{ comment.submit_date }} - {{ comment.name }}</strong>
+            </h4>
+            <p class="list-group-item-text well">
+                {{ comment.body }}
+            </p>
+        </li>
+    {% endfor %}
+
+</div>
+

@@ -1,7 +1,9 @@
 {% load comments i18n %}
 {% load crispy_forms_tags %}
-<form class="form-horizontal" action="{% comment_form_target %}" method="post">{% csrf_token %}
-  <input type="hidden" name="next" value="{% url 'notas-tecnicas:notas-tecnicas-edificio' object.edificio.id %}" />
+
+<form class="form-horizontal" action="{% url 'custom-comments:envio' %}" method="post">
+  {% csrf_token %}
+  <input type="hidden" name="next" value="{{ request.path }}" />
   {{form|crispy}}
   <p class="submit">
     <input type="submit" name="post" class="btn btn-primary" value="{% trans "Post" %}"/>

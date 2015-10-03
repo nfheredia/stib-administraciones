@@ -14,99 +14,108 @@
                     <a href="#">{{ object.titulo }}</a>
                 </h1>
             </div>
-            <div class="row">
-                <div class="col-lg-12">
-                    <b>Fecha:</b> {{ object.modificado|date:"SHORT_DATE_FORMAT" }} |
-                    <b>Estado:</b> {{ object.estado|mostrar_estados }}
-                </div>
-            </div><br>
-            <div class="row">
-                <!-- detalles del edificio -->
-                <div class="col-lg-3">
-                    <div class="panel panel-primary">
-                        <div class="panel-heading">
-                          <i class="fa fa-building fa-fw"></i> Edificio
-                          <div class="pull-right">
-                              <a title="Editar" href="{% url 'edificios:administraciones_detalles_update' object.edificio.id %}">
-                                  <i class="fa fa-pencil text-white"></i>
-                              </a>
-                          </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                <b>Fecha:</b> {{ object.modificado|date:"SHORT_DATE_FORMAT" }} |
+                <b>Estado:</b> {{ object.estado|mostrar_estados }}
+            </div>
+            <br>
+            <br>
+        </div>
+        <div class="row">
+            <!-- detalles del edificio -->
+            <div class="col-lg-3">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                      <i class="fa fa-building fa-fw"></i> Edificio
+                      <div class="pull-right">
+                          <a title="Editar" href="{% url 'edificios:administraciones_detalles_update' object.edificio.id %}">
+                              <i class="fa fa-pencil text-white"></i>
+                          </a>
+                      </div>
+                    </div>
+                    <div class="panel-body">
+                        <div class="well">
+                            {% if object.edificio.foto_fachada %}
+                                <img src="{% thumbnail object.edificio.foto_fachada 100x100 crop %}" alt="No imagen">
+                            {% else %}
+                                <img src="{% static 'images/sin-imagen-100x100.jpg' %}">
+                            {% endif %}
+                            <br><br>
+                            <small>
+                                <label><strong>Dirección: </strong></label>
+                                {{ object.edificio.direccion }}
+                                <br>
+                                <label><strong>Nombre: </strong></label>
+                                {{ object.edificio.nombre }}
+                            </small>
+                            <a class="btn btn-primary" href="{% url 'edificios:administraciones' object.edificio.id %}">
+                                <i class="fa fa-external-link"></i> Visitar
+                            </a>
                         </div>
-                        <div class="panel-body">
-                            <div class="well">
-                                {% if object.edificio.foto_fachada %}
-                                    <img src="{% thumbnail object.edificio.foto_fachada 100x100 crop %}" alt="No imagen">
+                    </div>
+                </div>
+            </div><!-- / detalles del edificio -->
+            <div class="col-lg-6">
+                <div class="well">
+                    {{ object.descripcion }}
+                </div>
+                <h3>¿Que deseas hacer con esta Nota Técnica?</h3>
+                <a class="btn btn-success" id="aceptar_nota_tecnica">
+                    <i class="fa fa-thumbs-o-up"></i> Aceptarla
+                </a>
+                <a class="btn btn-warning" id="pendiente_nota_tecnica">
+                    <i class="fa fa-hand-paper-o"></i> Mantener Pendiente
+                </a>
+                <a class="btn btn-danger" id="cancelar_nota_tecnica">
+                    <i class="fa fa-thumbs-o-down"></i> Cancelarla
+                </a>
+                <br><br>
+            </div>
+            <div class="col-lg-3">
+                <!-- detalles de la nota tecnica -->
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                      <i class="fa fa-bars text-white"></i> Detalles
+                    </div>
+                    <div class="panel-body">
+                        <div class="well">
+                            <small>
+                                <label><strong>Forma de Pago: </strong></label>
+                                {% if object.forma_pago %}
+                                    {{ object.forma_pago }}
                                 {% else %}
-                                    <img src="{% static 'images/sin-imagen-100x100.jpg' %}">
+                                    -
                                 {% endif %}
-                                <br><br>
-                                <small>
-                                    <label><strong>Dirección: </strong></label>
-                                    {{ object.edificio.direccion }}
-                                    <br>
-                                    <label><strong>Nombre: </strong></label>
-                                    {{ object.edificio.nombre }}
-                                </small>
-                                <a class="btn btn-primary" href="{% url 'edificios:administraciones' object.edificio.id %}">
-                                    <i class="fa fa-external-link"></i> Visitar
-                                </a>
-                            </div>
+                                <br>
+                                <label><strong>Validez Oferta: </strong></label>
+                                {% if object.validez_oferta != None %}
+                                    {{ object.validez_oferta }}
+                                {% else %}
+                                    -
+                                {% endif %}
+                                <br>
+                                <label><strong>Iva: </strong></label>
+                                {% if object.iva == 1 %} Incluido {% else %} No Incluido {% endif %}
+                                <br>
+                                <label><strong>Precio: </strong></label>
+                                ${{ object.precio }}
+                            </small>
                         </div>
                     </div>
-                </div><!-- / detalles del edificio -->
-                <div class="col-lg-6">
-                    <div class="well">
-                        {{ object.descripcion }}
-                    </div>
-                    <h3>¿Que deseas hacer con esta Nota Técnica?</h3>
-                    <a class="btn btn-success" id="aceptar_nota_tecnica">
-                        <i class="fa fa-thumbs-o-up"></i> Aceptarla
-                    </a>
-                    <a class="btn btn-warning" id="pendiente_nota_tecnica">
-                        <i class="fa fa-hand-paper-o"></i> Mantener Pendiente
-                    </a>
-                    <a class="btn btn-danger" id="cancelar_nota_tecnica">
-                        <i class="fa fa-thumbs-o-down"></i> Cancelarla
-                    </a>
-                    <br><br>
-                </div>
-                <div class="col-lg-3">
-                    <!-- detalles de la nota tecnica -->
-                    <div class="panel panel-primary">
-                        <div class="panel-heading">
-                          <i class="fa fa-bars text-white"></i> Detallessss
-                        </div>
-                        <div class="panel-body">
-                            <div class="well">
-                                <small>
-                                    <label><strong>Forma de Pago: </strong></label>
-                                    {% if object.forma_pago %}
-                                        {{ object.forma_pago }}
-                                    {% else %}
-                                        -
-                                    {% endif %}
-                                    <br>
-                                    <label><strong>Validez Oferta: </strong></label>
-                                    {% if object.validez_oferta != None %}
-                                        {{ object.validez_oferta }}
-                                    {% else %}
-                                        -
-                                    {% endif %}
-                                    <br>
-                                    <label><strong>Iva: </strong></label>
-                                    {% if object.iva == 1 %} Incluido {% else %} No Incluido {% endif %}
-                                    <br>
-                                    <label><strong>Precio: </strong></label>
-                                    ${{ object.precio }}
-                                </small>
-                            </div>
-                        </div>
-                    </div><!-- / detalles de la nota tecnica -->
-                </div>
+                </div><!-- / detalles de la nota tecnica -->
             </div>
         </div>
         <div class="row">
             <div class="col-lg-12">
+                <h1 class="page-header">
+                    <i class="fa fa-commenting"></i> ¿Tenés alguna duda o comentario que hacernos?
+                </h1>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-9">
                 {% render_comment_list for object %}
             </div>
         </div>

@@ -6,10 +6,11 @@ from django.utils import timezone
 from django.conf import settings
 from .models import NotificationComments
 
+
 class NotificationCommentsForm(CommentSecurityForm):
     name = forms.CharField(max_length=150, label="Nombre")
     body = forms.CharField(label="Comentario", widget=forms.Textarea,
-                              max_length=1000)
+                           max_length=1000)
 
     def get_comment_model(self):
         return NotificationComments
@@ -23,13 +24,12 @@ class NotificationCommentsForm(CommentSecurityForm):
 
         return new
 
-
     def get_comment_create_data(self):
-		return dict(
-		    content_type=ContentType.objects.get_for_model(self.target_object),
-		    object_pk=force_text(self.target_object._get_pk_val()),
-		    submit_date=timezone.now(),
-		    site_id=settings.SITE_ID,
+        return dict(
+            content_type=ContentType.objects.get_for_model(self.target_object),
+            object_pk=force_text(self.target_object._get_pk_val()),
+            submit_date=timezone.now(),
+            site_id=settings.SITE_ID,
             name=self.cleaned_data['name'],
             body=self.cleaned_data['body']
-		)
+        )
