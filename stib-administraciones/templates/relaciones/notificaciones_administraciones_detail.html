@@ -2,6 +2,7 @@
 {% load relaciones_tags %}
 {% load thumbnail %}
 {% load staticfiles %}
+{% load comments %}
 
 {% block title %} Notificación {% endblock %}
 
@@ -75,6 +76,25 @@
                 </div><!-- / detalles -->
             </div>
         </div>
+
+        <div class="row">
+            <div class="col-lg-12">
+                <h1 class="page-header">
+                    <i class="fa fa-commenting"></i> ¿Tenés alguna duda o comentario que hacernos?
+                </h1>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-9">
+                {% render_comment_list for object %}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-9">
+                {% render_comment_form for object %}
+            </div>
+        </div>
+
     {% endautoescape %}
 
     <div class="modal fade" id="modal_envio_cambio_estado">

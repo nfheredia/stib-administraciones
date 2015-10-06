@@ -68,8 +68,6 @@ def post_comment(request, next=None, using=None):
             "Attempting go get content-type %r and object PK %r exists raised %s" % \
                 (escape(ctype), escape(object_pk), e.__class__.__name__))
 
-    # Do we want to preview the comment?
-    preview = "preview" in data
 
     # Construct the comment form
     form = comments.get_form()(target, data=data)
@@ -84,7 +82,7 @@ def post_comment(request, next=None, using=None):
     if form.errors:
         messages.error(request, "Error al enviar su comentario, por favor complete todos los campos "
                                 "del formulario.")
-        return http.HttpResponseRedirect('/notas/tecnicas/24')
+        return http.HttpResponseRedirect(request.POST.get('next'))
 
 
     # Otherwise create the comment
