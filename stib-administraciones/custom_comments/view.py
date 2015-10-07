@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from __future__ import absolute_import
 
 from django import http
@@ -7,12 +8,12 @@ from django.contrib.comments import signals
 from django.contrib.comments.views.utils import next_redirect, confirmation_view
 from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from django.db import models
-from django.shortcuts import render_to_response
-from django.template import RequestContext
 from django.template.loader import render_to_string
 from django.utils.html import escape
 from django.views.decorators.csrf import csrf_protect
 from django.views.decorators.http import require_POST
+from django.core.mail import EmailMessage
+from ..settings_local import STIB_TO_EMAIL
 
 
 class CommentPostBadRequest(http.HttpResponseBadRequest):
@@ -110,6 +111,28 @@ def post_comment(request, next=None, using=None):
         comment=comment,
         request=request
     )
+
+    if request.user.is_staff is False:
+        to_mail = STIB_TO_EMAIL
+        from_mail = request.user.perfil.email_1
+    else:
+        to_mail = (request.user.perfil.email_1, )
+        from_mail = 'brunomartintenaglia@gmail.com'
+
+    subject = "[STIB] "
+    if comment.content_type_id == 46:
+        subject += " Nota técnica - "
+    else:
+        subject += " Notificaciones - "
+
+    subject += " Nuevo Comentario"
+
+    body = "Estiamdo, recuerde que cuenta con un nuevo comentario."
+    email = EmailMessage(subject=subject,
+                         body=body,
+                         from_email=from_mail,
+                         to=to_mail)
+    email.send()
 
     messages.success(request, "Gracias por su comentario, pronto responderemos su consulta.")
     return next_redirect(request, fallback=next or 'comments-comment-done',
