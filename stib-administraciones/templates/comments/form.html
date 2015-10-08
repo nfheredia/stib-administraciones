@@ -4,7 +4,13 @@
 <form class="form-horizontal" action="{% url 'custom-comments:envio' %}" method="post">
   {% csrf_token %}
   <input type="hidden" name="next" value="{{ request.path }}" />
-  <input type="hidden" name="comment_owner_email" value="{{ object.usuario.perfil.email_1 }}" />
+
+    {% if object.usuario %}
+        <input type="hidden" name="comment_owner_email" value="{{ object.usuario.perfil.email_1 }}" />
+    {% else %}
+        <input type="hidden" name="comment_owner_email" value="{{ object.edificio.user.perfil.email_1 }}" />
+    {% endif %}
+
   {{form|crispy}}
   <p class="submit">
     <input type="submit" name="post" class="btn btn-primary" value="{% trans "Post" %}"/>
