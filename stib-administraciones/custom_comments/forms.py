@@ -20,9 +20,7 @@ class NotificationCommentsForm(CommentSecurityForm):
             raise ValueError("get_comment_object may only be called on valid forms")
 
         NotificationComments = self.get_comment_model()
-        new = NotificationComments(**self.get_comment_create_data())
-
-        return new
+        return NotificationComments(**self.get_comment_create_data())
 
     def get_comment_create_data(self):
         return dict(

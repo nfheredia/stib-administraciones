@@ -112,27 +112,7 @@ def post_comment(request, next=None, using=None):
         request=request
     )
 
-    if request.user.is_staff is False:
-        to_mail = STIB_TO_EMAIL
-        from_mail = request.user.perfil.email_1
-    else:
-        to_mail = (request.user.perfil.email_1, )
-        from_mail = 'brunomartintenaglia@gmail.com'
-
-    subject = "[STIB] "
-    if comment.content_type_id == 46:
-        subject += " Nota técnica - "
-    else:
-        subject += " Notificaciones - "
-
-    subject += " Nuevo Comentario"
-
-    body = "Estiamdo, recuerde que cuenta con un nuevo comentario."
-    email = EmailMessage(subject=subject,
-                         body=body,
-                         from_email=from_mail,
-                         to=to_mail)
-    email.send()
+    _send_email(request)
 
     messages.success(request, "Gracias por su comentario, pronto responderemos su consulta.")
     return next_redirect(request, fallback=next or 'comments-comment-done',
@@ -142,3 +122,39 @@ comment_done = confirmation_view(
     template="comments/posted.html",
     doc="""Display a "comment was posted" success page."""
 )
+
+
+def _send_email(request):
+    ctx = {}
+    # -- si el comentario es enviado por un usuario no staff
+    # -- se envia un mail al personal de STIB desde la cta de email
+    # -- del usuario
+    if request.user.is_staff is False:
+        to_mail = STIB_TO_EMAIL
+        from_mail = request.user.perfil.email_1
+        ctx['nombre_comercial'] = request.user.perfil.nombre_comercial
+    else:
+        # -- si quien escribe/responde un comentario es un personal de STIB
+        # -- se envia mail al usuario dueño del comentario
+        to_mail = (request.POST.get('comment_owner_email'), )
+        from_mail = "no-reply@stibadministraciones.com"
+
+    subject = "[STIB] "
+    if request.POST.get('content_type_id') == 46:
+        subject += " Nota técnica - "
+        ctx['tipo'] = "nota técnicas"
+    else:
+        subject += " Notificaciones - "
+        ctx['tipo'] = "notificación"
+
+    subject += " Nuevo Comentario"
+
+    ctx['comentario_link'] = request.build_absolute_uri(request.POST.get('next'))
+
+    body = render_to_string("emails/email_nuevo_comentario.html", ctx)
+    email = EmailMessage(subject=subject,
+                         body=body,
+                         from_email=from_mail,
+                         to=to_mail)
+    email.content_subtype = 'html'
+    email.send()

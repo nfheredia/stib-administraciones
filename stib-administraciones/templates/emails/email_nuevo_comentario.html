@@ -1,0 +1,11 @@
+Estimado:<br>
+
+{% if nombre_comercial %}
+    Le informamos que la administración <b>{{ nombre_comercial }}</b>
+{% else %}
+    Le informamos que el personal de STIB
+{% endif %}
+    ha realizado un nuevo comentario en una {{ tipo }}. <br>
+Para verlo, haga click <a href="{{ comentario_link }}">aquí</a>.
+<br><br>
+Saludo atte.
