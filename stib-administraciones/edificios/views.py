@@ -151,7 +151,7 @@ class EdificiosAdministracionesView(LoginRequiredMixin, EdificiosAdministracione
 
     def get_context_data(self, **kwargs):
         ctx = super(EdificiosAdministracionesView, self).get_context_data(**kwargs)
-        ctx['otros_edificios'] = Edificios.objects.filter(user=self.request.user.id).\
+        ctx['otros_edificios'] = Edificios.edificios_usuarios_object.por_usuarios(self.request.user.id).\
                                     exclude(pk=self.kwargs['pk'])[:4]
         # -- obtengo las notificaciones del edificio que se consulta
         notificaciones_productos_edificios = RelacionesEdificiosProductos.objects.\
