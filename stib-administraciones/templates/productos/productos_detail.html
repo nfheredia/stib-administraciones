@@ -89,12 +89,12 @@
     <div class="row">
         {% for otro_producto in otros_productos %}
             <div class="col-lg-4">
-                <!--
+
                 <div class="panel panel-primary" style="height: 400px">
                     <div class="panel-heading">
                       <i class="fa fa-archive"></i> {{otro_producto.nombre}}
                     </div>
-                    <div class="panel-body text-center">
+                    <!--<div class="panel-body text-center">
                         {% if otro_producto.image %}
                             <img class="img-responsive center-block" src="{% thumbnail otro_producto.image 100x100 crop %}" alt="No imagen">
                         {% else %}
@@ -105,8 +105,8 @@
                             {% autoescape off %}{{ otro_producto.descripcion|truncatewords:20 }} {% endautoescape %}
                         </div>
                         <a class="btn btn-success" href="{% url 'productos:detail' otro_producto.id %}">Visitar</a>
-                    </div>
-                </div>-->
+                    </div>-->
+                </div>
             </div>
 
         {% endfor %}
