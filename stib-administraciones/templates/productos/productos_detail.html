@@ -100,12 +100,9 @@
                         {% else %}
                             <img class="img-responsive center-block" src="{% static 'images/sin-imagen.jpg' %}">
                         {% endif %}
-                        <div class="well">
-                            fsdfs f sf s fs f sfs f f f sf sf sfds f f fsd fdsfsdfds fsf dsfdsfds
-                        </div>
                         <br>
                         <div class="well">
-                            {{ otro_producto.descripcion|truncatewords:20 }}
+                            {% autoescape off %}{{ otro_producto.descripcion|striptags|truncatewords:20 }} {% endautoescape %}
                         </div>
                         <a class="btn btn-success" href="{% url 'productos:detail' otro_producto.id %}">Visitar</a>
 
