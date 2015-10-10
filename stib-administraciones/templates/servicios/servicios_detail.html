@@ -99,7 +99,7 @@
                         {% endif %}
                         <br>
                         <div class="well">
-                            {% autoescape off %}{{ otro_servicio.descripcion|truncatewords:20 }} {% endautoescape %}
+                            {% autoescape off %}{{ otro_servicio.descripcion|striptags|truncatewords:20 }} {% endautoescape %}
                         </div>
                         <a class="btn btn-success" href="{% url 'servicios:detail' otro_servicio.id %}">Visitar</a>
                     </div>
