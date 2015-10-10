@@ -94,18 +94,18 @@
                     <div class="panel-heading">
                       <i class="fa fa-archive"></i> {{otro_producto.nombre}}
                     </div>
-                    <!--<div class="panel-body text-center">
-                        {% if otro_producto.image %}
+                    <div class="panel-body text-center">
+                        <!--{% if otro_producto.image %}
                             <img class="img-responsive center-block" src="{% thumbnail otro_producto.image 100x100 crop %}" alt="No imagen">
                         {% else %}
                             <img class="img-responsive center-block" src="{% static 'images/sin-imagen.jpg' %}">
-                        {% endif %}
+                        {% endif %}-->
                         <br>
                         <div class="well">
                             {% autoescape off %}{{ otro_producto.descripcion|truncatewords:20 }} {% endautoescape %}
                         </div>
                         <a class="btn btn-success" href="{% url 'productos:detail' otro_producto.id %}">Visitar</a>
-                    </div>-->
+                    </div>
                 </div>
             </div>
 
