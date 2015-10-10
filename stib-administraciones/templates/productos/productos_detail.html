@@ -103,10 +103,10 @@
                         <div class="well">
                             fsdfs f sf s fs f sfs f f f sf sf sfds f f fsd fdsfsdfds fsf dsfdsfds
                         </div>
-                        <!--<br>
+                        <br>
                         <div class="well">
-                            {% autoescape off %}{{ otro_producto.descripcion|truncatewords:20 }} {% endautoescape %}
-                        </div>-->
+                            {{ otro_producto.descripcion|truncatewords:20 }}
+                        </div>
                         <a class="btn btn-success" href="{% url 'productos:detail' otro_producto.id %}">Visitar</a>
 
                     </div>
