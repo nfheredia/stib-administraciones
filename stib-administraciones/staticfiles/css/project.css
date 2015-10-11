@@ -296,3 +296,14 @@ ul {
     z-index: 100;
 }
 
+.btn-datos-clientes{
+  color: #337ab7;
+  background-color: #fff;
+  border-color: #337ab7;
+}
+.btn-datos-clientes:hover {
+  color: #337ab7;
+  background-color: #fff;
+  border-color: #337ab7;
+}
+
