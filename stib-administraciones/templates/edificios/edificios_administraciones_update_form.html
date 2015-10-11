@@ -14,7 +14,7 @@
             <h1 class="page-header">
                 Editar  "{{form.instance.direccion}}"
             </h1>
-            <form method="post">
+            <form method="post" enctype="multipart/form-data">
                 {% csrf_token %}
                 {{ form|crispy }}
                 <div class="control-group">
