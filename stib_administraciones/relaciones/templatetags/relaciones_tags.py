@@ -3,7 +3,7 @@ from django import template
 from ..models import RelacionesEdificiosServicios, RelacionesEdificiosProductos
 
 # -- import notas tecnicas module
-nt = __import__("stib-administraciones").notas_tecnicas.models
+nt = __import__("stib_administraciones").notas_tecnicas.models
 
 
 

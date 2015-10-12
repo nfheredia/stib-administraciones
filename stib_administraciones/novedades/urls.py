@@ -4,7 +4,7 @@ from .views import (NovedadesListView,
                     NovedadesTagsListView
 )
 
-urlpatterns = patterns('stib-administraciones.novedades.views',
+urlpatterns = patterns('stib_administraciones.novedades.views',
 
         url(r'^$', NovedadesListView.as_view(), name='list'),
         url(r'^(?P<pk>\d+)/$', NovedadesDetailView.as_view(), name='detail'),

@@ -2,7 +2,7 @@ from django.conf.urls import patterns, url
 
 from .views import PerfilesUpdateView, get_autocomplete_nombre_comercial
 
-urlpatterns = patterns('stib-administraciones.perfiles.views',
+urlpatterns = patterns('stib_administraciones.perfiles.views',
     url(
         regex=r'^update/$',
         view=PerfilesUpdateView.as_view(),

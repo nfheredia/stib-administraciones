@@ -112,8 +112,8 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'django.contrib.messages.context_processors.messages',
     'django.core.context_processors.request',
     # Your stuff: custom template context processers go here
-    'stib-administraciones.edificios.context_processors.edificios_usuarios',
-    'stib-administraciones.edificios.context_processors.url_to_open_lateral_menu',
+    'stib_administraciones.edificios.context_processors.edificios_usuarios',
+    'stib_administraciones.edificios.context_processors.url_to_open_lateral_menu',
 )
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#template-dirs
@@ -130,13 +130,15 @@ TEMPLATE_LOADERS = (
 CRISPY_TEMPLATE_PACK = 'bootstrap3'
 # END TEMPLATE CONFIGURATION
 
-ROOT_URLCONF = 'stib-administraciones.urls'
+ROOT_URLCONF = 'stib_administraciones.urls'
 
 # Python dotted path to the WSGI application used by Django's runserver.
-WSGI_APPLICATION = 'stib-administraciones.wsgi.application'
+WSGI_APPLICATION = 'stib_administraciones.wsgi.application'
 
 # APP CONFIGURATION
 DJANGO_APPS = (
+    # user app si here because we need this app before others
+    'stib_administraciones.users',  # custom users app ,
     # Default Django apps:
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -146,10 +148,6 @@ DJANGO_APPS = (
     'django.contrib.sites',
     'django.contrib.flatpages',
     'django.contrib.comments',
-
-    # Useful template tags:
-    # 'django.contrib.humanize',
-
     # Admin
     'django.contrib.admin',
 )
@@ -170,23 +168,22 @@ THIRD_PARTY_APPS = (
 
 # Apps specific for this project go here.
 LOCAL_APPS = (
-    'stib-administraciones.users',  # custom users app
-    'stib-administraciones.perfiles', # perfiles de usuarios
-    'stib-administraciones.edificios', # perfiles de edificios
-    'stib-administraciones.llaves', # llaves de edificios
-    'stib-administraciones.personales', # personales que trabajan en un edificio
-    'stib-administraciones.horarios', # horarios de los edificios
-    'stib-administraciones.contactos', # contactos de los edificios
-    'stib-administraciones.fotos', # fotos de los edificios
-    'stib-administraciones.productos', # productos
-    'stib-administraciones.servicios', # servicios
-    'stib-administraciones.relaciones', # relaciones
-    'stib-administraciones.flatpagesx', # flatpagesx
-    'stib-administraciones.feedbacks', # feedbacks
-    'stib-administraciones.novedades', # novedades
-    'stib-administraciones.notas_tecnicas', # notas tecnicas
-    'stib-administraciones.dashboard', # dashboard
-    'stib-administraciones.custom_comments', # my custom comments app
+    'stib_administraciones.perfiles', # perfiles de usuarios
+    'stib_administraciones.edificios', # perfiles de edificios
+    'stib_administraciones.llaves', # llaves de edificios
+    'stib_administraciones.personales', # personales que trabajan en un edificio
+    'stib_administraciones.horarios', # horarios de los edificios
+    'stib_administraciones.contactos', # contactos de los edificios
+    'stib_administraciones.fotos', # fotos de los edificios
+    'stib_administraciones.productos', # productos
+    'stib_administraciones.servicios', # servicios
+    'stib_administraciones.relaciones', # relaciones
+    'stib_administraciones.flatpagesx', # flatpagesx
+    'stib_administraciones.feedbacks', # feedbacks
+    'stib_administraciones.novedades', # novedades
+    'stib_administraciones.notas_tecnicas', # notas tecnicas
+    'stib_administraciones.dashboard', # dashboard
+    'stib_administraciones.custom_comments', # my custom comments app
 )
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
@@ -244,7 +241,7 @@ DISQUS_API_KEY = 'uqHEQ4RlBF6Vb6Lq4pUXXV5zusjm4wc5pZwbIyV324cbJ5ZZbAnUZZadG8ShKF
 DISQUS_WEBSITE_SHORTNAME = 'StibAdministraciones'
 # / Disqus
 
-COMMENTS_APP = 'stib-administraciones.custom_comments'
+COMMENTS_APP = 'stib_administraciones.custom_comments'
 
 # --------------------------
 #  IMPORT LOCAL SETTINGS

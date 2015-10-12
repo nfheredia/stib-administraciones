@@ -2,7 +2,7 @@ from django.conf.urls import patterns, url
 
 from .views import ProductosListView, ProductosDetailView, ProductosTagsListView, pedir_cotizacion, enviar_consulta
 
-urlpatterns = patterns('stib-administraciones.productos.views',
+urlpatterns = patterns('stib_administraciones.productos.views',
     url(
         regex=r'^$',
         view=ProductosListView.as_view(),

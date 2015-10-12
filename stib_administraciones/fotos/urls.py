@@ -5,7 +5,7 @@ from .views import (FotosAdministracionListView,
                     FotosAdministracionUpdateView,
                     FotosAdministracionDeleteView)
 
-urlpatterns = patterns('stib-administraciones.perfiles.views',
+urlpatterns = patterns('stib_administraciones.perfiles.views',
     url(
         regex=r'^administracion/(?P<edificio>\d+)$',
         view=FotosAdministracionListView.as_view(),

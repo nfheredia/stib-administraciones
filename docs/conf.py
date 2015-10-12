@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# stib-administraciones documentation build configuration file, created by
+# stib_administraciones documentation build configuration file, created by
 # sphinx-quickstart.
 #
 # This file is execfile()d with the current directory set to its containing dir.
@@ -41,7 +41,7 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = u'stib-administraciones'
+project = u'stib_administraciones'
 copyright = u'2015, Stib'
 
 # The version info for the project you're documenting, acts as replacement for
@@ -185,8 +185,8 @@ latex_elements = {
 # (source start file, target name, title, author, documentclass [howto/manual]).
 latex_documents = [
     ('index',
-     'stib-administraciones.tex',
-     u'stib-administraciones Documentation',
+     'stib_administraciones.tex',
+     u'stib_administraciones Documentation',
      u'Stib', 'manual'),
 ]
 
@@ -216,7 +216,7 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    ('index', 'stib-administraciones', u'stib-administraciones Documentation',
+    ('index', 'stib_administraciones', u'stib_administraciones Documentation',
      [u'Stib'], 1)
 ]
 
@@ -230,8 +230,8 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-    ('index', 'stib-administraciones', u'stib-administraciones Documentation',
-     u'Stib', 'stib-administraciones',
+    ('index', 'stib_administraciones', u'stib_administraciones Documentation',
+     u'Stib', 'stib_administraciones',
      'Sistema para administracion de edificios', 'Miscellaneous'),
 ]
 

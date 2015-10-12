@@ -34,6 +34,6 @@ node_modules/
 
 .idea
 *.*~
-stib-administraciones/settings_local.py
-stib-administraciones/static
-stib-administraciones/media
+stib_administraciones/settings_local.py
+stib_administraciones/static
+stib_administraciones/media
