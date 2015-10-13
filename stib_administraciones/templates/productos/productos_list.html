@@ -60,7 +60,7 @@
                             {% endif %}
                         </div>
                         <div class="col-lg-9">
-                            {% autoescape off %}{{ producto.descripcion|truncatewords:30 }} {% endautoescape %}
+                            {% autoescape off %}{{ producto.descripcion|striptags|truncatewords:30 }} {% endautoescape %}
                             <br>
                             <a href="{% url 'productos:detail' producto.id %}">
                                 Ampliar información...
