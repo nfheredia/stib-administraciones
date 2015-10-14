@@ -61,17 +61,24 @@
                 <div class="well">
                     {{ object.descripcion }}
                 </div>
-                <h3>¿Que deseas hacer con esta Nota Técnica?</h3>
-                <a class="btn btn-success" id="aceptar_nota_tecnica">
-                    <i class="fa fa-thumbs-o-up"></i> Aceptarla
-                </a>
-                <a class="btn btn-warning" id="pendiente_nota_tecnica">
-                    <i class="fa fa-hand-paper-o"></i> Mantener Pendiente
-                </a>
-                <a class="btn btn-danger" id="cancelar_nota_tecnica">
-                    <i class="fa fa-thumbs-o-down"></i> Cancelarla
-                </a>
-                <br><br>
+                {% if object.trabajo_realizado == False %}
+                    <h3>¿Que deseas hacer con esta Nota Técnica?</h3>
+                    <a class="btn btn-success" id="aceptar_nota_tecnica">
+                        <i class="fa fa-thumbs-o-up"></i> Aceptarla
+                    </a>
+                    <a class="btn btn-warning" id="pendiente_nota_tecnica">
+                        <i class="fa fa-hand-paper-o"></i> Mantener Pendiente
+                    </a>
+                    <a class="btn btn-danger" id="cancelar_nota_tecnica">
+                        <i class="fa fa-thumbs-o-down"></i> Cancelarla
+                    </a>
+                    <br><br>
+                {% else %}
+                    <div class="alert alert-info" role="alert">
+                        <i class="fa fa-wrench"></i> Le informamos que el trabajo
+                        correspondiente a esta nota técnica ya fué realizado.
+                    </div>
+                {% endif %}
             </div>
             <div class="col-lg-3">
                 <!-- detalles de la nota tecnica -->

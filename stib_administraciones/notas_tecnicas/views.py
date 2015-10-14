@@ -249,8 +249,7 @@ class NotasTecnicasTrabajoRealizadoView(LoginRequiredMixin, StaffuserRequiredMix
     La nota tecnica se marca como 'trabajo realizado'
     """
     def get(self, request, *args, **kwargs):
-        print 'acaaa'
         NotasTecnicas.marcar_trabajo_realizado(kwargs["pk"])
         self.url = reverse('notas-tecnicas:list')
-        messages.success(request, 'La nota técnica fué marcada como realizada.')
+        messages.success(request, 'La nota técnica fué editada correctamente.')
         return super(NotasTecnicasTrabajoRealizadoView, self).get(request, *args, **kwargs)
