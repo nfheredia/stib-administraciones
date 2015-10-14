@@ -4,9 +4,7 @@ from django.core.urlresolvers import reverse
 from django.contrib.auth import get_user_model
 from ..views import FeedbacksCreate
 
-pe = __import__("stib_administraciones").perfiles
-
-from pe.models import Perfiles
+from stib_administraciones.stib_administraciones.perfiles.models import Perfiles
 
 
 class CreatePageViewTest(TestCase):
@@ -25,10 +23,6 @@ class CreatePageViewTest(TestCase):
             email='jsj@gmail.com',
             password='pass')
         self.user.save()
-
-        p = Perfiles()
-        p.user = self.user.id
-        p.save()
 
         self.create_view_url = reverse('feedback_create')
 
