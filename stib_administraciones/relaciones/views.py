@@ -86,30 +86,13 @@ class NotificarCreateViewMixin(LoginRequiredMixin, StaffuserRequiredMixin, Creat
             # -- tiene email cargado?
             if len(email) > 0:
                 subject = "[STIB] [%s] %s" % (obj.tipo_relacion, tmp_subject)
-                ctx = {'link_vista': self.request.build_absolute_uri(self._get_url_view(obj))}
+                ctx = {'link_vista': self.request.build_absolute_uri(_get_url_view(obj))}
                 body = render_to_string("emails/email_notificaciones.html", ctx)
                 return _send_email(email, subject, body)
             else:
                 return False
         except:
             return False
-
-    def _get_url_view(self, obj):
-        """
-        Dependiendo si es una notificacion de una administracion o de un edificio, si
-        se trata de un servicio o producto, armamos el link para que desde el mail
-        visiten la notificacion...
-        """
-        if hasattr(obj, 'edificio'):
-            if hasattr(obj, 'producto'):
-                return reverse('notificaciones:edificios-productos-detail', args=[obj.id])
-            else:
-                return reverse('notificaciones:edificios-servicios-detail', args=[obj.id])
-        else:
-            if hasattr(obj, 'producto'):
-                return reverse('notificaciones:administraciones-productos-detail', args=[obj.id])
-            else:
-                return reverse('notificaciones:administraciones-servicios-detail', args=[obj.id])
 
 
 class NotificarProductosUsuarios(NotificarCreateViewMixin):
@@ -449,7 +432,7 @@ def reenviar_email_edificios_productos(request, notificacion):
     """
     if request.method == 'GET':
         notificacion = RelacionesEdificiosProductos.objects.get(pk=notificacion)
-        if _reenviar_email_notificaciones(notificacion):
+        if _reenviar_email_notificaciones(request, notificacion):
             messages.success(request, reenvio_email_massages['success'])
         else:
             messages.error(request, reenvio_email_massages['error'])
@@ -465,7 +448,7 @@ def reenviar_email_edificios_servicios(request, notificacion):
     """
     if request.method == 'GET':
         notificacion = RelacionesEdificiosServicios.objects.get(pk=notificacion)
-        if _reenviar_email_notificaciones(notificacion):
+        if _reenviar_email_notificaciones(request, notificacion):
             messages.success(request, reenvio_email_massages['success'])
         else:
             messages.error(request, reenvio_email_massages['error'])
@@ -481,7 +464,7 @@ def reenviar_email_administraciones_productos(request, notificacion):
     """
     if request.method == 'GET':
         notificacion = RelacionesUsuariosProductos.objects.get(pk=notificacion)
-        if _reenviar_email_notificaciones(notificacion):
+        if _reenviar_email_notificaciones(request, notificacion):
             messages.success(request, reenvio_email_massages['success'])
         else:
             messages.error(request, reenvio_email_massages['error'])
@@ -497,7 +480,7 @@ def reenviar_email_administraciones_servicios(request, notificacion):
     """
     if request.method == 'GET':
         notificacion = RelacionesUsuariosServicios.objects.get(pk=notificacion)
-        if _reenviar_email_notificaciones(notificacion):
+        if _reenviar_email_notificaciones(request, notificacion):
             messages.success(request, reenvio_email_massages['success'])
         else:
             messages.error(request, reenvio_email_massages['error'])
@@ -505,7 +488,7 @@ def reenviar_email_administraciones_servicios(request, notificacion):
     return HttpResponseRedirect(reverse("notificaciones:administraciones-list"))
 
 
-def _reenviar_email_notificaciones(obj_notificacion):
+def _reenviar_email_notificaciones(request, obj_notificacion):
     """
     * Funciona que maneja en reenvio de emails.
     * obj_notificacion : es un objeto del tipo
@@ -528,7 +511,7 @@ def _reenviar_email_notificaciones(obj_notificacion):
     # -- obtenemos el email al que enviaremos el recordatorio
     email_to = Perfiles.obtener_mail_por_usuario(user)
 
-    ctx = {'link_vista': 'http://google.com'}
+    ctx = {'link_vista': request.build_absolute_uri(_get_url_view(obj_notificacion))}
     body = render_to_string("emails/email_notificaciones.html", ctx)
     # -- mail enviado??
     if _send_email(email_to, subject, body):
@@ -790,4 +773,22 @@ class NotificacionesAdministracionListView(LoginRequiredMixin, TemplateView):
         ctx['notificaciones_servicios'] = RelacionesUsuariosServicios.objects.filter(usuario=self.request.user.id)
 
         return ctx
+
+
+def _get_url_view(obj):
+    """
+    Dependiendo si es una notificacion de una administracion o de un edificio, si
+    se trata de un servicio o producto, armamos el link para que desde el mail
+    visiten la notificacion...
+    """
+    if hasattr(obj, 'edificio'):
+        if hasattr(obj, 'producto'):
+            return reverse('notificaciones:edificios-productos-detail', args=[obj.id])
+        else:
+            return reverse('notificaciones:edificios-servicios-detail', args=[obj.id])
+    else:
+        if hasattr(obj, 'producto'):
+            return reverse('notificaciones:administraciones-productos-detail', args=[obj.id])
+        else:
+            return reverse('notificaciones:administraciones-servicios-detail', args=[obj.id])
 

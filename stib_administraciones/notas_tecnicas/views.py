@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from django.views.generic import CreateView, ListView, DeleteView, DetailView
+from django.views.generic import CreateView, ListView, DeleteView, DetailView, RedirectView
 from django.template.loader import render_to_string
 from django.core.mail import EmailMessage
 from django.contrib import messages
@@ -151,7 +151,7 @@ def reenviar_email(request, pk):
 
         if len(email) > 0:
             subject = "[STIB] Nota Técnica - " + str(nt.edificio)
-            ctx = {'link_vista': 'http://google.com'}
+            ctx = {'link_vista': request.build_absolute_uri(reverse('notas-tecnicas:detail', args=[pk]))}
             body = render_to_string("emails/email_notas_tecnicas.html", ctx)
             if _send_email(email, subject, body):
                 nt.mail_recibido = True
@@ -242,3 +242,15 @@ class NotasTecnicasEdificioListView(LoginRequiredMixin, ListView):
         ctx['edificio'] = Edificios.objects.values("id", "nombre").get(pk=self.kwargs['edificio'])
 
         return ctx
+
+
+class NotasTecnicasTrabajoRealizadoView(LoginRequiredMixin, StaffuserRequiredMixin, RedirectView):
+    """
+    La nota tecnica se marca como 'trabajo realizado'
+    """
+    def get(self, request, *args, **kwargs):
+        print 'acaaa'
+        NotasTecnicas.marcar_trabajo_realizado(kwargs["pk"])
+        self.url = reverse('notas-tecnicas:list')
+        messages.success(request, 'La nota técnica fué marcada como realizada.')
+        return super(NotasTecnicasTrabajoRealizadoView, self).get(request, *args, **kwargs)

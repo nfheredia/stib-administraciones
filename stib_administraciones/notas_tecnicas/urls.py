@@ -6,7 +6,8 @@ from .views import (NotasTecnicasCreateView,
                     reenviar_email,
                     NotasTecnicasDetailView,
                     enviar_cambio_estado,
-                    NotasTecnicasEdificioListView)
+                    NotasTecnicasEdificioListView,
+                    NotasTecnicasTrabajoRealizadoView)
 
 urlpatterns = patterns('',
 
@@ -57,6 +58,13 @@ urlpatterns = patterns('',
         r'^edificio/(?P<edificio>\d+)$',
         NotasTecnicasEdificioListView.as_view(),
         name='notas-tecnicas-edificio'
+    ),
+
+    # -- marcar la nota tecnica como trabajo realizado
+    url(
+        r'^(?P<pk>\d+)/trabajo/realizado$',
+        NotasTecnicasTrabajoRealizadoView.as_view(),
+        name='trabajo-realizado'
     ),
 
 )

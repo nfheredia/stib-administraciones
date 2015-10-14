@@ -9,6 +9,7 @@ class NotasTecnicasCreateForm(forms.ModelForm):
     nuevas Notas Técnicas
     """
     edificio_nombre = forms.CharField(max_length=150, required=True)
+
     def __init__(self, *args, **kwargs):
         super(NotasTecnicasCreateForm, self).__init__( *args, **kwargs)
         self.fields['edificio_nombre'].label = 'Edificio'
@@ -21,7 +22,7 @@ class NotasTecnicasCreateForm(forms.ModelForm):
     class Meta:
         model = NotasTecnicas
         fields = ('titulo', 'descripcion', 'edificio_nombre', 'edificio','forma_pago',
-                  'validez_oferta', 'condicion_iva', 'precio', 'estado',
+                  'validez_oferta', 'condicion_iva', 'precio', 'estado', 'trabajo_realizado',
                   'enviado')
 
 

@@ -41,6 +41,7 @@ class NotasTecnicas(TimeStampedModel):
     condicion_iva = models.IntegerField(choices=CONDICION_IVA, blank=True, null=True,
                                         verbose_name="Iva")
     precio = models.FloatField(blank=False, null=False, verbose_name="Precio", default='0.00')
+    trabajo_realizado = models.BooleanField(verbose_name="Trabajo realizado", default=False)
 
     class Meta:
         ordering = ['-creado']
@@ -57,6 +58,13 @@ class NotasTecnicas(TimeStampedModel):
         """ Marcar la nota tecnica con 'email recibido' """
         obj = cls.objects.get(pk=pk)
         obj.mail_recibido = 1
+        obj.save()
+
+    @classmethod
+    def marcar_trabajo_realizado(cls, pk):
+        """ Marcar la nota tecnica como trabajo realizado """
+        obj = cls.objects.get(pk=pk)
+        obj.trabajo_realizado = 1
         obj.save()
 
 
