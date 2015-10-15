@@ -45,7 +45,10 @@ class NotasTecnicasCreateView(LoginRequiredMixin, StaffuserRequiredMixin, Create
             # -- tiene email cargado?
             if len(email) > 0:
                 subject = "[STIB] Nota Técnica - %s" % str(obj.edificio)
-                ctx = {'link_vista':  self.request.build_absolute_uri(reverse('notas-tecnicas:detail', args=[obj.id]))}
+                ctx = {
+                    'link_vista':  self.request.build_absolute_uri(reverse('notas-tecnicas:detail', args=[obj.id])),
+                    'edificio': obj.edificio
+                }
                 body = render_to_string("emails/email_notas_tecnicas.html", ctx)
                 return _send_email(email, subject, body)
             else:
@@ -151,7 +154,10 @@ def reenviar_email(request, pk):
 
         if len(email) > 0:
             subject = "[STIB] Nota Técnica - " + str(nt.edificio)
-            ctx = {'link_vista': request.build_absolute_uri(reverse('notas-tecnicas:detail', args=[pk]))}
+            ctx = {
+                'link_vista': request.build_absolute_uri(reverse('notas-tecnicas:detail', args=[pk])),
+                'edificio': nt.edificio
+            }
             body = render_to_string("emails/email_notas_tecnicas.html", ctx)
             if _send_email(email, subject, body):
                 nt.mail_recibido = True
