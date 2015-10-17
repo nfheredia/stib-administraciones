@@ -19,6 +19,13 @@ $(function() {
     });
 
     /* --------------------------------------------
+        Lanzar modal de Soporte tecnico
+    --------------------------------------------- */
+    $('#open_soporte_modal').click(function(){
+        $("#soporte_modal").modal("show");
+    });
+
+    /* --------------------------------------------
         Open bootstrap pop-over
     --------------------------------------------- */
     $('.open_popover').popover({
