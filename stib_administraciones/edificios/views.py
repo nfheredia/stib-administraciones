@@ -156,12 +156,10 @@ class EdificiosAdministracionesView(LoginRequiredMixin, EdificiosAdministracione
         # -- obtengo las notificaciones del edificio que se consulta
         notificaciones_productos_edificios = RelacionesEdificiosProductos.objects.\
             filter(edificio=self.kwargs['pk'],
-                   edificio__user=self.request.user.id,
-                   leido=False, estado=1)[:5]
+                   edificio__user=self.request.user.id)[:5]
         notificaciones_servicios_edificios = RelacionesEdificiosServicios.objects.\
             filter(edificio=self.kwargs['pk'],
-                   edificio__user=self.request.user.id,
-                   leido=False, estado=1)[:5]
+                   edificio__user=self.request.user.id)[:5]
         ctx['notificaciones'] = sorted(
             chain.from_iterable([notificaciones_productos_edificios, notificaciones_servicios_edificios]),
             key=attrgetter('creado'),
@@ -170,8 +168,7 @@ class EdificiosAdministracionesView(LoginRequiredMixin, EdificiosAdministracione
         # -- obtengo notas tecnicas del edificio
         ctx['notas_tecnicas'] = NotasTecnicas.objects.\
             filter(edificio=self.kwargs['pk'],
-                   edificio__user=self.request.user.id,
-                   leido=False, estado=1)[:3]
+                   edificio__user=self.request.user.id)[:3]
 
         return ctx
 
